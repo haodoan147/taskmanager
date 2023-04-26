@@ -5,6 +5,7 @@ import com.example.task_management.model.Category;
 import com.example.task_management.model.MyProfile;
 import com.example.task_management.model.Task;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -18,7 +19,7 @@ public interface APIService {
     @GET("categories.php")
     Call<List<Category>> getCategoriesAll();
 
-    @GET("categoriy.php")
+    @GET("category.php")
     Call<Category> getCategory();
 
     @FormUrlEncoded
@@ -34,6 +35,11 @@ public interface APIService {
     Call<MyProfile> getMyProfile(@Header("Authorization") String accessToken);
     @GET("task")
     Call<List<Task>> getAllTask(@Header("Authorization") String accessToken);
-
-
+    @FormUrlEncoded
+    @POST("task")
+    Call<Task> getCreateNewTask(@Header("Authorization") String accessToken,
+                                @Field("title") String title, @Field("description") String description,
+                                @Field("dueDate") String dueDate,@Field("categoryId") int categoryId,
+                                @Field("duration") int duration,@Field("priority") int priority,
+                                @Field("labels") ArrayList<Integer> labels);
 }

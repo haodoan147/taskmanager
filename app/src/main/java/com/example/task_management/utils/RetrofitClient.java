@@ -14,7 +14,7 @@ public class RetrofitClient {
     public static Retrofit getInstance() {
         if (retrofit == null) {
             retrofit = new Retrofit.Builder()
-                    .baseUrl("https://taskmanagement.up.railway.app/")
+                    .baseUrl("http://192.168.32.1:3000/")
                     .addConverterFactory(GsonConverterFactory.create(gson))
                     .build();
         }

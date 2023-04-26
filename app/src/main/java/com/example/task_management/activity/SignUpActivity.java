@@ -85,12 +85,9 @@ public class SignUpActivity extends AppCompatActivity {
 
                 if (accessToken != null) {
                     Toast.makeText(SignUpActivity.this, "Register Success", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(SignUpActivity.this, TaskActivity.class);
-//                    Bundle bundle = new Bundle();
-//                    bundle.putSerializable("userObject", stateMessage.getUser());
-//                    intent.putExtras(bundle);
-//                    startActivity(intent);
                     SharedPrefManager.getInstance(getApplicationContext()).userLogin(accessToken.getAccessToken());
+                    Intent intent = new Intent(SignUpActivity.this, TaskActivity.class);
+                    startActivity(intent);
                 } else {
                     Toast.makeText(SignUpActivity.this, "This account has already exist", Toast.LENGTH_SHORT).show();
                 }
