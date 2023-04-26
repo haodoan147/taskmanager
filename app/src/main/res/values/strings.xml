@@ -4,4 +4,9 @@
     <string name="nav_search">Search</string>
     <string name="nav_add">Add</string>
     <string name="nav_notification">Notification</string>
+    <string-array name="numbers">
+        <item>one</item>
+        <item>two</item>
+        <item>three</item>
+    </string-array>
 </resources>
