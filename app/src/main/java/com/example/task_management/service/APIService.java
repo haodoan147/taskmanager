@@ -1,19 +1,27 @@
 package com.example.task_management.service;
 
+import androidx.annotation.Nullable;
+
 import com.example.task_management.model.AccessToken;
 import com.example.task_management.model.Category;
+import com.example.task_management.model.CreateTask;
+import com.example.task_management.model.Label;
 import com.example.task_management.model.MyProfile;
+import com.example.task_management.model.PaginationTask;
 import com.example.task_management.model.Task;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface APIService {
     @GET("categories.php")
@@ -34,12 +42,16 @@ public interface APIService {
     @GET("user/me")
     Call<MyProfile> getMyProfile(@Header("Authorization") String accessToken);
     @GET("task")
-    Call<List<Task>> getAllTask(@Header("Authorization") String accessToken);
-    @FormUrlEncoded
+    Call<PaginationTask> getAllTask(@Header("Authorization") String accessToken, @Query("page") int page , @Query("limit") int limit,
+                                    @Query("order") String order, @Query("status") String status,
+                                    @Query("orderBy") String orderBy, @Query("search") String search);
     @POST("task")
-    Call<Task> getCreateNewTask(@Header("Authorization") String accessToken,
-                                @Field("title") String title, @Field("description") String description,
-                                @Field("dueDate") String dueDate,@Field("categoryId") int categoryId,
-                                @Field("duration") int duration,@Field("priority") int priority,
-                                @Field("labels") ArrayList<Integer> labels);
+    Call<Task> getCreateNewTask(@Header("Authorization") String accessToken, @Body CreateTask task);
+
+    @DELETE("task/{id}")
+    Call<Task> deleteTask(@Header("Authorization") String accessToken, @Path("id") int id);
+    @GET("label")
+    Call<List<Label>> getAllLabel(@Header("Authorization") String accessToken);
+    @GET("category")
+    Call<List<Category>> getAllCategory(@Header("Authorization") String accessToken);
 }

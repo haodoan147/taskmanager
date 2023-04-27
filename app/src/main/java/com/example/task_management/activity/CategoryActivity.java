@@ -78,7 +78,6 @@ public class CategoryActivity extends AppCompatActivity {
             }
             @Override
             public void onFailure(Call<List<Category>> call, Throwable t) {
-                Log.d("TAG", "onFailure: " + t.getMessage());
             }
         });
     }

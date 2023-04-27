@@ -7,7 +7,33 @@
     android:background="@color/white">
 
         <include layout="@layout/toolbar" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
+                <androidx.appcompat.widget.SearchView
+                    android:id="@+id/searchView"
+                    android:theme="@style/ThemeOverlay.SearchView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="70dp"
+                    app:iconifiedByDefault="false"
+                    android:background="@drawable/edittext_background"
+                    android:textColor="#3b608c"
+                    android:layout_marginLeft="30dp"
+                    app:queryHint="Search here..." />
+                <ImageView
+                    android:id="@+id/filter_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.498"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginTop="90dp"
+                    android:onClick="btnFilter_onClick"
+                    android:src="@drawable/baseline_filter_alt_24"/>
+        </LinearLayout>
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
@@ -19,5 +45,6 @@
             app:layout_constraintTop_toTopOf="parent">
 
         </androidx.recyclerview.widget.RecyclerView>
+
         <include layout="@layout/activity_base" />
 </RelativeLayout>

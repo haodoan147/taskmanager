@@ -79,7 +79,6 @@ public class MyProfileActivity extends AppCompatActivity {
             }
             @Override
             public void onFailure(Call<MyProfile> call, Throwable t) {
-                Log.d("TAG", "onFailure: " + t.getMessage());
             }
         });
     }

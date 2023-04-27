@@ -6,23 +6,23 @@ import java.io.Serializable;
 
 public class Label implements Serializable {
     @SerializedName("id")
-    private Long id;
+    private int id;
     @SerializedName("name")
     private String name;
     @SerializedName("color")
     private String color;
 
-    public Label(Long id, String name, String color) {
+    public Label(int id, String name, String color) {
         this.id = id;
         this.name = name;
         this.color = color;
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

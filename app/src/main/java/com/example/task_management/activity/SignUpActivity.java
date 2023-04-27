@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -13,6 +11,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.task_management.R;
+import com.example.task_management.activity.task.TaskActivity;
 import com.example.task_management.model.AccessToken;
 import com.example.task_management.service.APIService;
 import com.example.task_management.utils.RetrofitClient;

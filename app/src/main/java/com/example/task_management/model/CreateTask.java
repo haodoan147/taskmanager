@@ -5,9 +5,7 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.util.List;
 
-public class Task implements Serializable {
-    @SerializedName("id")
-    private Integer id;
+public class CreateTask implements Serializable {
     @SerializedName("title")
     private String title;
     @SerializedName("description")
@@ -19,31 +17,22 @@ public class Task implements Serializable {
     @SerializedName("duration")
     private Integer duration;
     @SerializedName("labels")
-    private List<Label> labels;
+    private List<Integer> labels;
     @SerializedName("categoryId")
     private Integer categoryId;
     @SerializedName("priority")
     private Integer priority;
 
-    public Task(Integer id, String title, String description, String dueDate, String status, Integer duration, List<Label> labels, Integer categoryId, Integer priority) {
-        this.id = id;
+    public CreateTask(String title, String description, String dueDate, Integer duration, List<Integer> labels, Integer categoryId, Integer priority) {
         this.title = title;
         this.description = description;
         this.dueDate = dueDate;
-        this.status = status;
         this.duration = duration;
         this.labels = labels;
         this.categoryId = categoryId;
         this.priority = priority;
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getTitle() {
         return title;
@@ -85,11 +74,11 @@ public class Task implements Serializable {
         this.duration = duration;
     }
 
-    public List<Label> getLabels() {
+    public List<Integer> getLabels() {
         return labels;
     }
 
-    public void setLabels(List<Label> labels) {
+    public void setLabels(List<Integer> labels) {
         this.labels = labels;
     }
 
