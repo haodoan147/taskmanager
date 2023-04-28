@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.task_management.R;
 import com.example.task_management.activity.MyProfileActivity;
 import com.example.task_management.adapter.TaskAdapter;
+import com.example.task_management.model.Category;
 import com.example.task_management.model.PaginationTask;
 import com.example.task_management.model.Task;
 import com.example.task_management.service.APIService;
@@ -41,6 +42,7 @@ public class TaskActivity extends AppCompatActivity {
     TextView appHeader;
     ImageView profileBtn,filterBtn;
     SearchView searchView;
+    List<Category> listCategory = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,13 +89,14 @@ public class TaskActivity extends AppCompatActivity {
     private void getAllTask(String status){
         String accessToken = (SharedPrefManager.getInstance(getApplicationContext()).getAccessToken()).getAccessToken();
         String authHeader = "Bearer " + accessToken;
+        getCategory();
         apiService = RetrofitClient.getInstance().create(APIService.class);
         apiService.getAllTask(authHeader,1,100,"asc", status,"priority", "").enqueue(new Callback<PaginationTask>() {
             @Override
             public void onResponse(Call<PaginationTask> call, Response<PaginationTask> response) {
                 if (response.isSuccessful()) {
                     taskList = response.body().getData();
-                    taskAdapter = new TaskAdapter(TaskActivity.this, taskList);
+                    taskAdapter = new TaskAdapter(TaskActivity.this, taskList,listCategory);
                     RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(),
                             LinearLayoutManager.VERTICAL, false);
                     recyclerView.setLayoutManager(layoutManager);
@@ -146,5 +149,22 @@ public class TaskActivity extends AppCompatActivity {
         }
         taskAdapter.setListenerList(list);
 
+    }
+    private void getCategory(){
+        String accessToken = (SharedPrefManager.getInstance(getApplicationContext()).getAccessToken()).getAccessToken();
+        String authHeader = "Bearer " + accessToken;
+        APIService apiService = RetrofitClient.getInstance().create(APIService.class);
+        apiService.getAllCategory(authHeader).enqueue(new Callback<List<Category>>() {
+            @Override
+            public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
+                if (response.isSuccessful()) {
+                    listCategory = response.body();
+                }
+            }
+            @Override
+            public void onFailure(Call<List<Category>> call, Throwable t) {
+                Log.d("TAG", "onFailure: " + t.getMessage());
+            }
+        });
     }
 }

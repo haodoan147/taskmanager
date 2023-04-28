@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:title="Chi tiết"
+        android:orderInCategory="1"
+        android:id="@+id/menuDetail"/>
+    <item android:title="Xóa"
+        android:orderInCategory="2"
+        android:id="@+id/menuDelete"/>
+    <item android:title="Hoàn thành"
+        android:orderInCategory="3"
+        android:id="@+id/menuDone"/>
+</menu>
