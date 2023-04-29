@@ -1,11 +1,14 @@
 package com.example.task_management.activity.task;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -14,10 +17,10 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.example.task_management.R;
-import com.example.task_management.activity.HomeActivity;
 import com.example.task_management.model.Category;
 import com.example.task_management.model.CreateTask;
 import com.example.task_management.model.Label;
@@ -25,7 +28,6 @@ import com.example.task_management.model.Task;
 import com.example.task_management.service.APIService;
 import com.example.task_management.utils.RetrofitClient;
 import com.example.task_management.utils.SharedPrefManager;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -41,7 +43,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CreateTaskActivity extends AppCompatActivity {
+public class CreateTaskFragment extends Fragment {
     EditText edtTaskName, edtTaskDescription;
     DatePicker deadlineDatePicker;
     ArrayList<String> labelItems  = new ArrayList<>();
@@ -58,36 +60,40 @@ public class CreateTaskActivity extends AppCompatActivity {
     {
         NONE, LOW, MEDIUM, HIGH, URGENT
     }
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.create_new_task);
-        BottomNavigationView navigationView = findViewById(R.id.btm_footer);
-        navigationView.setOnItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener(){
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item){
-                switch (item.getItemId()){
-                    case R.id.btm_home:
-                        Intent intent = new Intent(CreateTaskActivity.this, HomeActivity.class);
-                        startActivity(intent);
-                        break;
-                    case R.id.btm_search:
-                        break;
-                    case R.id.btm_group:
-                        break;
-                    case R.id.btm_notice:
-                        break;
-                }
-                return true;
-            }
-        });
-        initView();
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.create_new_task, container, false);
+        SharedPreferences pref = getActivity().getSharedPreferences("ATAuthen",Context.MODE_PRIVATE);
+        String accessToken = pref.getString("keyaccesstoken", "empty");
+        authHeader = "Bearer " + accessToken;
+        priorityItems.add("NONE");
+        priorityItems.add("LOW");
+        priorityItems.add("MEDIUM");
+        priorityItems.add("HIGH");
+        priorityItems.add("URGENT");
+        edtTaskName = view.findViewById(R.id.edittext_task);
+        edtTaskDescription =  view.findViewById(R.id.edittext_description);
+        btnSubmit = view.findViewById(R.id.btn_submit);
+        edtTaskCate = view.findViewById(R.id.edittext_category);
+        edtTaskLabel = view.findViewById(R.id.edittext_label);
+        edtTaskPriority = view.findViewById(R.id.edittext_priority);
+        deadlineDatePicker = view.findViewById(R.id.dlDatePicker);
+        getLabel();
+        getCategory();
+        adapterItems = new ArrayAdapter<String>(view.getContext(),R.layout.dropdown_select_option,cateItems);
+        edtTaskCate.setAdapter(adapterItems);
+        adapterItems = new ArrayAdapter<String>(view.getContext(),R.layout.dropdown_select_option,labelItems);
+        edtTaskLabel.setAdapter(adapterItems);
+        adapterItems = new ArrayAdapter<String>(view.getContext(),R.layout.dropdown_select_option,priorityItems);
+        edtTaskPriority.setAdapter(adapterItems);
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 createtask();
             }
         });
+        return view;
     }
     private void createtask() {
         final String taskName = edtTaskName.getText().toString();
@@ -146,9 +152,9 @@ public class CreateTaskActivity extends AppCompatActivity {
                 public void onResponse(Call<Task> call, Response<Task> response) {
                     if (response.isSuccessful()) {
                         Task task = response.body();
-                        Toast.makeText(CreateTaskActivity.this, "Create Task Success", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(CreateTaskActivity.this, HomeActivity.class);
-                        startActivity(intent);
+                        Toast.makeText(getActivity(), "Create Task Success", Toast.LENGTH_SHORT).show();
+//                        Intent intent = new Intent(CreateTaskActivity.this, TaskActivity.class);
+//                        startActivity(intent);
                     }else{
                         try {
                             Log.v("Error code 400",response.errorBody().string());
@@ -159,37 +165,13 @@ public class CreateTaskActivity extends AppCompatActivity {
                 }
                 @Override
                 public void onFailure(Call<Task> call, Throwable t) {
-                    Toast.makeText(CreateTaskActivity.this, "Create Task Failure", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Create Task Failure", Toast.LENGTH_SHORT).show();
                 }
             });
         }catch(Exception e){
             Log.e("TAG", String.valueOf(e));
         }
 
-    }
-    private void initView(){
-        String accessToken = (SharedPrefManager.getInstance(getApplicationContext()).getAccessToken()).getAccessToken();
-        authHeader = "Bearer " + accessToken;
-        priorityItems.add("NONE");
-        priorityItems.add("LOW");
-        priorityItems.add("MEDIUM");
-        priorityItems.add("HIGH");
-        priorityItems.add("URGENT");
-        edtTaskName = findViewById(R.id.edittext_task);
-        edtTaskDescription =  findViewById(R.id.edittext_description);
-        btnSubmit = findViewById(R.id.btn_submit);
-        edtTaskCate = findViewById(R.id.edittext_category);
-        edtTaskLabel = findViewById(R.id.edittext_label);
-        edtTaskPriority = findViewById(R.id.edittext_priority);
-        deadlineDatePicker = findViewById(R.id.dlDatePicker);
-        getLabel();
-        getCategory();
-        adapterItems = new ArrayAdapter<String>(this,R.layout.dropdown_select_option,cateItems);
-        edtTaskCate.setAdapter(adapterItems);
-        adapterItems = new ArrayAdapter<String>(this,R.layout.dropdown_select_option,labelItems);
-        edtTaskLabel.setAdapter(adapterItems);
-        adapterItems = new ArrayAdapter<String>(this,R.layout.dropdown_select_option,priorityItems);
-        edtTaskPriority.setAdapter(adapterItems);
     }
     private void getLabel(){
         apiService = RetrofitClient.getInstance().create(APIService.class);
@@ -210,23 +192,22 @@ public class CreateTaskActivity extends AppCompatActivity {
         });
     }
     private void getCategory(){
-            Log.e("acess",authHeader);
-            apiService = RetrofitClient.getInstance().create(APIService.class);
-            apiService.getAllCategory(authHeader).enqueue(new Callback<List<Category>>() {
-                @Override
-                public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
-                    if (response.isSuccessful()) {
-                        listCategory = response.body();
-                        for (Category value: listCategory) {
-                            cateItems.add(value.getName());
-                        }
+        apiService = RetrofitClient.getInstance().create(APIService.class);
+        apiService.getAllCategory(authHeader).enqueue(new Callback<List<Category>>() {
+            @Override
+            public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
+                if (response.isSuccessful()) {
+                    listCategory = response.body();
+                    for (Category value: listCategory) {
+                        cateItems.add(value.getName());
                     }
                 }
-                @Override
-                public void onFailure(Call<List<Category>> call, Throwable t) {
-                    Log.d("TAG", "onFailure: " + t.getMessage());
-                }
-            });
+            }
+            @Override
+            public void onFailure(Call<List<Category>> call, Throwable t) {
+                Log.d("TAG", "onFailure: " + t.getMessage());
+            }
+        });
     }
     private Integer getLabelId(){
         int selectedId = 0;
@@ -245,7 +226,7 @@ public class CreateTaskActivity extends AppCompatActivity {
         return selectedId;
     }
     private Integer getPriorityId(){
-        int selectedId = Priority.valueOf(edtTaskPriority.getText().toString()).ordinal();;
+        int selectedId = CreateTaskActivity.Priority.valueOf(edtTaskPriority.getText().toString()).ordinal();;
         return selectedId;
     }
 }

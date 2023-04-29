@@ -11,7 +11,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.task_management.R;
-import com.example.task_management.activity.task.TaskActivity;
 import com.example.task_management.model.AccessToken;
 import com.example.task_management.service.APIService;
 import com.example.task_management.utils.RetrofitClient;
@@ -85,7 +84,7 @@ public class SignUpActivity extends AppCompatActivity {
                 if (accessToken != null) {
                     Toast.makeText(SignUpActivity.this, "Register Success", Toast.LENGTH_SHORT).show();
                     SharedPrefManager.getInstance(getApplicationContext()).userLogin(accessToken.getAccessToken());
-                    Intent intent = new Intent(SignUpActivity.this, TaskActivity.class);
+                    Intent intent = new Intent(SignUpActivity.this, HomeActivity.class);
                     startActivity(intent);
                 } else {
                     Toast.makeText(SignUpActivity.this, "This account has already exist", Toast.LENGTH_SHORT).show();

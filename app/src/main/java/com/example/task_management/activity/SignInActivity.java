@@ -12,7 +12,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.task_management.R;
-import com.example.task_management.activity.task.TaskActivity;
 import com.example.task_management.model.AccessToken;
 import com.example.task_management.service.APIService;
 import com.example.task_management.utils.RetrofitClient;
@@ -38,7 +37,7 @@ public class SignInActivity extends AppCompatActivity {
         initView();
         if(SharedPrefManager.getInstance(getApplicationContext()).isLoggedIn())
         {
-            Intent intent = new Intent(SignInActivity.this, TaskActivity.class);
+            Intent intent = new Intent(SignInActivity.this, HomeActivity.class);
 //                    Bundle bundle = new Bundle();
 //                    bundle.putSerializable("userObject", stateMessage.getUser());
 //                    intent.putExtras(bundle);
@@ -78,7 +77,7 @@ public class SignInActivity extends AppCompatActivity {
                 AccessToken accessToken = response.body();
                 if (accessToken != null) {
                     Toast.makeText(SignInActivity.this, "Login Success", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(SignInActivity.this, TaskActivity.class);
+                    Intent intent = new Intent(SignInActivity.this, HomeActivity.class);
 //                    Bundle bundle = new Bundle();
 //                    bundle.putSerializable("userObject", stateMessage.getUser());
 //                    intent.putExtras(bundle);

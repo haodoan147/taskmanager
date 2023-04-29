@@ -1,19 +1,25 @@
 package com.example.task_management.activity.task;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
-import androidx.appcompat.widget.SearchView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 import com.example.task_management.R;
 import com.example.task_management.activity.MyProfileActivity;
@@ -23,53 +29,39 @@ import com.example.task_management.model.PaginationTask;
 import com.example.task_management.model.Task;
 import com.example.task_management.service.APIService;
 import com.example.task_management.utils.RetrofitClient;
-import com.example.task_management.utils.SharedPrefManager;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class TaskActivity extends AppCompatActivity {
+public class SearchTaskFragment extends Fragment {
     RecyclerView recyclerView;
     TaskAdapter taskAdapter;
     APIService apiService;
-    List<Task> taskList;
+    List<Task> taskList= new ArrayList<>();
     TextView appHeader;
     ImageView profileBtn,filterBtn;
     SearchView searchView;
-    List<Category> listCategory = new ArrayList<>();
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.task);
-        anhXa();
-        if(appHeader.getText() =="Home"){
-            ImageView left_icon = findViewById(R.id.left_icon);
-            left_icon.setVisibility(View.INVISIBLE);
-        }
+    List<Category> listCategory= new ArrayList<>();
+    BottomNavigationView navigationView;
+    ViewPager viewPager;
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.search_task, container, false);
+        recyclerView = view.findViewById(R.id.recyclerView);
         getAllTask("TODO");
-        profileBtn.setOnClickListener(new View.OnClickListener() {
+        filterBtn = view.findViewById(R.id.filter_icon);
+        filterBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(TaskActivity.this, "Test Clicked", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(TaskActivity.this, MyProfileActivity.class);
-                startActivity(intent);
+                btnFilter_onClick(v);
             }
         });
-    }
-
-    private void anhXa (){
-        recyclerView = findViewById(R.id.recyclerView);
-        appHeader = findViewById((R.id.app_header));
-        appHeader.setText("Home task");
-        profileBtn = findViewById(R.id.right_icon);
-        filterBtn = findViewById(R.id.filter_icon);
-        searchView = findViewById(R.id.searchView);
+        searchView = view.findViewById(R.id.searchView);
         searchView.clearFocus();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -83,12 +75,15 @@ public class TaskActivity extends AppCompatActivity {
                 return false;
             }
         });
+        return view;
     }
 
 
     private void getAllTask(String status){
-        String accessToken = (SharedPrefManager.getInstance(getApplicationContext()).getAccessToken()).getAccessToken();
+        SharedPreferences pref = getActivity().getSharedPreferences("ATAuthen", Context.MODE_PRIVATE);
+        String accessToken = pref.getString("keyaccesstoken", "empty");
         String authHeader = "Bearer " + accessToken;
+        Log.e("123", authHeader);
         getCategory();
         apiService = RetrofitClient.getInstance().create(APIService.class);
         apiService.getAllTask(authHeader,1,100,"asc", status,"priority", "").enqueue(new Callback<PaginationTask>() {
@@ -96,12 +91,18 @@ public class TaskActivity extends AppCompatActivity {
             public void onResponse(Call<PaginationTask> call, Response<PaginationTask> response) {
                 if (response.isSuccessful()) {
                     taskList = response.body().getData();
-                    taskAdapter = new TaskAdapter(TaskActivity.this, taskList,listCategory);
-                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(),
+                    taskAdapter = new TaskAdapter(getActivity(), taskList,listCategory);
+                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity(),
                             LinearLayoutManager.VERTICAL, false);
                     recyclerView.setLayoutManager(layoutManager);
                     recyclerView.setAdapter(taskAdapter);
                     taskAdapter.notifyDataSetChanged();
+                }else{
+                    try {
+                        Log.v("Error code 400",response.errorBody().string());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
             @Override
@@ -111,7 +112,7 @@ public class TaskActivity extends AppCompatActivity {
         });
     }
     public void btnFilter_onClick(View view) {
-        PopupMenu popupMenu = new PopupMenu(this, filterBtn);
+        PopupMenu popupMenu = new PopupMenu(getActivity(), filterBtn);
         popupMenu.getMenuInflater().inflate(R.menu.menu_setting_popup,popupMenu.getMenu());
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
 
@@ -142,16 +143,18 @@ public class TaskActivity extends AppCompatActivity {
     }
     private void filterListener(String text){
         List<Task> list = new ArrayList<>();
-        for (Task task:taskList){
-            if(task.getTitle().toLowerCase().contains(text.toLowerCase())){
-                list.add(task);
+        if(!taskList.isEmpty()) {
+            for (Task task : taskList) {
+                if (task.getTitle().toLowerCase().contains(text.toLowerCase())) {
+                    list.add(task);
+                }
             }
+            taskAdapter.setListenerList(list);
         }
-        taskAdapter.setListenerList(list);
-
     }
     private void getCategory(){
-        String accessToken = (SharedPrefManager.getInstance(getApplicationContext()).getAccessToken()).getAccessToken();
+        SharedPreferences pref = getActivity().getSharedPreferences("ATAuthen",Context.MODE_PRIVATE);
+        String accessToken = pref.getString("keyaccesstoken", "empty");
         String authHeader = "Bearer " + accessToken;
         APIService apiService = RetrofitClient.getInstance().create(APIService.class);
         apiService.getAllCategory(authHeader).enqueue(new Callback<List<Category>>() {

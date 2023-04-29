@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="Home"
+        android:id="@+id/btm_home"
+        android:icon="@drawable/ic_home"/>
+    <item android:title="Search"
+        android:id="@+id/btm_search"
+        android:icon="@drawable/ic_search"/>
+    <item android:title="Group"
+        android:id="@+id/btm_group"
+        android:icon="@drawable/ic_plus" />
+    <item android:title="Notification"
+        android:id="@+id/btm_notice"
+        android:icon="@drawable/ic_notification"/>
+</menu>

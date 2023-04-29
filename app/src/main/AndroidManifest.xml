@@ -52,7 +52,7 @@
             <!--            </intent-filter>-->
         </activity>
         <activity
-            android:name=".activity.task.TaskActivity"
+            android:name=".activity.HomeActivity"
             android:exported="false">
             <!--            <intent-filter>-->
             <!--                <action android:name="android.intent.action.MAIN" />-->

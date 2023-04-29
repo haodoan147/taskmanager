@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:title="Trang chủ" />
+        <item
+            android:id="@+id/nav_profile"
+            android:title="Trang cá nhân" />
+        <item
+            android:id="@+id/nav_nofitication"
+            android:title="Thông báo" />
+    </group>
+    <item android:title="Quản lý">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_schedule"
+                    android:title="Lịch biểu" />
+                <item
+                    android:id="@+id/nav_statistic"
+                    android:title="Thống kê" />
+                <item
+                    android:id="@+id/nav_logout"
+                    android:title="Đăng xuất" />
+            </group>
+        </menu>
+    </item>
+</menu>
