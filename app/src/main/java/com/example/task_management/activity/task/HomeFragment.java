@@ -51,9 +51,6 @@ public class HomeFragment extends Fragment {
     TaskAdapter taskAdapter;
     APIService apiService;
     List<Task> taskList= new ArrayList<>();
-    TextView appHeader;
-    ImageView profileBtn,filterBtn;
-    SearchView searchView;
     List<Category> listCategory= new ArrayList<>();
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.home, container, false);
