@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:title="TODO"
+        android:id="@+id/menu_status_todo"/>
+    <item android:title="IN_PROGRESS"
+        android:id="@+id/menu_status_process"/>
+    <item android:title="DONE"
+        android:id="@+id/menu_status_done"/>
+    <item android:title="POSTPONED"
+        android:id="@+id/menu_status_postponed"/>
+    <item android:title="CANCELED"
+        android:id="@+id/menu_status_cancled"/>
+</menu>

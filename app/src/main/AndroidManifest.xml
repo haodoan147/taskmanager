@@ -12,12 +12,12 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Task_management"
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".activity.CategoryActivity"
-            android:exported="false">
+            android:name=".activity.category.CategoryActivity"
+            android:exported="true">
 <!--            <intent-filter>-->
 <!--                <action android:name="android.intent.action.MAIN" />-->
 
@@ -26,12 +26,21 @@
         </activity>
         <activity
             android:name=".activity.task.DetailTaskActivity"
-            android:exported="false">
-            <!--            <intent-filter>-->
-            <!--                <action android:name="android.intent.action.MAIN" />-->
+            android:exported="true">
+<!--                        <intent-filter>-->
+<!--                            <action android:name="android.intent.action.MAIN" />-->
 
-            <!--                <category android:name="android.intent.category.LAUNCHER" />-->
-            <!--            </intent-filter>-->
+<!--                            <category android:name="android.intent.category.LAUNCHER" />-->
+<!--                        </intent-filter>-->
+        </activity>
+        <activity
+            android:name=".activity.group.CreateCategoryActivity"
+            android:exported="true">
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
         </activity>
         <activity
             android:name=".activity.SignInActivity"
@@ -69,15 +78,15 @@
             <!--                <category android:name="android.intent.category.LAUNCHER" />-->
             <!--            </intent-filter>-->
         </activity>
-        <activity
-            android:name=".activity.task.CreateTaskActivity"
-            android:exported="true">
+<!--        <activity-->
+<!--            android:name=".activity.task.CreateTaskActivity"-->
+<!--            android:exported="true">-->
 <!--                        <intent-filter>-->
 <!--                            <action android:name="android.intent.action.MAIN" />-->
 
 <!--                            <category android:name="android.intent.category.LAUNCHER" />-->
 <!--                        </intent-filter>-->
-        </activity>
+<!--        </activity>-->
     </application>
 
 </manifest>

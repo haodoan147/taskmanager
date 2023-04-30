@@ -5,17 +5,29 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.task_management.R;
 import com.example.task_management.model.Category;
+import com.example.task_management.model.Task;
+import com.example.task_management.service.APIService;
+import com.example.task_management.utils.RetrofitClient;
+import com.example.task_management.utils.SharedPrefManager;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyViewHolder>{
     Context context;
@@ -33,16 +45,18 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyView
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public ImageView imageView;
-        public TextView tenSp;
+        public TextView tv_category;
+        public CardView card_cate;
+        public ImageView iv_options;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            imageView = itemView.findViewById(R.id.image_cate);
-            tenSp = itemView.findViewById(R.id.tvNameCategory);
+            tv_category = itemView.findViewById(R.id.tv_category);
+            card_cate = itemView.findViewById(R.id.card_cate_task);
+            iv_options = itemView.findViewById(R.id.iv_options);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(context, "Bạn đã chọn category" + tenSp.getText().toString(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Bạn đã chọn category" + tv_category.getText().toString(), Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -50,13 +64,55 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyView
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+        List<Integer> colorCode = new ArrayList<>();
+        colorCode.add(R.color.color1);
+        colorCode.add(R.color.color2);
+        colorCode.add(R.color.color3);
+        colorCode.add(R.color.color4);
+        colorCode.add(R.color.color5);
+        colorCode.add(R.color.color6);
+        colorCode.add(R.color.color7);
+        colorCode.add(R.color.color8);
+        Random random = new Random();
+        int number = random.nextInt(8);
         Category category = categoryList.get(position);
-        holder.tenSp.setText(category.getName());
-        Glide.with(context).load(category.getImages()).into(holder.imageView);
+        holder.tv_category.setText(category.getName());
+        holder.card_cate.setCardBackgroundColor(colorCode.get(number));
+        holder.iv_options.setOnClickListener(view -> showPopUpMenu(view, position));
     }
+    public void showPopUpMenu(View view,int position) {
+        PopupMenu popupMenu = new PopupMenu(context, view);
+        popupMenu.getMenuInflater().inflate(R.menu.cate_option, popupMenu.getMenu());
+        popupMenu.setOnMenuItemClickListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.menuDelete:
+                    String accessToken = (SharedPrefManager.getInstance(context.getApplicationContext()).getAccessToken()).getAccessToken();
+                    String authHeader = "Bearer " + accessToken;
+                    APIService apiService = RetrofitClient.getInstance().create(APIService.class);
+                    apiService.deleteCate(authHeader,categoryList.get(position).getId()).enqueue(new Callback<Category>() {
+                        @Override
+                        public void onResponse(Call<Category> call, Response<Category> response) {
+                        }
+                        @Override
+                        public void onFailure(Call<Category> call, Throwable t) {
 
+                        }
+                    });
+                    removeItem(position);
+                    break;
+
+            }
+            return false;
+        });
+        popupMenu.show();
+    }
     @Override
     public int getItemCount() {
         return categoryList == null ? 0 : categoryList.size();
+    }
+    public void removeItem(int position){
+
+        categoryList.remove(position);
+        notifyItemRemoved(position);
     }
 }

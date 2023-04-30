@@ -4,7 +4,10 @@
     android:layout_height="200dp"
     android:orientation="vertical"
     android:background="@color/colorAccent"
-    android:gravity="bottom">
+    android:gravity="bottom"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark"
+    android:padding="16dp"
+    >
     <ImageView
         android:layout_width="75dp"
         android:layout_height="75dp"

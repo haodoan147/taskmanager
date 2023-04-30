@@ -226,7 +226,7 @@ public class CreateTaskFragment extends Fragment {
         return selectedId;
     }
     private Integer getPriorityId(){
-        int selectedId = CreateTaskActivity.Priority.valueOf(edtTaskPriority.getText().toString()).ordinal();;
+        int selectedId = Priority.valueOf(edtTaskPriority.getText().toString()).ordinal();;
         return selectedId;
     }
 }

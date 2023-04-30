@@ -14,9 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.task_management.R;
-import com.example.task_management.adapter.CategoryAdapter;
-import com.example.task_management.model.AccessToken;
-import com.example.task_management.model.Category;
 import com.example.task_management.model.MyProfile;
 import com.example.task_management.service.APIService;
 import com.example.task_management.utils.RetrofitClient;
