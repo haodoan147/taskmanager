@@ -121,14 +121,45 @@
                 android:textColor="@color/black" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_marginTop="30dp"
-            android:layout_marginLeft="270dp"
-            android:text="Tạo task">
-        </Button>
+<!--        <Button-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:gravity="center"-->
+<!--            android:layout_marginTop="30dp"-->
+<!--            android:layout_marginLeft="270dp"-->
+<!--            android:text="Tạo task">-->
+<!--        </Button>-->
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_marginTop="50dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/btnCreateTask"
+                android:layout_width="170dp"
+                android:layout_height="50dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.497"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.903"
+                app:srcCompat="@drawable/button_log" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="monospace"
+                android:text="Tạo task"
+                android:textColor="#FFFFFF"
+                android:textSize="18dp"
+                android:textStyle="normal"
+                app:layout_constraintBottom_toBottomOf="@+id/btnCreateTask"
+                app:layout_constraintEnd_toEndOf="@+id/btnCreateTask"
+                app:layout_constraintStart_toStartOf="@+id/btnCreateTask"
+                app:layout_constraintTop_toTopOf="@+id/btnCreateTask" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <include layout="@layout/activity_base" />
     </LinearLayout>
