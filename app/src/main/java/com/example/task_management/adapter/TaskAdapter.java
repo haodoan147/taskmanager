@@ -91,6 +91,43 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         holder.tv_priority.setText("Độ ưu tiên: " +String.valueOf(TaskPriority.values()[task.getPriority()]));
         holder.tv_status.setText(task.getStatus());
         holder.iv_options.setOnClickListener(view -> showPopUpMenu(view, position));
+        switch (TaskPriority.values()[task.getPriority()])
+        {
+            case NONE:
+                holder.tv_priority.setBackgroundResource(R.drawable.status_view_round_1);
+                break;
+            case LOW:
+                holder.tv_priority.setBackgroundResource(R.drawable.status_view_round_2);
+                break;
+            case MEDIUM:
+                holder.tv_priority.setBackgroundResource(R.drawable.status_view_round_3);
+                break;
+            case HIGH:
+                holder.tv_priority.setBackgroundResource(R.drawable.status_view_round_4);
+                break;
+            case URGENT:
+                holder.tv_priority.setBackgroundResource(R.drawable.status_view_round_5);
+                break;
+        }
+        switch (task.getStatus())
+        {
+            case "TODO":
+                holder.tv_status.setBackgroundResource(R.drawable.status_view_round_1);
+                break;
+            case "IN_PROGRESS":
+                holder.tv_status.setBackgroundResource(R.drawable.status_view_round_2);
+                break;
+            case "DONE":
+                holder.tv_status.setBackgroundResource(R.drawable.status_view_round_3);
+                break;
+            case "POSTPONED":
+                holder.tv_status.setBackgroundResource(R.drawable.status_view_round_4);
+                break;
+            case "CANCELED":
+                holder.tv_status.setBackgroundResource(R.drawable.status_view_round_5);
+                break;
+        }
+
     }
 
     @Override

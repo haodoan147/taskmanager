@@ -31,8 +31,8 @@
         android:layout_gravity="start"
         app:headerLayout="@layout/header_new"
         app:menu="@menu/activity_drawer"
-        app:itemIconTint="@color/lavender"
-        app:itemTextColor="@color/lavender"
+        app:itemIconTint="@color/colorAccent"
+        app:itemTextColor="@color/colorAccent"
         android:translationZ="10dp"/>
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         xmlns:android="http://schemas.android.com/apk/res/android"

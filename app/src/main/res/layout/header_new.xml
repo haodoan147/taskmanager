@@ -16,10 +16,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Traveling"
-        android:textSize="24sp" />
+        android:textSize="24sp"
+        android:id="@+id/base_name"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="www.taimoorsikander.com"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        android:id="@+id/base_email"/>
 </LinearLayout>

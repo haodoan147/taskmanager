@@ -1,7 +1,9 @@
 package com.example.task_management.activity.group;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -12,6 +14,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,18 +28,32 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.task_management.R;
+import com.example.task_management.activity.HomeActivity;
 import com.example.task_management.activity.MyProfileActivity;
 import com.example.task_management.activity.SignInActivity;
+import com.example.task_management.activity.task.CreateTaskActivity;
 import com.example.task_management.activity.task.CreateTaskFragment;
 import com.example.task_management.activity.task.HomeFragment;
 import com.example.task_management.activity.task.SearchTaskFragment;
+import com.example.task_management.model.CreateCategory;
+import com.example.task_management.model.CreateTask;
+import com.example.task_management.model.MyProfile;
+import com.example.task_management.service.APIService;
+import com.example.task_management.utils.RetrofitClient;
 import com.example.task_management.utils.SharedPrefManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class GroupActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     DrawerLayout drawerLayout;
     BottomNavigationView bottomNavigationView;
+    APIService apiService;
+    String id, name, email;
+    NavigationView navigationView;
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -44,8 +61,9 @@ public class GroupActivity extends AppCompatActivity implements NavigationView.O
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         drawerLayout = findViewById(R.id.drawer_layout);
         View fab = findViewById(R.id.fab);
-        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        getMyProfile();
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.open,R.string.close);
@@ -93,7 +111,8 @@ public class GroupActivity extends AppCompatActivity implements NavigationView.O
         Intent intent;
         switch (item.getItemId()) {
             case R.id.nav_home:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
+                intent = new Intent(getApplicationContext(), HomeActivity.class);
+                startActivity(intent);
                 break;
             case R.id.nav_profile:
                 intent = new Intent(getApplicationContext(), MyProfileActivity.class);
@@ -128,11 +147,13 @@ public class GroupActivity extends AppCompatActivity implements NavigationView.O
         ImageView cancelButton = dialog.findViewById(R.id.cancelButton);
 
         layoutTask.setOnClickListener(new View.OnClickListener() {
+            Intent intent;
             @Override
             public void onClick(View v) {
 
                 dialog.dismiss();
-                Toast.makeText(getApplicationContext(),"Upload a Video is clicked",Toast.LENGTH_SHORT).show();
+                intent = new Intent(getApplicationContext(), CreateTaskActivity.class);
+                startActivity(intent);
 
             }
         });
@@ -140,9 +161,10 @@ public class GroupActivity extends AppCompatActivity implements NavigationView.O
         layoutCate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent;
                 dialog.dismiss();
-                Toast.makeText(getApplicationContext(),"Create a short is Clicked",Toast.LENGTH_SHORT).show();
+                intent = new Intent(getApplicationContext(), CreateCategoryActivity.class);
+                startActivity(intent);
 
             }
         });
@@ -170,5 +192,31 @@ public class GroupActivity extends AppCompatActivity implements NavigationView.O
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         dialog.getWindow().setGravity(Gravity.BOTTOM);
 
+    }
+    private void getMyProfile(){
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("ATAuthen", Context.MODE_PRIVATE);
+        String accessToken = pref.getString("keyaccesstoken", "empty");
+        apiService = RetrofitClient.getInstance().create(APIService.class);
+        String authHeader = "Bearer " + accessToken;
+        apiService.getMyProfile(authHeader).enqueue(new Callback<MyProfile>() {
+            @Override
+            public void onResponse(Call<MyProfile> call, Response<MyProfile> response) {
+                MyProfile myProfile = response.body();
+                if (response.isSuccessful()) {
+                    id = String.valueOf(myProfile.getId());
+                    name = "Hi, " + myProfile.getName();
+                    email = myProfile.getEmail();
+                    View headerLayout = navigationView.getHeaderView(0);
+                    TextView baseName = headerLayout.findViewById(R.id.base_name);
+                    TextView baseEmail = headerLayout.findViewById(R.id.base_email);
+                    SharedPrefManager.getInstance(getApplicationContext()).userProfile(id,name,email);
+                    baseName.setText(pref.getString("keyname", "empty"));
+                    baseEmail.setText(pref.getString("keyemail", "empty"));;
+                }
+            }
+            @Override
+            public void onFailure(Call<MyProfile> call, Throwable t) {
+            }
+        });
     }
 }

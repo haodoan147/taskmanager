@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,6 +37,7 @@ public class CreateCategoryActivity extends AppCompatActivity {
     APIService apiService;
     Button btnSubmit;
     String authHeader ;
+    ImageView btnBack;
     public enum Priority
     {
         NONE, LOW, MEDIUM, HIGH, URGENT
@@ -108,6 +110,8 @@ public class CreateCategoryActivity extends AppCompatActivity {
         edtTaskPriority = findViewById(R.id.edittext_priority);
         adapterItems = new ArrayAdapter<String>(this,R.layout.dropdown_select_option,priorityItems);
         edtTaskPriority.setAdapter(adapterItems);
+        btnBack = findViewById(R.id.btn_back_to_context);
+        btnBack.setOnClickListener(view -> finish());
     }
     private Integer getPriorityId(){
         int selectedId = Priority.valueOf(edtTaskPriority.getText().toString()).ordinal();;

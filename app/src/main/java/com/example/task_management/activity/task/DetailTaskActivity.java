@@ -4,9 +4,11 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
@@ -35,6 +37,7 @@ public class DetailTaskActivity extends AppCompatActivity {
     TextView tv_title,tv_dueDate,tv_category,tv_label,tv_des,tv_duration,tv_priority,tv_status;
     Integer idTask;
     Task task;
+    ImageView btnBack;
     enum TaskPriority {
         NONE ,
         LOW ,
@@ -61,6 +64,9 @@ public class DetailTaskActivity extends AppCompatActivity {
         tv_status = findViewById((R.id.tv_status));
         getDetailTask();
         tv_status.setOnClickListener(view -> showPopUpStatusMenu(view));
+        btnBack = findViewById(R.id.btn_back_to_context);
+        btnBack.setOnClickListener(view -> finish());
+
     }
     private void getDetailTask(){
 
@@ -88,6 +94,42 @@ public class DetailTaskActivity extends AppCompatActivity {
                     tv_duration.setText("Hạn: " +task.getDuration() + "ngày");
                     tv_priority.setText(String.valueOf(TaskPriority.values()[task.getPriority()]));
                     tv_status.setText(task.getStatus());
+                    switch (TaskPriority.values()[task.getPriority()])
+                    {
+                        case NONE:
+                            tv_priority.setBackgroundResource(R.drawable.status_view_round_1);
+                            break;
+                        case LOW:
+                            tv_priority.setBackgroundResource(R.drawable.status_view_round_2);
+                            break;
+                        case MEDIUM:
+                            tv_priority.setBackgroundResource(R.drawable.status_view_round_3);
+                            break;
+                        case HIGH:
+                            tv_priority.setBackgroundResource(R.drawable.status_view_round_4);
+                            break;
+                        case URGENT:
+                            tv_priority.setBackgroundResource(R.drawable.status_view_round_5);
+                            break;
+                    }
+                    switch (task.getStatus())
+                    {
+                        case "TODO":
+                            tv_status.setBackgroundResource(R.drawable.status_view_round_1);
+                            break;
+                        case "IN_PROGRESS":
+                            tv_status.setBackgroundResource(R.drawable.status_view_round_2);
+                            break;
+                        case "DONE":
+                            tv_status.setBackgroundResource(R.drawable.status_view_round_3);
+                            break;
+                        case "POSTPONED":
+                            tv_status.setBackgroundResource(R.drawable.status_view_round_4);
+                            break;
+                        case "CANCELED":
+                            tv_status.setBackgroundResource(R.drawable.status_view_round_5);
+                            break;
+                    }
                 }
                 else{
                     try {

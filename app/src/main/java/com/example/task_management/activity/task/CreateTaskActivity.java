@@ -11,6 +11,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -54,6 +55,7 @@ public class CreateTaskActivity extends AppCompatActivity {
     String authHeader ;
     List<Label> listLabel = new ArrayList<>();
     List<Category> listCategory = new ArrayList<>();
+    ImageView btnBack;
     public enum Priority
     {
         NONE, LOW, MEDIUM, HIGH, URGENT
@@ -171,6 +173,8 @@ public class CreateTaskActivity extends AppCompatActivity {
         edtTaskLabel.setAdapter(adapterItems);
         adapterItems = new ArrayAdapter<String>(this,R.layout.dropdown_select_option,priorityItems);
         edtTaskPriority.setAdapter(adapterItems);
+        btnBack = findViewById(R.id.btn_back_to_context);
+        btnBack.setOnClickListener(view -> finish());
     }
     private void getLabel(){
         apiService = RetrofitClient.getInstance().create(APIService.class);

@@ -7,18 +7,18 @@
     app:cardElevation="5dp"
     app:cardCornerRadius="10dp"
     app:contentPadding="10dp"
-    android:layout_height="190dp"
-    android:id="@+id/card_cate_task">
+    android:layout_height="190dp">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:id="@+id/card_cate_task">
         <ImageView
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:id="@+id/iv_options"
             android:background="@drawable/more"
-            android:layout_gravity="right"/>
+            android:layout_gravity="right" />
         <TextView
             android:id="@+id/tv_category"
             android:layout_width="wrap_content"

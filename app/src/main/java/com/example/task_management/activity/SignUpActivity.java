@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.task_management.R;
 import com.example.task_management.model.AccessToken;
+import com.example.task_management.model.MyProfile;
 import com.example.task_management.service.APIService;
 import com.example.task_management.utils.RetrofitClient;
 import com.example.task_management.utils.SharedPrefManager;
@@ -28,7 +29,6 @@ public class SignUpActivity extends AppCompatActivity {
     EditText editTextConFirmPassword;
     ImageButton btnRegister;
     APIService apiService;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,7 +99,6 @@ public class SignUpActivity extends AppCompatActivity {
 
 
     }
-
     private void initView(){
         editTextName =  findViewById(R.id.edittext_name);
         editTextEmail =  findViewById(R.id.edittext_email);

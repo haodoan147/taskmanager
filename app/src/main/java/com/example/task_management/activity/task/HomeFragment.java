@@ -30,6 +30,7 @@ import com.example.task_management.activity.MyProfileActivity;
 import com.example.task_management.adapter.TaskAdapter;
 import com.example.task_management.adapter.ViewPagerAdapter;
 import com.example.task_management.model.Category;
+import com.example.task_management.model.MyProfile;
 import com.example.task_management.model.PaginationTask;
 import com.example.task_management.model.Task;
 import com.example.task_management.service.APIService;

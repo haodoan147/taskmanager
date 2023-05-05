@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,7 +47,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyView
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView tv_category;
-        public CardView card_cate;
+        public LinearLayout card_cate;
         public ImageView iv_options;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -65,19 +66,16 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyView
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         List<Integer> colorCode = new ArrayList<>();
-        colorCode.add(R.color.color1);
-        colorCode.add(R.color.color2);
-        colorCode.add(R.color.color3);
-        colorCode.add(R.color.color4);
-        colorCode.add(R.color.color5);
-        colorCode.add(R.color.color6);
-        colorCode.add(R.color.color7);
-        colorCode.add(R.color.color8);
+        colorCode.add(R.drawable.status_view_round_1);
+        colorCode.add(R.drawable.status_view_round_2);
+        colorCode.add(R.drawable.status_view_round_3);
+        colorCode.add(R.drawable.status_view_round_4);
+        colorCode.add(R.drawable.status_view_round_5);
         Random random = new Random();
-        int number = random.nextInt(8);
+        int number = random.nextInt(5);
         Category category = categoryList.get(position);
         holder.tv_category.setText(category.getName());
-        holder.card_cate.setCardBackgroundColor(colorCode.get(number));
+        holder.card_cate.setBackgroundResource(colorCode.get(number));
         holder.iv_options.setOnClickListener(view -> showPopUpMenu(view, position));
     }
     public void showPopUpMenu(View view,int position) {

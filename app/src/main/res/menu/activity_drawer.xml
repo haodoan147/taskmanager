@@ -18,6 +18,9 @@
         <menu>
             <group android:checkableBehavior="single">
                 <item
+                    android:id="@+id/nav_group"
+                    android:title="Quản lí nhóm" />
+                <item
                     android:id="@+id/nav_schedule"
                     android:title="Lịch biểu" />
                 <item

@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.task_management.R;
 import com.example.task_management.model.AccessToken;
+import com.example.task_management.model.MyProfile;
 import com.example.task_management.service.APIService;
 import com.example.task_management.utils.RetrofitClient;
 import com.example.task_management.utils.SharedPrefManager;
@@ -26,7 +27,7 @@ public class SignInActivity extends AppCompatActivity {
     EditText editTextPassword;
     ImageButton btnLogin;
     APIService apiService;
-
+    String id, name, email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,12 +78,13 @@ public class SignInActivity extends AppCompatActivity {
                 AccessToken accessToken = response.body();
                 if (accessToken != null) {
                     Toast.makeText(SignInActivity.this, "Login Success", Toast.LENGTH_SHORT).show();
+                    SharedPrefManager.getInstance(getApplicationContext()).userLogin(accessToken.getAccessToken());
                     Intent intent = new Intent(SignInActivity.this, HomeActivity.class);
 //                    Bundle bundle = new Bundle();
 //                    bundle.putSerializable("userObject", stateMessage.getUser());
 //                    intent.putExtras(bundle);
                     startActivity(intent);
-                    SharedPrefManager.getInstance(getApplicationContext()).userLogin(accessToken.getAccessToken());
+
                 } else {
                     Toast.makeText(SignInActivity.this, "Wrong Account", Toast.LENGTH_SHORT).show();
                 }
@@ -96,7 +98,6 @@ public class SignInActivity extends AppCompatActivity {
 
 
     }
-
     private void initView(){
         editTextEmail = findViewById(R.id.edittext_email);
         editTextPassword =  findViewById(R.id.edittext_password);

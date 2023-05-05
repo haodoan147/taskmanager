@@ -7,21 +7,21 @@
     <RelativeLayout
         android:id="@+id/constraint"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="40dp"
         android:background="@color/white"
         app:title="Chi tiết sảo phẩm"
-        app:titleTextColor="#000000">
+        app:titleTextColor="@color/colorAccent">
         <ImageView
-            android:id="@+id/btn_back_to_prodetail"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:id="@+id/btn_back_to_context"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/back" />
+            app:srcCompat="@drawable/baseline_arrow_back_ios_24" />
     </RelativeLayout>
     <androidx.cardview.widget.CardView
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -52,13 +52,15 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/status_view_round_6"
+                    android:paddingRight="10dp"
+                    android:paddingLeft="10dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         tools:text="Full house"
-                        android:singleLine="true"
                         android:textSize="26sp"
                         android:layout_weight="1"
                         android:id="@+id/tv_title"
@@ -72,7 +74,11 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingTop="10dp">
+                    android:paddingTop="10dp"
+                    android:background="@drawable/status_view_round_5"
+                    android:layout_marginTop="10dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -102,7 +108,9 @@
                     android:textSize="18sp"
                     android:textColor="@android:color/black"
                     android:paddingLeft="10dp"
-                    android:paddingRight="10dp"/>
+                    android:paddingRight="10dp"
+                    android:background="@drawable/status_view_round_1"
+                    android:layout_marginTop="10dp"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -113,7 +121,9 @@
                     android:textSize="18sp"
                     android:textColor="@android:color/black"
                     android:paddingLeft="10dp"
-                    android:paddingRight="10dp"/>
+                    android:paddingRight="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/status_view_round_2"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -132,7 +142,11 @@
                     android:alpha="0.5"
                     android:id="@+id/tv_duration"
                     android:textSize="18sp"
-                    android:textColor="@android:color/black"/>
+                    android:textColor="@android:color/black"
+                    android:background="@drawable/status_view_round_4"
+                    android:layout_marginTop="10dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"/>
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -163,8 +177,8 @@
                         android:textSize="16sp"
                         android:id="@+id/tv_priority"
                         android:layout_gravity="right"
-                        android:paddingLeft="10dp"
-                        android:paddingRight="10dp"/>
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
