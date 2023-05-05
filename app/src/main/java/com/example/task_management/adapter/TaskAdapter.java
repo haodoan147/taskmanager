@@ -171,7 +171,9 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
                             .setNegativeButton(R.string.no, (dialog, which) -> dialog.cancel()).show();
                     break;
                 case R.id.menuDetail:
-                    context.startActivity(new Intent(context, DetailTaskActivity.class));
+                    Intent detailContext = new Intent(context, DetailTaskActivity.class);
+                    detailContext.putExtra("idTask", taskList.get(position).getId());
+                    context.startActivity(detailContext);
                     break;
                 case R.id.menuDone:
                     break;

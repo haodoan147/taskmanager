@@ -49,7 +49,7 @@ public class DetailTaskActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.detail_task);
         Intent intent = getIntent();
-        idTask =intent.getIntExtra("idTask", 24);
+        idTask = intent.getIntExtra("idTask", 24);
         initView();
     }
 
@@ -170,46 +170,27 @@ public class DetailTaskActivity extends AppCompatActivity {
                 case R.id.menu_status_todo:
                     updateStatus("TODO");
                     tv_status.setText("TODO");
+                    tv_status.setBackgroundResource(R.drawable.status_view_round_1);
                     break;
                 case R.id.menu_status_process:
                     updateStatus("IN_PROGRESS");
                     tv_status.setText("IN_PROGRESS");
+                    tv_status.setBackgroundResource(R.drawable.status_view_round_2);
                     break;
                 case R.id.menu_status_done:
                     updateStatus("DONE");
                     tv_status.setText("DONE");
+                    tv_status.setBackgroundResource(R.drawable.status_view_round_3);
                     break;
                 case R.id.menu_status_postponed:
                     updateStatus("POSTPONED");
                     tv_status.setText("POSTPONED");
+                    tv_status.setBackgroundResource(R.drawable.status_view_round_4);
                     break;
                 case R.id.menu_status_cancled:
                     updateStatus("CANCELED");
                     tv_status.setText("CANCELED");
-                    break;
-            }
-            return false;
-        });
-        popupMenu.show();
-    }
-    public void showPopUpMoreMenu(View view) {
-        PopupMenu popupMenu = new PopupMenu(getApplicationContext(), view);
-        popupMenu.getMenuInflater().inflate(R.menu.task_option_popup, popupMenu.getMenu());
-        popupMenu.setOnMenuItemClickListener(item -> {
-            switch (item.getItemId()) {
-                case R.id.menuDelete:
-                    String accessToken = (SharedPrefManager.getInstance(getApplicationContext().getApplicationContext()).getAccessToken()).getAccessToken();
-                    String authHeader = "Bearer " + accessToken;
-                    APIService apiService = RetrofitClient.getInstance().create(APIService.class);
-                    apiService.deleteTask(authHeader,getTaskId()).enqueue(new Callback<Task>() {
-                        @Override
-                        public void onResponse(Call<Task> call, Response<Task> response) {
-                        }
-                        @Override
-                        public void onFailure(Call<Task> call, Throwable t) {
-
-                        }
-                    });
+                    tv_status.setBackgroundResource(R.drawable.status_view_round_5);
                     break;
             }
             return false;
