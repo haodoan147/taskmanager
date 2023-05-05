@@ -31,6 +31,7 @@ import com.example.task_management.R;
 import com.example.task_management.activity.HomeActivity;
 import com.example.task_management.activity.MyProfileActivity;
 import com.example.task_management.activity.SignInActivity;
+import com.example.task_management.activity.task.CalendarActivity;
 import com.example.task_management.activity.task.CreateTaskActivity;
 import com.example.task_management.activity.task.CreateTaskFragment;
 import com.example.task_management.activity.task.HomeFragment;
@@ -121,6 +122,10 @@ public class GroupActivity extends AppCompatActivity implements NavigationView.O
             case R.id.nav_logout:
                 SharedPrefManager.getInstance(getApplicationContext()).logout();
                 intent = new Intent(getApplicationContext(), SignInActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.nav_schedule:
+                intent = new Intent(getApplicationContext(), CalendarActivity.class);
                 startActivity(intent);
                 break;
         }

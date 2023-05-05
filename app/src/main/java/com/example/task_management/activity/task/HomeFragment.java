@@ -66,7 +66,6 @@ public class HomeFragment extends Fragment {
         SharedPreferences pref = getActivity().getSharedPreferences("ATAuthen",Context.MODE_PRIVATE);
         String accessToken = pref.getString("keyaccesstoken", "empty");
         String authHeader = "Bearer " + accessToken;
-        Log.e("123", authHeader);
         getCategory();
         apiService = RetrofitClient.getInstance().create(APIService.class);
         apiService.getAllTask(authHeader,1,100,"asc", status,"priority", "").enqueue(new Callback<PaginationTask>() {

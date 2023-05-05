@@ -22,6 +22,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.task_management.R;
 import com.example.task_management.activity.group.GroupActivity;
+import com.example.task_management.activity.task.CalendarActivity;
 import com.example.task_management.activity.task.CreateTaskFragment;
 import com.example.task_management.activity.task.HomeFragment;
 import com.example.task_management.activity.task.SearchTaskFragment;
@@ -107,6 +108,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_logout:
                 SharedPrefManager.getInstance(getApplicationContext()).logout();
                 intent = new Intent(getApplicationContext(), SignInActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.nav_schedule:
+                intent = new Intent(getApplicationContext(), CalendarActivity.class);
                 startActivity(intent);
                 break;
         }
