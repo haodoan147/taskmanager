@@ -4,129 +4,381 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#f8eeec"
+    android:layout_margin="20dp"
     tools:context=".activity.SignUpActivity">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="vertical">-->
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"></LinearLayout>
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:orientation="vertical"></LinearLayout>-->
+
+<!--            <ImageView-->
+<!--                android:id="@+id/imageView"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:background="@drawable/top_background2"-->
+<!--                android:scaleType="fitXY"-->
+<!--                app:srcCompat="@drawable/top_background1" />-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/textView"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:paddingStart="30dp"-->
+<!--                android:paddingEnd="30dp"-->
+<!--                android:text="Create\nAccount"-->
+<!--                android:textColor="#3b608c"-->
+<!--                android:textSize="30dp"-->
+<!--                android:textStyle="bold" />-->
+
+<!--            <EditText-->
+<!--                android:id="@+id/edittext_name"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="50dp"-->
+<!--                android:layout_marginStart="30dp"-->
+<!--                android:layout_marginTop="16dp"-->
+<!--                android:layout_marginEnd="30dp"-->
+<!--                android:background="@drawable/edittext_background"-->
+<!--                android:drawableStart="@drawable/name"-->
+<!--                android:drawablePadding="16dp"-->
+<!--                android:ems="10"-->
+<!--                android:hint="Name"-->
+<!--                android:inputType="textPersonName"-->
+<!--                android:padding="8dp"-->
+<!--                android:textColorHint="#756C6C" />-->
+
+<!--            <EditText-->
+<!--                android:id="@+id/edittext_email"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="50dp"-->
+<!--                android:layout_marginStart="30dp"-->
+<!--                android:layout_marginTop="16dp"-->
+<!--                android:layout_marginEnd="30dp"-->
+<!--                android:background="@drawable/edittext_background"-->
+<!--                android:drawableStart="@drawable/email"-->
+<!--                android:drawablePadding="16dp"-->
+<!--                android:ems="10"-->
+<!--                android:hint="Email"-->
+<!--                android:inputType="textPersonName"-->
+<!--                android:padding="8dp"-->
+<!--                android:textColorHint="#756C6C" />-->
+
+<!--            <EditText-->
+<!--                android:id="@+id/edittext_password"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="50dp"-->
+<!--                android:layout_marginStart="30dp"-->
+<!--                android:layout_marginTop="16dp"-->
+<!--                android:layout_marginEnd="30dp"-->
+<!--                android:background="@drawable/edittext_background"-->
+<!--                android:drawableStart="@drawable/password"-->
+<!--                android:drawablePadding="16dp"-->
+<!--                android:ems="10"-->
+<!--                android:hint="Password"-->
+<!--                android:password="true"-->
+<!--                android:inputType="textPersonName"-->
+<!--                android:padding="8dp"-->
+<!--                android:textColorHint="#756C6C" />-->
+<!--            <EditText-->
+<!--                android:id="@+id/edittext_confirm_password"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="50dp"-->
+<!--                android:layout_marginStart="30dp"-->
+<!--                android:layout_marginTop="16dp"-->
+<!--                android:layout_marginEnd="30dp"-->
+<!--                android:background="@drawable/edittext_background"-->
+<!--                android:drawableStart="@drawable/password"-->
+<!--                android:drawablePadding="16dp"-->
+<!--                android:ems="10"-->
+<!--                android:hint="Confirm Password"-->
+<!--                android:password="true"-->
+<!--                android:inputType="textPersonName"-->
+<!--                android:padding="8dp"-->
+<!--                android:textColorHint="#756C6C" />-->
+
+<!--            <ImageButton-->
+<!--                android:id="@+id/imgBtn_Register"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="end"-->
+<!--                android:layout_margin="14dp"-->
+<!--                android:background="@drawable/login_background"-->
+<!--                app:srcCompat="@drawable/btn_arrow2" />-->
+
+
+
+<!--            <TextView-->
+<!--                android:id="@+id/textView2"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="8dp"-->
+<!--                android:text="Forget your password? Recover it"-->
+<!--                android:textAlignment="center"-->
+<!--                android:textColor="#3b608c"-->
+<!--                android:textSize="16dp"-->
+<!--                android:textStyle="bold" />-->
+<!--        </LinearLayout>-->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/imageView"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/top_background2"
-                android:scaleType="fitXY"
-                app:srcCompat="@drawable/top_background1" />
+                android:layout_gravity="start"
+                android:layout_marginTop="30dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_baseline_arrow_left" />
 
-            <TextView
-                android:id="@+id/textView"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingStart="30dp"
-                android:paddingEnd="30dp"
-                android:text="Create\nAccount"
-                android:textColor="#3b608c"
-                android:textSize="30dp"
-                android:textStyle="bold" />
+                android:layout_height="match_parent"
+                android:layout_marginTop="30dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView">
 
-            <EditText
-                android:id="@+id/edittext_name"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="30dp"
-                android:background="@drawable/edittext_background"
-                android:drawableStart="@drawable/name"
-                android:drawablePadding="16dp"
-                android:ems="10"
-                android:hint="Name"
-                android:inputType="textPersonName"
-                android:padding="8dp"
-                android:textColorHint="#756C6C" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-            <EditText
-                android:id="@+id/edittext_email"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="30dp"
-                android:background="@drawable/edittext_background"
-                android:drawableStart="@drawable/email"
-                android:drawablePadding="16dp"
-                android:ems="10"
-                android:hint="Email"
-                android:inputType="textPersonName"
-                android:padding="8dp"
-                android:textColorHint="#756C6C" />
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="10dp">
 
-            <EditText
-                android:id="@+id/edittext_password"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="30dp"
-                android:background="@drawable/edittext_background"
-                android:drawableStart="@drawable/password"
-                android:drawablePadding="16dp"
-                android:ems="10"
-                android:hint="Password"
-                android:password="true"
-                android:inputType="textPersonName"
-                android:padding="8dp"
-                android:textColorHint="#756C6C" />
-            <EditText
-                android:id="@+id/edittext_confirm_password"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="30dp"
-                android:background="@drawable/edittext_background"
-                android:drawableStart="@drawable/password"
-                android:drawablePadding="16dp"
-                android:ems="10"
-                android:hint="Confirm Password"
-                android:password="true"
-                android:inputType="textPersonName"
-                android:padding="8dp"
-                android:textColorHint="#756C6C" />
+                        <TextView
+                            android:id="@+id/textView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="10dp"
+                            android:fontFamily="sans-serif-medium"
+                            android:text="Đăng ký tài khoản"
+                            android:textSize="30dp"
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.0"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_bias="0.0" />
 
-            <ImageButton
-                android:id="@+id/imgBtn_Register"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_margin="14dp"
-                android:background="@drawable/login_background"
-                app:srcCompat="@drawable/btn_arrow2" />
+                        <TextView
+                            android:id="@+id/textView2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Đăng ký tài khoản để có thể sử dụng ngay trong hôm nay."
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:id="@+id/textView4"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Đã có tài khoản? "
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                tools:layout_editor_absoluteX="354dp" />
+
+                            <TextView
+                                android:id="@+id/textView5"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="sans-serif-medium"
+                                android:text="Đăng nhập."
+                                android:textSize="17dp"
+                                android:textStyle="bold"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toEndOf="@id/textView4"
+                                app:layout_constraintTop_toTopOf="parent"
+                                tools:layout_editor_absoluteX="385dp" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="100dp"
+                        android:orientation="vertical">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginBottom="10dp">
+
+                            <ImageView
+                                android:id="@+id/imageView5"
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:srcCompat="@drawable/imageview_fill_info" />
+
+                            <EditText
+                                android:id="@+id/edittext_email"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Email"
+                                app:layout_constraintBottom_toBottomOf="@+id/imageView5"
+                                app:layout_constraintEnd_toEndOf="@+id/imageView5"
+                                app:layout_constraintStart_toStartOf="@+id/imageView5"
+                                app:layout_constraintTop_toTopOf="@+id/imageView5" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginBottom="10dp">
+
+                            <ImageView
+                                android:id="@+id/imageView6"
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:srcCompat="@drawable/imageview_fill_info" />
+
+                            <EditText
+                                android:id="@+id/edittext_name"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Họ và tên"
+                                app:layout_constraintBottom_toBottomOf="@+id/imageView6"
+                                app:layout_constraintEnd_toEndOf="@+id/imageView6"
+                                app:layout_constraintStart_toStartOf="@+id/imageView6"
+                                app:layout_constraintTop_toTopOf="@+id/imageView6" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginBottom="10dp">
+
+                            <ImageView
+                                android:id="@+id/imageView2"
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:srcCompat="@drawable/imageview_fill_info" />
+
+                            <EditText
+                                android:id="@+id/edittext_password"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Mật khẩu"
+                                app:layout_constraintBottom_toBottomOf="@+id/imageView2"
+                                app:layout_constraintEnd_toEndOf="@+id/imageView2"
+                                app:layout_constraintStart_toStartOf="@+id/imageView2"
+                                app:layout_constraintTop_toTopOf="@+id/imageView2" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginBottom="20dp">
 
 
+                            <ImageView
+                                android:id="@+id/imageView3"
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:srcCompat="@drawable/imageview_fill_info" />
 
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="Forget your password? Recover it"
-                android:textAlignment="center"
-                android:textColor="#3b608c"
-                android:textSize="16dp"
-                android:textStyle="bold" />
-        </LinearLayout>
+                            <EditText
+                                android:id="@+id/edittext_confirm_password"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Nhập lại mật khẩu"
+                                app:layout_constraintBottom_toBottomOf="@+id/imageView3"
+                                app:layout_constraintEnd_toEndOf="@+id/imageView3"
+                                app:layout_constraintStart_toStartOf="@+id/imageView3"
+                                app:layout_constraintTop_toTopOf="@+id/imageView3" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <ImageView
+                                android:id="@+id/imageView4"
+                                android:layout_width="170dp"
+                                android:layout_height="50dp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:srcCompat="@drawable/button_log" />
+
+                            <TextView
+                                android:id="@+id/textView6"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="monospace"
+                                android:text="Đăng ký"
+                                android:textColor="#FFFFFF"
+                                android:textSize="18dp"
+                                android:textStyle="normal"
+                                app:layout_constraintBottom_toBottomOf="@+id/imageView4"
+                                app:layout_constraintEnd_toEndOf="@+id/imageView4"
+                                app:layout_constraintStart_toStartOf="@+id/imageView4"
+                                app:layout_constraintTop_toTopOf="@+id/imageView4" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
