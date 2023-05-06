@@ -129,8 +129,8 @@
                 android:alpha="0.5"
                 android:id="@+id/tv_priority"
                 android:textSize="10sp"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
                 android:textColor="@android:color/black"
                 android:background="@drawable/status_view_round_1"/>
 
@@ -143,8 +143,8 @@
                 android:id="@+id/tv_status"
                 android:layout_gravity="right"
                 android:layout_marginTop="10dp"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
                 android:background="@drawable/status_view_round_1"/>
 
 
