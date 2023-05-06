@@ -76,7 +76,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     replaceFragment(new SearchTaskFragment());
                     break;
                 case R.id.btm_group:
-                    intent = new Intent(getApplicationContext(), GroupActivity.class);
+                    intent = new Intent(getApplicationContext(), LoadingActivity.class);
+                    intent.putExtra("currentContext", "GroupActivity");
                     startActivity(intent);
                     break;
                 case R.id.btm_notice:

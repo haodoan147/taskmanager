@@ -13,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.task_management.R;
 import com.example.task_management.model.AccessToken;
-import com.example.task_management.model.MyProfile;
 import com.example.task_management.service.APIService;
 import com.example.task_management.utils.RetrofitClient;
 import com.example.task_management.utils.SharedPrefManager;
@@ -79,10 +78,8 @@ public class SignInActivity extends AppCompatActivity {
                 if (accessToken != null) {
                     Toast.makeText(SignInActivity.this, "Login Success", Toast.LENGTH_SHORT).show();
                     SharedPrefManager.getInstance(getApplicationContext()).userLogin(accessToken.getAccessToken());
-                    Intent intent = new Intent(SignInActivity.this, HomeActivity.class);
-//                    Bundle bundle = new Bundle();
-//                    bundle.putSerializable("userObject", stateMessage.getUser());
-//                    intent.putExtras(bundle);
+                    Intent intent = new Intent(SignInActivity.this, LoadingActivity.class);
+                    intent.putExtra("currentContext", "HomeActivity");
                     startActivity(intent);
 
                 } else {
