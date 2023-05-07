@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,6 +26,7 @@ import com.example.task_management.activity.group.GroupActivity;
 import com.example.task_management.activity.task.CalendarActivity;
 import com.example.task_management.activity.task.CreateTaskFragment;
 import com.example.task_management.activity.task.HomeFragment;
+import com.example.task_management.activity.task.NewTaskFragment;
 import com.example.task_management.activity.task.SearchTaskFragment;
 import com.example.task_management.model.MyProfile;
 import com.example.task_management.service.APIService;
@@ -58,11 +60,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout.addDrawerListener(drawerToggle);
         drawerToggle.syncState();
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new NewTaskFragment()).commit();
             navigationView.setCheckedItem(R.id.nav_home);
         }
         SharedPreferences pref = getApplicationContext().getSharedPreferences("ATAuthen", Context.MODE_PRIVATE);
-        replaceFragment(new HomeFragment());
+        replaceFragment(new NewTaskFragment());
         navigationView.bringToFront();
 
         bottomNavigationView.setBackground(null);
@@ -70,7 +72,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             Intent intent;
             switch (item.getItemId()) {
                 case R.id.btm_home:
-                    replaceFragment(new HomeFragment());
+                    replaceFragment(new NewTaskFragment());
                     break;
                 case R.id.btm_search:
                     replaceFragment(new SearchTaskFragment());

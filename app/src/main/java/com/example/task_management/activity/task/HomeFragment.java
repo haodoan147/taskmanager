@@ -53,6 +53,7 @@ public class HomeFragment extends Fragment {
     APIService apiService;
     List<Task> taskList= new ArrayList<>();
     List<Category> listCategory= new ArrayList<>();
+
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.home, container, false);
         recyclerView = view.findViewById(R.id.recyclerView);
