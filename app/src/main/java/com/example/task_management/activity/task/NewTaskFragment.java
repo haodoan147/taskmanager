@@ -61,13 +61,6 @@ public class NewTaskFragment extends Fragment {
     public static NewTaskFragment newInstance() {
         return new NewTaskFragment();
     }
-    private Handler mHandler = new Handler();
-    private Runnable mRunnable = new Runnable() {
-        @Override
-        public void run() {
-            // Code to be executed after delay
-        }
-    };
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,6 +69,11 @@ public class NewTaskFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        taskList = (List<Task>) getArguments().getSerializable("newTaskList");
+        for (int i = 0; i < taskList.size(); i++) {
+            long id = sCreatedItems++;
+            mItemArray.add(new Pair<>(id, taskList.get(i)));
+        }
         View view = inflater.inflate(R.layout.board_layout, container, false);
         mBoardView = view.findViewById(R.id.board_view);
         mBoardView.setSnapToColumnsWhenScrolling(true);
@@ -129,15 +127,10 @@ public class NewTaskFragment extends Fragment {
                 //Toast.makeText(getContext(), "Column drag ended at " + position, Toast.LENGTH_SHORT).show();
             }
         });
+        resetBoard();
         return view;
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("All Task");
-        resetBoard();
-    }
     private void resetBoard() {
         mBoardView.clearBoard();
         mBoardView.setCustomDragItem(new MyDragItem(getActivity(), R.layout.column_item));
@@ -150,13 +143,18 @@ public class NewTaskFragment extends Fragment {
     }
 
     private void addColumn(String status) {
-        mItemArray.clear();
-        getAllTask(status);
-        mHandler.postDelayed(mRunnable, 4000);
-        final ItemAdapter listAdapter = new ItemAdapter(mItemArray, R.layout.column_item, R.id.item_layout, true,getActivity());
+        ArrayList<Pair<Long, Task>> newMItemArray = new ArrayList<>();
+        for (Pair<Long, Task> task: mItemArray) {
+            if(task.second.getStatus().equals(status)){
+                Log.e("123123","" + task.second.getStatus());
+                newMItemArray.add(task);
+            }
+        }
+        Log.e("123123","" + newMItemArray.size());
+        final ItemAdapter listAdapter = new ItemAdapter(newMItemArray, R.layout.column_item, R.id.item_layout, true,getActivity());
         final View header = View.inflate(getActivity(), R.layout.column_header, null);
         ((TextView) header.findViewById(R.id.text)).setText(status);
-        ((TextView) header.findViewById(R.id.item_count)).setText("" + mItemArray.size());
+        ((TextView) header.findViewById(R.id.item_count)).setText("" + newMItemArray.size());
         LinearLayoutManager layoutManager = mGridLayout ? new GridLayoutManager(getContext(), 4) : new LinearLayoutManager(getContext());
         ColumnProperties columnProperties = ColumnProperties.Builder.newBuilder(listAdapter)
                 .setLayoutManager(layoutManager)
@@ -279,36 +277,5 @@ public class NewTaskFragment extends Fragment {
             anim.setDuration(ANIMATION_DURATION);
             anim.start();
         }
-    }
-    private List<Task> getAllTask(String status) {
-        taskList.clear();
-        SharedPreferences pref = getActivity().getSharedPreferences("ATAuthen", Context.MODE_PRIVATE);
-        String accessToken = pref.getString("keyaccesstoken", "empty");
-        String authHeader = "Bearer " + accessToken;
-        apiService = RetrofitClient.getInstance().create(APIService.class);
-        apiService.getAllTask(authHeader, 1, 100, "asc", status, "priority", "").enqueue(new Callback<PaginationTask>() {
-            @Override
-            public void onResponse(Call<PaginationTask> call, Response<PaginationTask> response) {
-                if (response.isSuccessful()) {
-                    taskList = response.body().getData();
-                    for (int i = 0; i < taskList.size(); i++) {
-                        long id = sCreatedItems++;
-                        mItemArray.add(new Pair<>(id, taskList.get(i)));
-                    }
-                } else {
-                    try {
-                        Log.v("Error code 400", response.errorBody().string());
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<PaginationTask> call, Throwable t) {
-                Log.e("TAG", "onFailure: " + t.getMessage());
-            }
-        });
-        return taskList;
     }
 }
