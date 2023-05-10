@@ -30,6 +30,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.task_management.R;
 import com.example.task_management.adapter.ItemAdapter;
+import com.example.task_management.model.Category;
 import com.example.task_management.model.PaginationTask;
 import com.example.task_management.model.Task;
 import com.example.task_management.service.APIService;
@@ -56,6 +57,7 @@ public class NewTaskFragment extends Fragment {
     private APIService apiService;
     ArrayList<Pair<Long, Task>> mItemArray = new ArrayList<>();
     List<Task> taskList= new ArrayList<>();
+    List<Category> listCategory = new ArrayList<>();
 
 
     public static NewTaskFragment newInstance() {
@@ -74,6 +76,7 @@ public class NewTaskFragment extends Fragment {
             long id = sCreatedItems++;
             mItemArray.add(new Pair<>(id, taskList.get(i)));
         }
+        listCategory  = (List<Category>) getArguments().getSerializable("newCateList");
         View view = inflater.inflate(R.layout.board_layout, container, false);
         mBoardView = view.findViewById(R.id.board_view);
         mBoardView.setSnapToColumnsWhenScrolling(true);
@@ -146,12 +149,10 @@ public class NewTaskFragment extends Fragment {
         ArrayList<Pair<Long, Task>> newMItemArray = new ArrayList<>();
         for (Pair<Long, Task> task: mItemArray) {
             if(task.second.getStatus().equals(status)){
-                Log.e("123123","" + task.second.getStatus());
                 newMItemArray.add(task);
             }
         }
-        Log.e("123123","" + newMItemArray.size());
-        final ItemAdapter listAdapter = new ItemAdapter(newMItemArray, R.layout.column_item, R.id.item_layout, true,getActivity());
+        final ItemAdapter listAdapter = new ItemAdapter(newMItemArray, R.layout.column_item, R.id.item_layout, true,getActivity(),listCategory);
         final View header = View.inflate(getActivity(), R.layout.column_header, null);
         ((TextView) header.findViewById(R.id.text)).setText(status);
         ((TextView) header.findViewById(R.id.item_count)).setText("" + newMItemArray.size());
@@ -203,9 +204,16 @@ public class NewTaskFragment extends Fragment {
 
             for (int i = 0; i < clickedRecyclerView.getChildCount(); i++) {
                 View view = View.inflate(dragView.getContext(), R.layout.column_item, null);
+                ((TextView) view.findViewById(R.id.tv_date)).setText(((TextView) clickedRecyclerView.getChildAt(i).findViewById(R.id.tv_date)).getText());
+                ((TextView) view.findViewById(R.id.tv_month)).setText(((TextView) clickedRecyclerView.getChildAt(i).findViewById(R.id.tv_month)).getText());
                 ((TextView) view.findViewById(R.id.tv_title)).setText(((TextView) clickedRecyclerView.getChildAt(i).findViewById(R.id.tv_title)).getText());
+                ((TextView) view.findViewById(R.id.tv_des)).setText(((TextView) clickedRecyclerView.getChildAt(i).findViewById(R.id.tv_des)).getText());
+                ((TextView) view.findViewById(R.id.tv_duration)).setText(((TextView) clickedRecyclerView.getChildAt(i).findViewById(R.id.tv_duration)).getText());
+                ((TextView) view.findViewById(R.id.tv_category)).setText(((TextView) clickedRecyclerView.getChildAt(i).findViewById(R.id.tv_category)).getText());
+                ((TextView) view.findViewById(R.id.tv_label)).setText(((TextView) clickedRecyclerView.getChildAt(i).findViewById(R.id.tv_label)).getText());
+                ((TextView) view.findViewById(R.id.tv_priority)).setText(((TextView) clickedRecyclerView.getChildAt(i).findViewById(R.id.tv_priority)).getText());
+                ((TextView) view.findViewById(R.id.tv_status)).setText(((TextView) clickedRecyclerView.getChildAt(i).findViewById(R.id.tv_status)).getText());
                 dragLayout.addView(view);
-
                 if (i == 0) {
                     dragScrollView.setScrollY(-clickedRecyclerView.getChildAt(i).getTop());
                 }
@@ -236,8 +244,25 @@ public class NewTaskFragment extends Fragment {
 
         @Override
         public void onBindDragView(View clickedView, View dragView) {
-            CharSequence text = ((TextView) clickedView.findViewById(R.id.tv_title)).getText();
-            ((TextView) dragView.findViewById(R.id.tv_title)).setText(text);
+            CharSequence tv_date = ((TextView) clickedView.findViewById(R.id.tv_date)).getText();
+            CharSequence tv_month = ((TextView) clickedView.findViewById(R.id.tv_month)).getText();
+            CharSequence tv_title = ((TextView) clickedView.findViewById(R.id.tv_title)).getText();
+            CharSequence tv_des = ((TextView) clickedView.findViewById(R.id.tv_des)).getText();
+            CharSequence tv_duration = ((TextView) clickedView.findViewById(R.id.tv_duration)).getText();
+            CharSequence tv_category = ((TextView) clickedView.findViewById(R.id.tv_category)).getText();
+            CharSequence tv_label = ((TextView) clickedView.findViewById(R.id.tv_label)).getText();
+            CharSequence tv_priority = ((TextView) clickedView.findViewById(R.id.tv_priority)).getText();
+            CharSequence tv_status = ((TextView) clickedView.findViewById(R.id.tv_status)).getText();
+
+            ((TextView) dragView.findViewById(R.id.tv_date)).setText(tv_date);
+            ((TextView) dragView.findViewById(R.id.tv_month)).setText(tv_month);
+            ((TextView) dragView.findViewById(R.id.tv_title)).setText(tv_title);
+            ((TextView) dragView.findViewById(R.id.tv_des)).setText(tv_des);
+            ((TextView) dragView.findViewById(R.id.tv_duration)).setText(tv_duration);
+            ((TextView) dragView.findViewById(R.id.tv_category)).setText(tv_category);
+            ((TextView) dragView.findViewById(R.id.tv_label)).setText(tv_label);
+            ((TextView) dragView.findViewById(R.id.tv_priority)).setText(tv_priority);
+            ((TextView) dragView.findViewById(R.id.tv_status)).setText(tv_status);
             CardView dragCard = dragView.findViewById(R.id.card);
             CardView clickedCard = clickedView.findViewById(R.id.card);
             dragCard.setMaxCardElevation(40);
@@ -276,6 +301,7 @@ public class NewTaskFragment extends Fragment {
             anim.setInterpolator(new DecelerateInterpolator());
             anim.setDuration(ANIMATION_DURATION);
             anim.start();
+
         }
     }
 }

@@ -7,7 +7,4 @@
     <item android:title="Xóa"
         android:orderInCategory="2"
         android:id="@+id/menuDelete"/>
-    <item android:title="Hoàn thành"
-        android:orderInCategory="3"
-        android:id="@+id/menuDone"/>
 </menu>

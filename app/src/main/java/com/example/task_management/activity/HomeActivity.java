@@ -31,6 +31,7 @@ import com.example.task_management.activity.task.HomeFragment;
 import com.example.task_management.activity.task.NewTaskFragment;
 import com.example.task_management.activity.task.SearchTaskFragment;
 import com.example.task_management.adapter.TaskAdapter;
+import com.example.task_management.model.Category;
 import com.example.task_management.model.MyProfile;
 import com.example.task_management.model.PaginationTask;
 import com.example.task_management.model.Task;
@@ -56,6 +57,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     String id, name, email;
     NavigationView navigationView;
     List<Task> taskList= new ArrayList<>();
+    List<Category> listCategory= new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -66,11 +68,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
         Toolbar toolbar = findViewById(R.id.toolbar);
         getMyProfile();
-        getAllTask("TODO");
-        getAllTask("IN_PROGRESS");
-        getAllTask("DONE");
-        getAllTask("POSTPONED");
-        getAllTask("CANCELED");
+        getCategory();
         setSupportActionBar(toolbar);
         ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.open,R.string.close);
         drawerLayout.addDrawerListener(drawerToggle);
@@ -86,10 +84,16 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         bottomNavigationView.setBackground(null);
         bottomNavigationView.setOnItemSelectedListener(item -> {
             Intent intent;
+            taskList.clear();
+            getAllTask("TODO");
+            getAllTask("IN_PROGRESS");
+            getAllTask("DONE");
+            getAllTask("POSTPONED");
+            getAllTask("CANCELED");
             switch (item.getItemId()) {
                 case R.id.btm_home:
-
                     List<Task> newTaskList = taskList;
+                    List<Category> newCateList = listCategory;
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -97,6 +101,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                             Fragment newFragment = new NewTaskFragment();
                             Bundle args = new Bundle();
                             args.putSerializable("newTaskList", (Serializable) newTaskList);
+                            args.putSerializable("newCateList", (Serializable) newCateList);
                             newFragment.setArguments(args);
                             replaceFragment(newFragment);
                         }
@@ -114,7 +119,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 //                    replaceFragment(new LibraryFragment());
                     break;
             }
-
             return true;
         });
     }
@@ -204,6 +208,24 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onFailure(Call<PaginationTask> call, Throwable t) {
                 Log.e("TAG", "onFailure: " + t.getMessage());
+            }
+        });
+    }
+    private void getCategory(){
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("ATAuthen",Context.MODE_PRIVATE);
+        String accessToken = pref.getString("keyaccesstoken", "empty");
+        String authHeader = "Bearer " + accessToken;
+        APIService apiService = RetrofitClient.getInstance().create(APIService.class);
+        apiService.getAllCategory(authHeader).enqueue(new Callback<List<Category>>() {
+            @Override
+            public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
+                if (response.isSuccessful()) {
+                    listCategory = response.body();
+                }
+            }
+            @Override
+            public void onFailure(Call<List<Category>> call, Throwable t) {
+                Log.d("TAG", "onFailure: " + t.getMessage());
             }
         });
     }

@@ -59,13 +59,14 @@ public class ItemAdapter extends DragItemAdapter<Pair<Long, Task>, ItemAdapter.V
         URGENT,
     }
     Context context;
-    List<Category> listCategory = new ArrayList<>();
+    List<Category> listCategory;
 
-    public ItemAdapter(ArrayList<Pair<Long, Task>> list, int layoutId, int grabHandleId, boolean dragOnLongPress,Context context) {
+    public ItemAdapter(ArrayList<Pair<Long, Task>> list, int layoutId, int grabHandleId, boolean dragOnLongPress,Context context, List<Category> cateList) {
         this.context = context;
         mLayoutId = layoutId;
         mGrabHandleId = grabHandleId;
         mDragOnLongPress = dragOnLongPress;
+        this.listCategory = cateList;
         setItemList(list);
     }
 
@@ -94,6 +95,7 @@ public class ItemAdapter extends DragItemAdapter<Pair<Long, Task>, ItemAdapter.V
         holder.tv_label.setText((("Nhãn: "+ (task.getLabels()).get(0).getName())));
         holder.tv_priority.setText("Độ ưu tiên: " +String.valueOf(TaskAdapter.TaskPriority.values()[task.getPriority()]));
         holder.tv_status.setText(task.getStatus());
+        holder.tv_status.setOnClickListener(view -> showChangeStatusPopUpMenu(view, position, holder.tv_status));
         holder.iv_options.setOnClickListener(view -> showPopUpMenu(view, position));
         switch (TaskAdapter.TaskPriority.values()[task.getPriority()])
         {
@@ -186,11 +188,83 @@ public class ItemAdapter extends DragItemAdapter<Pair<Long, Task>, ItemAdapter.V
                     detailContext.putExtra("idTask", mItemList.get(position).second.getId());
                     context.startActivity(detailContext);
                     break;
-                case R.id.menuDone:
+            }
+            return false;
+        });
+        popupMenu.show();
+    }
+    public void showChangeStatusPopUpMenu(View view, int position, TextView tv_status) {
+        PopupMenu popupMenu = new PopupMenu(context, view);
+        popupMenu.getMenuInflater().inflate(R.menu.change_status_option, popupMenu.getMenu());
+        popupMenu.setOnMenuItemClickListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.menuDelete:
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context, R.style.Theme_Task_management);
+                    alertDialogBuilder.setTitle(R.string.delete_confirmation).setMessage(R.string.sureToDelete).
+                            setPositiveButton(R.string.yes, (dialog, which) -> {
+                                String accessToken = (SharedPrefManager.getInstance(context.getApplicationContext()).getAccessToken()).getAccessToken();
+                                String authHeader = "Bearer " + accessToken;
+                                APIService apiService = RetrofitClient.getInstance().create(APIService.class);
+                                apiService.deleteTask(authHeader,mItemList.get(position).second.getId()).enqueue(new Callback<Task>() {
+                                    @Override
+                                    public void onResponse(Call<Task> call, Response<Task> response) {
+                                    }
+                                    @Override
+                                    public void onFailure(Call<Task> call, Throwable t) {
+
+                                    }
+                                });
+                                removeItem(position);
+                            })
+                            .setNegativeButton(R.string.no, (dialog, which) -> dialog.cancel()).show();
+                    break;
+                case R.id.menuDetail:
+                    Intent detailContext = new Intent(context, DetailTaskActivity.class);
+                    detailContext.putExtra("idTask", mItemList.get(position).second.getId());
+                    context.startActivity(detailContext);
+                    break;
+                case R.id.menu_status_todo:
+                    updateStatus("TODO",mItemList.get(position).second.getId());
+                    tv_status.setText("TODO");
+                    tv_status.setBackgroundResource(R.drawable.status_view_round_1);
+                    break;
+                case R.id.menu_status_process:
+                    updateStatus("IN_PROGRESS",mItemList.get(position).second.getId());
+                    tv_status.setText("IN_PROGRESS");
+                    tv_status.setBackgroundResource(R.drawable.status_view_round_2);
+                    break;
+                case R.id.menu_status_done:
+                    updateStatus("DONE",mItemList.get(position).second.getId());
+                    tv_status.setText("DONE");
+                    tv_status.setBackgroundResource(R.drawable.status_view_round_3);
+                    break;
+                case R.id.menu_status_postponed:
+                    updateStatus("POSTPONED",mItemList.get(position).second.getId());
+                    tv_status.setText("POSTPONED");
+                    tv_status.setBackgroundResource(R.drawable.status_view_round_4);
+                    break;
+                case R.id.menu_status_cancled:
+                    updateStatus("CANCELED",mItemList.get(position).second.getId());
+                    tv_status.setText("CANCELED");
+                    tv_status.setBackgroundResource(R.drawable.status_view_round_5);
                     break;
             }
             return false;
         });
         popupMenu.show();
+    }
+    private void updateStatus(String status,Integer id){
+        String accessToken = (SharedPrefManager.getInstance(context.getApplicationContext()).getAccessToken()).getAccessToken();
+        String authHeader = "Bearer " + accessToken;
+        APIService apiService = RetrofitClient.getInstance().create(APIService.class);
+        apiService.updateStatusTask(authHeader,id,status).enqueue(new Callback<Task>() {
+            @Override
+            public void onResponse(Call<Task> call, Response<Task> response) {
+            }
+            @Override
+            public void onFailure(Call<Task> call, Throwable t) {
+
+            }
+        });
     }
 }
