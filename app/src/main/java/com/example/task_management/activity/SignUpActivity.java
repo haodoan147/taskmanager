@@ -3,9 +3,12 @@ package com.example.task_management.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,6 +18,8 @@ import com.example.task_management.model.AccessToken;
 import com.example.task_management.service.APIService;
 import com.example.task_management.utils.RetrofitClient;
 import com.example.task_management.utils.SharedPrefManager;
+
+import java.io.IOException;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -26,20 +31,28 @@ public class SignUpActivity extends AppCompatActivity {
     EditText editTextPassword;
 
     EditText editTextConFirmPassword;
-    ImageButton btnRegister;
+    Button btnRegister;
+    TextView loginRedirectText;
     APIService apiService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.sign_up);
-
+        setContentView(R.layout.sign_up_new);
         initView();
 
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 testRegister();
+            }
+        });
+        loginRedirectText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+                Intent intent = new Intent(SignUpActivity.this, SignInActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -50,7 +63,8 @@ public class SignUpActivity extends AppCompatActivity {
         final String email = editTextEmail.getText().toString();
         final String password = editTextPassword.getText().toString();
         final String confirmPassword = editTextConFirmPassword.getText().toString();
-
+        Log.e("1233", password);
+        Log.e("1234", confirmPassword);
         if (TextUtils.isEmpty(username)) {
             editTextName.setError("Please enter your username");
             editTextName.requestFocus();
@@ -74,19 +88,27 @@ public class SignUpActivity extends AppCompatActivity {
             return;
         }
         apiService = RetrofitClient.getInstance().create(APIService.class);
-
-        apiService.getAccessTokenRegister(email, password,confirmPassword,username,username).enqueue(new Callback<AccessToken>() {
+        apiService.getAccessTokenRegister(email,password,confirmPassword,username,username).enqueue(new Callback<AccessToken>() {
             @Override
             public void onResponse(Call<AccessToken> call, Response<AccessToken> response) {
                 AccessToken accessToken = response.body();
-
-                if (accessToken != null) {
-                    Toast.makeText(SignUpActivity.this, "Register Success", Toast.LENGTH_SHORT).show();
-                    SharedPrefManager.getInstance(getApplicationContext()).userLogin(accessToken.getAccessToken());
-                    Intent intent = new Intent(SignUpActivity.this, LoadingActivity.class);
-                    startActivity(intent);
-                } else {
-                    Toast.makeText(SignUpActivity.this, "This account has already exist", Toast.LENGTH_SHORT).show();
+                if (response.isSuccessful()) {
+                    if (accessToken != null) {
+                        Toast.makeText(SignUpActivity.this, "Register Success", Toast.LENGTH_SHORT).show();
+                        SharedPrefManager.getInstance(getApplicationContext()).userLogin(accessToken.getAccessToken());
+                        Intent intent = new Intent(SignUpActivity.this, LoadingActivity.class);
+                        intent.putExtra("currentContext", "HomeActivity");
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(SignUpActivity.this, "This account has already exist", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                else{
+                    try {
+                        Log.v("Error code 400",response.errorBody().string());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
             @Override
@@ -102,7 +124,8 @@ public class SignUpActivity extends AppCompatActivity {
         editTextName =  findViewById(R.id.edittext_name);
         editTextEmail =  findViewById(R.id.edittext_email);
         editTextPassword =  findViewById(R.id.edittext_password);
-        editTextConFirmPassword =  findViewById(R.id.edittext_email);
+        editTextConFirmPassword =  findViewById(R.id.edittext_confirm_password);
         btnRegister= findViewById(R.id.imgBtn_Register);
+        loginRedirectText = findViewById(R.id.loginRedirectText);
     }
 }

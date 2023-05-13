@@ -5,8 +5,10 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,7 +26,8 @@ import retrofit2.Response;
 public class SignInActivity extends AppCompatActivity {
     EditText editTextEmail;
     EditText editTextPassword;
-    ImageButton btnLogin;
+    Button btnLogin;
+    TextView signUpRedirectText;
     APIService apiService;
     String id, name, email;
 
@@ -32,15 +35,12 @@ public class SignInActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.sign_in);
+        setContentView(R.layout.sign_in_new);
 
         initView();
         if(SharedPrefManager.getInstance(getApplicationContext()).isLoggedIn())
         {
             Intent intent = new Intent(SignInActivity.this, HomeActivity.class);
-//                    Bundle bundle = new Bundle();
-//                    bundle.putSerializable("userObject", stateMessage.getUser());
-//                    intent.putExtras(bundle);
             startActivity(intent);
             return;
         }
@@ -49,6 +49,14 @@ public class SignInActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 testLogin();
+            }
+        });
+        signUpRedirectText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+                Intent intent = new Intent(SignInActivity.this, SignUpActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -99,5 +107,6 @@ public class SignInActivity extends AppCompatActivity {
         editTextEmail = findViewById(R.id.edittext_email);
         editTextPassword =  findViewById(R.id.edittext_password);
         btnLogin = findViewById(R.id.imgBtn_Login);
+        signUpRedirectText = findViewById(R.id.signUpRedirectText);
     }
 }
