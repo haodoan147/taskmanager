@@ -18,5 +18,6 @@
     <!-- Margins -->
     <dimen name="columnSpacing">0dp</dimen>
     <dimen name="boardEdges">0dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 
 </resources>

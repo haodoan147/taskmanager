@@ -1,4 +1,4 @@
-package com.example.task_management.activity.group;
+package com.example.task_management.activity.group_task;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -15,13 +15,10 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.task_management.R;
-import com.example.task_management.activity.category.CategoryActivity;
 import com.example.task_management.adapter.CategoryAdapter;
-import com.example.task_management.adapter.TaskAdapter;
 import com.example.task_management.model.Category;
 import com.example.task_management.service.APIService;
 import com.example.task_management.utils.RetrofitClient;
-import com.example.task_management.utils.SharedPrefManager;
 
 import java.util.List;
 
@@ -44,7 +41,6 @@ public class CateByGroupFragment extends Fragment {
         SharedPreferences pref = getActivity().getSharedPreferences("ATAuthen",Context.MODE_PRIVATE);
         String accessToken = pref.getString("keyaccesstoken", "empty");
         String authHeader = "Bearer " + accessToken;
-        Log.e("123", authHeader);
         apiService = RetrofitClient.getInstance().create(APIService.class);
         apiService.getAllCategory(authHeader).enqueue(new Callback<List<Category>>() {
             @Override

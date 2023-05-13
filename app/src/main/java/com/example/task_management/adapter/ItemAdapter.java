@@ -17,11 +17,18 @@
 package com.example.task_management.adapter;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
+import android.os.Handler;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
@@ -29,9 +36,11 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.util.Pair;
+import androidx.fragment.app.Fragment;
 
 import com.example.task_management.R;
 import com.example.task_management.activity.task.DetailTaskActivity;
+import com.example.task_management.activity.task.NewTaskFragment;
 import com.example.task_management.model.Category;
 import com.example.task_management.model.Task;
 import com.example.task_management.service.APIService;
@@ -39,6 +48,7 @@ import com.example.task_management.utils.RetrofitClient;
 import com.example.task_management.utils.SharedPrefManager;
 import com.woxthebox.draglistview.DragItemAdapter;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -160,7 +170,7 @@ public class ItemAdapter extends DragItemAdapter<Pair<Long, Task>, ItemAdapter.V
     }
     public void showPopUpMenu(View view, int position) {
         PopupMenu popupMenu = new PopupMenu(context, view);
-        popupMenu.getMenuInflater().inflate(R.menu.task_option_popup, popupMenu.getMenu());
+        popupMenu.getMenuInflater().inflate(R.menu.my_group_task_option, popupMenu.getMenu());
         popupMenu.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()) {
                 case R.id.menuDelete:
@@ -184,9 +194,18 @@ public class ItemAdapter extends DragItemAdapter<Pair<Long, Task>, ItemAdapter.V
                             .setNegativeButton(R.string.no, (dialog, which) -> dialog.cancel()).show();
                     break;
                 case R.id.menuDetail:
-                    Intent detailContext = new Intent(context, DetailTaskActivity.class);
-                    detailContext.putExtra("idTask", mItemList.get(position).second.getId());
-                    context.startActivity(detailContext);
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            // Replace the current fragment with NewTaskFragment and pass the parameter
+                            Intent detailContext = new Intent(context, DetailTaskActivity.class);
+                            detailContext.putExtra("idTask", mItemList.get(position).second.getId());
+                            context.startActivity(detailContext);
+                        }
+                    }, 3000);
+                    break;
+                case R.id.menuAssign:
+                    showBottomDialog();
                     break;
             }
             return false;
@@ -266,5 +285,14 @@ public class ItemAdapter extends DragItemAdapter<Pair<Long, Task>, ItemAdapter.V
 
             }
         });
+    }
+    private void showBottomDialog() {
+        final Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.assign_bottom_sheet_layout);
+        dialog.show();
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
     }
 }

@@ -1,20 +1,29 @@
 package com.example.task_management.adapter;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.task_management.R;
+import com.example.task_management.activity.group_task.CreateCategoryActivity;
+import com.example.task_management.activity.task.CreateTaskActivity;
 import com.example.task_management.activity.task.DetailTaskActivity;
 import com.example.task_management.model.Category;
 import com.example.task_management.model.Task;
@@ -147,7 +156,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
     }
     public void showPopUpMenu(View view, int position) {
         PopupMenu popupMenu = new PopupMenu(context, view);
-        popupMenu.getMenuInflater().inflate(R.menu.task_option_popup, popupMenu.getMenu());
+        popupMenu.getMenuInflater().inflate(R.menu.my_group_task_option, popupMenu.getMenu());
         popupMenu.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()) {
                 case R.id.menuDelete:
@@ -175,11 +184,25 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
                     detailContext.putExtra("idTask", taskList.get(position).getId());
                     context.startActivity(detailContext);
                     break;
-                case R.id.menuDone:
+                case R.id.menuAssign:
+                    showBottomDialog();
                     break;
+
             }
             return false;
         });
         popupMenu.show();
+    }
+    private void showBottomDialog() {
+
+        final Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.assign_bottom_sheet_layout);
+        dialog.show();
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
+
     }
 }

@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -15,7 +16,7 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-        <activity android:name=".activity.group.GroupActivity"
+        <activity android:name=".activity.group_task.GroupTaskActivity"
             android:exported="true">
 <!--                        <intent-filter>-->
 <!--                            <action android:name="android.intent.action.MAIN" />-->
@@ -33,6 +34,15 @@
 <!--            </intent-filter>-->
         </activity>
         <activity
+            android:name=".activity.group.GroupJoinRequestActivity"
+            android:exported="true">
+            <!--            <intent-filter>-->
+            <!--                <action android:name="android.intent.action.MAIN" />-->
+
+            <!--                <category android:name="android.intent.category.LAUNCHER" />-->
+            <!--            </intent-filter>-->
+        </activity>
+        <activity
             android:name=".activity.task.DetailTaskActivity"
             android:exported="true">
 <!--                        <intent-filter>-->
@@ -42,7 +52,34 @@
 <!--                        </intent-filter>-->
         </activity>
         <activity
-            android:name=".activity.group.CreateCategoryActivity"
+            android:name=".activity.group.MyGroupActivity"
+            android:exported="true">
+            <!--                        <intent-filter>-->
+            <!--                            <action android:name="android.intent.action.MAIN" />-->
+
+            <!--                            <category android:name="android.intent.category.LAUNCHER" />-->
+            <!--                        </intent-filter>-->
+        </activity>
+        <activity
+            android:name=".activity.group.ManageMyGroupActivity"
+            android:exported="true">
+<!--                <intent-filter>-->
+<!--                    <action android:name="android.intent.action.MAIN" />-->
+
+<!--                    <category android:name="android.intent.category.LAUNCHER" />-->
+<!--                </intent-filter>-->
+        </activity>
+        <activity
+            android:name=".activity.group.CreateGroupActivity"
+            android:exported="true">
+            <!--                <intent-filter>-->
+            <!--                    <action android:name="android.intent.action.MAIN" />-->
+
+            <!--                    <category android:name="android.intent.category.LAUNCHER" />-->
+            <!--                </intent-filter>-->
+        </activity>
+        <activity
+            android:name=".activity.group_task.CreateCategoryActivity"
             android:exported="true">
 <!--            <intent-filter>-->
 <!--                <action android:name="android.intent.action.MAIN" />-->

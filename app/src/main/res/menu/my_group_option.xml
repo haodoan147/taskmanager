@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/task"
+        android:title="Task"
+        android:icon="@drawable/baseline_edit_note_24"/>
+
+    <item
+        android:id="@+id/member"
+        android:title="Member"
+        android:icon="@drawable/baseline_group_24"
+        />
+    <item
+        android:title=""/>
+    <item
+        android:id="@+id/cate"
+        android:title="Category"
+        android:icon="@drawable/outline_category_24"
+        />
+    <item
+        android:id="@+id/label"
+        android:title="Label"
+        android:icon="@drawable/outline_label_24"
+        />
+</menu>

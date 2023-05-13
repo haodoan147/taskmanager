@@ -1,13 +1,21 @@
-package com.example.task_management.activity;
+package com.example.task_management.activity.group;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,12 +30,14 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.task_management.R;
-import com.example.task_management.activity.group.MyGroupActivity;
-import com.example.task_management.activity.group_task.GroupJoinedFragment;
-import com.example.task_management.activity.member.MyGroupFragment;
+import com.example.task_management.activity.HomeActivity;
+import com.example.task_management.activity.MyProfileActivity;
+import com.example.task_management.activity.SignInActivity;
+import com.example.task_management.activity.group_task.CateByGroupFragment;
+import com.example.task_management.activity.group_task.CreateCategoryActivity;
 import com.example.task_management.activity.task.CalendarActivity;
+import com.example.task_management.activity.task.CreateTaskActivity;
 import com.example.task_management.activity.task.NewTaskFragment;
-import com.example.task_management.activity.task.SearchTaskFragment;
 import com.example.task_management.model.Category;
 import com.example.task_management.model.User;
 import com.example.task_management.model.PaginationTask;
@@ -47,39 +57,36 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class ManageMyGroupActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     DrawerLayout drawerLayout;
     BottomNavigationView bottomNavigationView;
     APIService apiService;
     String id, name, email;
     NavigationView navigationView;
     List<Task> taskList= new ArrayList<>();
+    Integer idGroup;
     List<Category> listCategory= new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.base_activity);
+        setContentView(R.layout.base_my_group_activity);
+        Intent intent = getIntent();
+        idGroup = intent.getIntExtra("idGroup", 1);
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         drawerLayout = findViewById(R.id.drawer_layout);
+        View fab = findViewById(R.id.fab);
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        Toolbar toolbar = findViewById(R.id.toolbar);
         getMyProfile();
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.open,R.string.close);
         drawerLayout.addDrawerListener(drawerToggle);
         drawerToggle.syncState();
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SearchTaskFragment()).commit();
-            navigationView.setCheckedItem(R.id.nav_home);
-        }
-        SharedPreferences pref = getApplicationContext().getSharedPreferences("ATAuthen", Context.MODE_PRIVATE);
-        replaceFragment(new SearchTaskFragment());
         navigationView.bringToFront();
 
         bottomNavigationView.setBackground(null);
         bottomNavigationView.setOnItemSelectedListener(item -> {
-            Intent intent;
             taskList.clear();
             getAllTask("TODO");
             getAllTask("IN_PROGRESS");
@@ -88,7 +95,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             getAllTask("CANCELED");
             getCategory();
             switch (item.getItemId()) {
-                case R.id.btm_home:
+                case R.id.task:
                     List<Task> newTaskList = taskList;
                     List<Category> newCateList = listCategory;
                     new Handler().postDelayed(new Runnable() {
@@ -104,20 +111,26 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                         }
                     }, 3000);
                     break;
-                case R.id.btm_search:
-                    replaceFragment(new SearchTaskFragment());
+                case R.id.cate:
+                    replaceFragment(new CateByGroupFragment());
                     break;
-                case R.id.btm_group:
-//                    intent = new Intent(getApplicationContext(), LoadingActivity.class);
-//                    intent.putExtra("currentContext", "GroupActivity");
-//                    startActivity(intent);
-                    replaceFragment(new MyGroupFragment());
+                case R.id.member:
+                    MyGroupMemberFragment fragment = new MyGroupMemberFragment();
+                    Bundle args = new Bundle();
+                    args.putInt("idGroup", idGroup);
+                    fragment.setArguments(args);
+                    replaceFragment(fragment);
                     break;
-                case R.id.btm_notice:
-//                    replaceFragment(new LibraryFragment());
+                case R.id.label:
                     break;
             }
             return true;
+        });
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showBottomDialog();
+            }
         });
     }
     private  void replaceFragment(Fragment fragment) {
@@ -132,7 +145,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         Intent intent;
         switch (item.getItemId()) {
             case R.id.nav_home:
-                Toast.makeText(getApplicationContext(), "Bạn đang ở trang chủ", Toast.LENGTH_SHORT).show();
+                intent = new Intent(getApplicationContext(), HomeActivity.class);
+                finish();
+                startActivity(intent);
                 break;
             case R.id.nav_profile:
                 intent = new Intent(getApplicationContext(), MyProfileActivity.class);
@@ -147,10 +162,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 intent = new Intent(getApplicationContext(), CalendarActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.nav_group:
-                intent = new Intent(getApplicationContext(), MyGroupActivity.class);
-                startActivity(intent);
-                break;
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
@@ -163,8 +174,66 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             super.onBackPressed();
         }
     }
+    private void showBottomDialog() {
+
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.bottomsheetlayout);
+
+        LinearLayout layoutTask = dialog.findViewById(R.id.layoutTask);
+        LinearLayout layoutCate = dialog.findViewById(R.id.layoutCate);
+        LinearLayout layoutGroup = dialog.findViewById(R.id.layoutGroup);
+        ImageView cancelButton = dialog.findViewById(R.id.cancelButton);
+
+        layoutTask.setOnClickListener(new View.OnClickListener() {
+            Intent intent;
+            @Override
+            public void onClick(View v) {
+
+                dialog.dismiss();
+                intent = new Intent(getApplicationContext(), CreateTaskActivity.class);
+                startActivity(intent);
+
+            }
+        });
+
+        layoutCate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent;
+                dialog.dismiss();
+                intent = new Intent(getApplicationContext(), CreateCategoryActivity.class);
+                startActivity(intent);
+
+            }
+        });
+
+        layoutGroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                dialog.dismiss();
+                Toast.makeText(getApplicationContext(),"Go live is Clicked",Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
+
+    }
     private void getMyProfile(){
-        SharedPreferences pref = getApplicationContext().getSharedPreferences("ATAuthen",Context.MODE_PRIVATE);
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("ATAuthen", Context.MODE_PRIVATE);
         String accessToken = pref.getString("keyaccesstoken", "empty");
         apiService = RetrofitClient.getInstance().create(APIService.class);
         String authHeader = "Bearer " + accessToken;
@@ -194,7 +263,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         String accessToken = pref.getString("keyaccesstoken", "empty");
         String authHeader = "Bearer " + accessToken;
         apiService = RetrofitClient.getInstance().create(APIService.class);
-        apiService.getAllTask(authHeader,1,100,"asc",1, status,"priority", "").enqueue(new Callback<PaginationTask>() {
+        apiService.getAllTask(authHeader,1,100,"asc",idGroup, status,"priority", "").enqueue(new Callback<PaginationTask>() {
             @Override
             public void onResponse(Call<PaginationTask> call, Response<PaginationTask> response) {
                 if (response.isSuccessful()) {

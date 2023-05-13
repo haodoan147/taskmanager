@@ -1,4 +1,4 @@
-package com.example.task_management.activity.group;
+package com.example.task_management.activity.group_task;
 
 import android.content.Intent;
 import android.os.Bundle;

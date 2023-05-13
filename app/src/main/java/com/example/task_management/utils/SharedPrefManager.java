@@ -1,12 +1,10 @@
 package com.example.task_management.utils;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 
-import com.example.task_management.activity.SignInActivity;
 import com.example.task_management.model.AccessToken;
-import com.example.task_management.model.MyProfile;
+import com.example.task_management.model.User;
 
 public class SharedPrefManager {
     private static final String SHARED_PREF_NAME = "ATAuthen";
@@ -54,9 +52,9 @@ public class SharedPrefManager {
                 sharedPreferences.getString(KEY_ACCESSTOKEN, "")
         );
     }
-    public MyProfile getUser(){
+    public User getUser(){
         SharedPreferences sharedPreferences = ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
-        return new MyProfile(
+        return new User(
                 Integer.parseInt(sharedPreferences.getString(KEY_ID, "")),sharedPreferences.getString(KEY_NAME, ""),
                 sharedPreferences.getString(KEY_EMAIL, ""), "1","1"
         );

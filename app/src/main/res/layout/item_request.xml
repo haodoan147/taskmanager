@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:cardUseCompatPadding="true"
+    app:cardElevation="5dp"
+    app:cardCornerRadius="10dp"
+    app:contentPadding="10dp"
+    android:layout_height="wrap_content"
+    app:cardBackgroundColor="@color/white">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.3"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="request by"
+                android:singleLine="true"
+                android:textSize="20sp"
+                android:layout_weight="1"
+                android:id="@+id/tv_name"
+                android:textColor="@android:color/black"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="trạng thái"
+                android:singleLine="true"
+                android:alpha="0.5"
+                android:id="@+id/tv_status"
+                android:textSize="20sp"
+                android:textColor="@android:color/black"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    android:text="Từ chối"
+                    android:textSize="20sp"
+                    android:id="@+id/tv_reject"
+                    android:layout_marginTop="10dp"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:background="@drawable/status_view_round_5"/>
+
+                <TextView
+                    android:id="@+id/tv_accept"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/status_view_round_3"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:text="Đồng ý"
+                    android:textColor="@android:color/black"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+</androidx.cardview.widget.CardView>

@@ -86,7 +86,7 @@ public class SearchTaskFragment extends Fragment {
         Log.e("123", authHeader);
         getCategory();
         apiService = RetrofitClient.getInstance().create(APIService.class);
-        apiService.getAllTask(authHeader,1,100,"asc", status,"priority", "").enqueue(new Callback<PaginationTask>() {
+        apiService.getAllTask(authHeader,1,100,"asc",1, status,"priority", "").enqueue(new Callback<PaginationTask>() {
             @Override
             public void onResponse(Call<PaginationTask> call, Response<PaginationTask> response) {
                 if (response.isSuccessful()) {

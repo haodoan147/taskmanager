@@ -1,4 +1,4 @@
-package com.example.task_management.activity.group;
+package com.example.task_management.activity.group_task;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -31,14 +31,11 @@ import com.example.task_management.R;
 import com.example.task_management.activity.HomeActivity;
 import com.example.task_management.activity.MyProfileActivity;
 import com.example.task_management.activity.SignInActivity;
+import com.example.task_management.activity.group.MyGroupMemberFragment;
 import com.example.task_management.activity.task.CalendarActivity;
 import com.example.task_management.activity.task.CreateTaskActivity;
-import com.example.task_management.activity.task.CreateTaskFragment;
 import com.example.task_management.activity.task.HomeFragment;
-import com.example.task_management.activity.task.SearchTaskFragment;
-import com.example.task_management.model.CreateCategory;
-import com.example.task_management.model.CreateTask;
-import com.example.task_management.model.MyProfile;
+import com.example.task_management.model.User;
 import com.example.task_management.service.APIService;
 import com.example.task_management.utils.RetrofitClient;
 import com.example.task_management.utils.SharedPrefManager;
@@ -49,7 +46,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class GroupActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class GroupTaskActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     DrawerLayout drawerLayout;
     BottomNavigationView bottomNavigationView;
     APIService apiService;
@@ -203,14 +200,14 @@ public class GroupActivity extends AppCompatActivity implements NavigationView.O
         String accessToken = pref.getString("keyaccesstoken", "empty");
         apiService = RetrofitClient.getInstance().create(APIService.class);
         String authHeader = "Bearer " + accessToken;
-        apiService.getMyProfile(authHeader).enqueue(new Callback<MyProfile>() {
+        apiService.getMyProfile(authHeader).enqueue(new Callback<User>() {
             @Override
-            public void onResponse(Call<MyProfile> call, Response<MyProfile> response) {
-                MyProfile myProfile = response.body();
+            public void onResponse(Call<User> call, Response<User> response) {
+                User user = response.body();
                 if (response.isSuccessful()) {
-                    id = String.valueOf(myProfile.getId());
-                    name = "Hi, " + myProfile.getName();
-                    email = myProfile.getEmail();
+                    id = String.valueOf(user.getId());
+                    name = "Hi, " + user.getName();
+                    email = user.getEmail();
                     View headerLayout = navigationView.getHeaderView(0);
                     TextView baseName = headerLayout.findViewById(R.id.base_name);
                     TextView baseEmail = headerLayout.findViewById(R.id.base_email);
@@ -220,7 +217,7 @@ public class GroupActivity extends AppCompatActivity implements NavigationView.O
                 }
             }
             @Override
-            public void onFailure(Call<MyProfile> call, Throwable t) {
+            public void onFailure(Call<User> call, Throwable t) {
             }
         });
     }

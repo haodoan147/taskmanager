@@ -1,306 +1,344 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <RelativeLayout
-        android:id="@+id/constraint"
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@color/white"
-        app:title="Chi tiết sảo phẩm"
-        app:titleTextColor="@color/colorAccent">
-        <ImageView
-            android:id="@+id/btn_back_to_context"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/baseline_arrow_back_ios_24" />
-    </RelativeLayout>
-    <androidx.cardview.widget.CardView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        app:cardUseCompatPadding="true"
-        app:cardElevation="5dp"
-        app:cardCornerRadius="10dp"
-        app:contentPadding="10dp"
-        android:layout_height="wrap_content"
-        app:cardBackgroundColor="@color/white"
-        android:id="@+id/card_detail_task"
-        android:layout_below="@+id/constraint">
+        android:layout_height="match_parent">
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:weightSum="1">
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
 
-            <LinearLayout
+            <RelativeLayout
+                android:id="@+id/constraint"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:orientation="vertical">
+                android:layout_height="40dp"
+                android:background="@color/white"
+                app:title="Chi tiết sảo phẩm"
+                app:titleTextColor="@color/colorAccent">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/status_view_round_6"
-                    android:paddingRight="10dp"
-                    android:paddingLeft="10dp">
+                <ImageView
+                    android:id="@+id/btn_back_to_context"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/baseline_arrow_back_ios_24" />
+            </RelativeLayout>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        tools:text="Full house"
-                        android:textSize="26sp"
-                        android:layout_weight="1"
-                        android:id="@+id/tv_title"
-                        android:textColor="@android:color/black" />
-                    <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:id="@+id/iv_options"
-                        android:background="@drawable/more"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
-                    android:background="@drawable/status_view_round_5"
-                    android:layout_marginTop="10dp"
-                    android:paddingStart="10dp"
-                    android:paddingEnd="10dp">
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/baseline_access_time_24"
-                        android:id="@+id/iv_dueDay"
-                        android:alpha="0.5"
-                        android:layout_gravity="right"
-                        android:paddingLeft="10dp"
-                        android:paddingRight="10dp"/>
-                    <TextView
-                        android:id="@+id/tv_dueDate"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@android:color/black"
-                        android:alpha="0.5"
-                        android:text="18/08/2023"
-                        android:textSize="18sp"
-                        android:layout_gravity="right" />
-                </LinearLayout>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    tools:text="Loại"
-                    android:singleLine="true"
-                    android:alpha="0.5"
-                    android:id="@+id/tv_category"
-                    android:textSize="18sp"
-                    android:textColor="@android:color/black"
-                    android:paddingStart="10dp"
-                    android:paddingEnd="10dp"
-                    android:background="@drawable/status_view_round_1"
-                    android:layout_marginTop="10dp"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    tools:text="label"
-                    android:singleLine="true"
-                    android:alpha="0.5"
-                    android:id="@+id/tv_label"
-                    android:textSize="18sp"
-                    android:textColor="@android:color/black"
-                    android:paddingStart="10dp"
-                    android:paddingEnd="10dp"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/status_view_round_2"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    tools:text="Full House is the Grand prize in any Tambola game played. It means all 15 Numbers of a ticket are cut, striked out"
-                    android:alpha="0.5"
-                    android:id="@+id/tv_des"
-                    android:textSize="18sp"
-                    android:textColor="@android:color/black"
-                    android:paddingTop="10dp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    tools:text="Hạn"
-                    android:singleLine="true"
-                    android:alpha="0.5"
-                    android:id="@+id/tv_duration"
-                    android:textSize="18sp"
-                    android:textColor="@android:color/black"
-                    android:background="@drawable/status_view_round_4"
-                    android:layout_marginTop="10dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"/>
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="right">
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="50dp"
-                        tools:text="Hạn"
-                        android:singleLine="true"
-                        android:alpha="0.5"
-                        android:id="@+id/id_assignee"
-                        android:textSize="18sp"
-                        android:src="@drawable/ic_launcher_foreground"
-                        android:textColor="@android:color/black"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_gravity="right"
-                    android:paddingTop="10dp">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@android:color/black"
-                        android:text="COMPLETED"
-                        android:textSize="16sp"
-                        android:id="@+id/tv_priority"
-                        android:layout_gravity="right"
-                        android:paddingStart="10dp"
-                        android:paddingEnd="10dp"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@android:color/black"
-                        android:text="COMPLETED"
-                        android:textSize="16sp"
-                        android:id="@+id/tv_status"
-                        android:layout_gravity="right"
-                        android:layout_marginStart="10dp"
-                        android:paddingStart="10dp"
-                        android:paddingEnd="10dp"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingTop="10dp">
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/baseline_format_align_left_24"
-                        android:id="@+id/iv_statics"
-                        android:alpha="0.5"
-                        android:layout_gravity="right"
-                        android:paddingLeft="10dp"
-                        android:paddingRight="10dp"/>
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/baseline_attachment_24"
-                            android:id="@+id/iv_attachments"
-                            android:alpha="0.5"
-                            android:layout_gravity="right"
-                            android:paddingLeft="10dp" />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@android:color/black"
-                            android:alpha="0.5"
-                            android:text="1"
-                            android:textSize="12sp"
-                            android:layout_gravity="right" />
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/baseline_mode_comment_24"
-                            android:id="@+id/iv_comments"
-                            android:alpha="0.5"
-                            android:layout_gravity="right"
-                            android:paddingLeft="10dp" />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@android:color/black"
-                            android:alpha="0.5"
-                            android:text="1"
-                            android:textSize="12sp"
-                            android:layout_gravity="right" />
-                    </LinearLayout>
-                </LinearLayout>
-            </LinearLayout>
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        app:cardUseCompatPadding="true"
-        app:cardElevation="5dp"
-        app:cardCornerRadius="10dp"
-        app:contentPadding="10dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/card_detail_task"
-        app:cardBackgroundColor="@color/white"
-        android:id="@+id/write_your_des">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:weightSum="1">
-
-            <LinearLayout
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_detail_task"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.7"
-                android:layout_marginRight="5dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="5dp"
-                android:orientation="vertical">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    tools:text="Viết bình luận của bạn"
-                    android:singleLine="true"
-                    android:alpha="0.5"
-                    android:textSize="18sp"
-                    android:textColor="@android:color/black"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"/>
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="5dp"
+                app:cardUseCompatPadding="true"
+                app:contentPadding="10dp">
 
-                <EditText
-                    android:id="@+id/text_your_des"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="7"
-                    android:alpha="0.7"
-                    android:text="Bình luận..." />
-            </LinearLayout>
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:weightSum="1">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/status_view_round_6"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="10dp">
+
+                            <TextView
+                                android:id="@+id/tv_title"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:textColor="@android:color/black"
+                                android:textSize="26sp"
+                                tools:text="Full house" />
+
+                            <ImageView
+                                android:id="@+id/iv_options"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:background="@drawable/more" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:background="@drawable/status_view_round_5"
+                            android:paddingStart="10dp"
+                            android:paddingTop="10dp"
+                            android:paddingEnd="10dp">
+
+                            <ImageView
+                                android:id="@+id/iv_dueDay"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="right"
+                                android:alpha="0.5"
+                                android:paddingLeft="10dp"
+                                android:paddingRight="10dp"
+                                android:src="@drawable/baseline_access_time_24" />
+
+                            <TextView
+                                android:id="@+id/tv_dueDate"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="right"
+                                android:alpha="0.5"
+                                android:text="18/08/2023"
+                                android:textColor="@android:color/black"
+                                android:textSize="18sp" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/tv_category"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:alpha="0.5"
+                            android:background="@drawable/status_view_round_1"
+                            android:paddingStart="10dp"
+                            android:paddingEnd="10dp"
+                            android:singleLine="true"
+                            android:textColor="@android:color/black"
+                            android:textSize="18sp"
+                            tools:text="Loại" />
+
+                        <TextView
+                            android:id="@+id/tv_label"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:alpha="0.5"
+                            android:background="@drawable/status_view_round_2"
+                            android:paddingStart="10dp"
+                            android:paddingEnd="10dp"
+                            android:singleLine="true"
+                            android:textColor="@android:color/black"
+                            android:textSize="18sp"
+                            tools:text="label" />
+
+                        <TextView
+                            android:id="@+id/tv_des"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:alpha="0.5"
+                            android:paddingTop="10dp"
+                            android:textColor="@android:color/black"
+                            android:textSize="18sp"
+                            tools:text="Full House is the Grand prize in any Tambola game played. It means all 15 Numbers of a ticket are cut, striked out" />
+
+                        <TextView
+                            android:id="@+id/tv_duration"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:alpha="0.5"
+                            android:background="@drawable/status_view_round_4"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="10dp"
+                            android:singleLine="true"
+                            android:textColor="@android:color/black"
+                            android:textSize="18sp"
+                            tools:text="Hạn" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="right">
+
+                            <ImageView
+                                android:id="@+id/id_assignee"
+                                android:layout_width="wrap_content"
+                                android:layout_height="50dp"
+                                android:alpha="0.5"
+                                android:singleLine="true"
+                                android:src="@drawable/ic_launcher_foreground"
+                                android:textColor="@android:color/black"
+                                android:textSize="18sp"
+                                tools:text="Hạn" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right"
+                            android:orientation="horizontal"
+                            android:paddingTop="10dp">
+
+                            <TextView
+                                android:id="@+id/tv_priority"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="right"
+                                android:paddingStart="10dp"
+                                android:paddingEnd="10dp"
+                                android:text="COMPLETED"
+                                android:textColor="@android:color/black"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:id="@+id/tv_status"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="right"
+                                android:layout_marginStart="10dp"
+                                android:paddingStart="10dp"
+                                android:paddingEnd="10dp"
+                                android:text="COMPLETED"
+                                android:textColor="@android:color/black"
+                                android:textSize="16sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingTop="10dp">
+
+                            <ImageView
+                                android:id="@+id/iv_statics"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="right"
+                                android:alpha="0.5"
+                                android:paddingLeft="10dp"
+                                android:paddingRight="10dp"
+                                android:src="@drawable/baseline_format_align_left_24" />
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
+
+                                <ImageView
+                                    android:id="@+id/iv_attachments"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="right"
+                                    android:alpha="0.5"
+                                    android:paddingLeft="10dp"
+                                    android:src="@drawable/baseline_attachment_24" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="right"
+                                    android:alpha="0.5"
+                                    android:text="1"
+                                    android:textColor="@android:color/black"
+                                    android:textSize="12sp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
+
+                                <ImageView
+                                    android:id="@+id/iv_comments"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="right"
+                                    android:alpha="0.5"
+                                    android:paddingLeft="10dp"
+                                    android:src="@drawable/baseline_mode_comment_24" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="right"
+                                    android:alpha="0.5"
+                                    android:text="1"
+                                    android:textColor="@android:color/black"
+                                    android:textSize="12sp" />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/write_your_des"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="5dp"
+                app:cardUseCompatPadding="true"
+                app:contentPadding="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="5dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:alpha="0.5"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="10dp"
+                            android:textColor="@android:color/black"
+                            android:textSize="18sp"
+                            tools:text="Viết bình luận của bạn" />
+
+                        <EditText
+                            android:id="@+id/text_your_des"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:alpha="0.7"
+                            android:ems="7"
+                            android:hint="Bình luận..." />
+
+                        <Button
+                            android:id="@+id/btn_submit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="250dp"
+                            android:layout_marginEnd="30dp"
+                            android:gravity="center"
+                            android:text="Gửi"></Button>
+                    </LinearLayout>
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rcv_comment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="4dp"></androidx.recyclerview.widget.RecyclerView>
 
         </LinearLayout>
-    </androidx.cardview.widget.CardView>
+    </ScrollView>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rcv_comment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/write_your_des"
-        android:layout_marginTop="4dp"
-        ></androidx.recyclerview.widget.RecyclerView>
-</RelativeLayout>
+</ScrollView>

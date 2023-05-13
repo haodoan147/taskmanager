@@ -2,13 +2,13 @@ package com.example.task_management.model;
 
 import java.io.Serializable;
 
-public class MyProfile implements Serializable {
+public class User implements Serializable {
     private int id;
     private String dateOfBirth;
     private String username;
     private String email;
     private String name;
-    public MyProfile(int id, String username,String email,String dateOfBirth, String name){
+    public User(int id, String username, String email, String dateOfBirth, String name){
         this.username = username;
         this.email = email;
         this.name = name;

@@ -7,7 +7,7 @@
     <item android:title="Xóa"
         android:orderInCategory="2"
         android:id="@+id/menuDelete"/>
-    <item android:title="Cập nhật"
-        android:orderInCategory="3"
-        android:id="@+id/menuUpdate"/>
+    <item android:title="Gán người thực hiện"
+        android:orderInCategory="2"
+        android:id="@+id/menuAssign"/>
 </menu>

@@ -1,13 +1,14 @@
 package com.example.task_management.service;
 
-import androidx.annotation.Nullable;
-
 import com.example.task_management.model.AccessToken;
 import com.example.task_management.model.Category;
+import com.example.task_management.model.Comment;
 import com.example.task_management.model.CreateCategory;
 import com.example.task_management.model.CreateTask;
+import com.example.task_management.model.Group;
+import com.example.task_management.model.JoinRequest;
 import com.example.task_management.model.Label;
-import com.example.task_management.model.MyProfile;
+import com.example.task_management.model.User;
 import com.example.task_management.model.PaginationTask;
 import com.example.task_management.model.Task;
 
@@ -42,10 +43,10 @@ public interface APIService {
     @Field("username") String username,@Field("name") String name);
 
     @GET("user/me")
-    Call<MyProfile> getMyProfile(@Header("Authorization") String accessToken);
+    Call<User> getMyProfile(@Header("Authorization") String accessToken);
     @GET("task")
     Call<PaginationTask> getAllTask(@Header("Authorization") String accessToken, @Query("page") int page , @Query("limit") int limit,
-                                    @Query("order") String order, @Query("status") String status,
+                                    @Query("order") String order,@Query("groupId") int groupId, @Query("status") String status,
                                     @Query("orderBy") String orderBy, @Query("search") String search);
     @GET("task/{id}")
     Call<Task> getDetailTask(@Header("Authorization") String accessToken, @Path("id") int id);
@@ -65,4 +66,34 @@ public interface APIService {
     Call<Category> getCreateNewCategory(@Header("Authorization") String accessToken, @Body CreateCategory category);
     @DELETE("category/{id}")
     Call<Category> deleteCate(@Header("Authorization") String accessToken, @Path("id") int id);
+    @FormUrlEncoded
+    @POST("comment/{taskId}")
+    Call<Comment> createComment(@Header("Authorization") String accessToken, @Path("taskId") int id, @Field("content") String content);
+
+    @GET("comment/{taskId}")
+    Call<List<Comment>> getAllComment(@Header("Authorization") String accessToken, @Path("taskId") int id);
+    @GET("group/my-groups")
+    Call<List<Group>> getMyGroups(@Header("Authorization") String accessToken);
+
+    @FormUrlEncoded
+    @POST("group")
+    Call<Group> createGroup(@Header("Authorization") String accessToken, @Field("name") String name);
+    @DELETE("delete/{groupId}")
+    Call<Group> deleteGroup(@Header("Authorization") String accessToken, @Path("groupId") int groupId);
+    @FormUrlEncoded
+    @PATCH("group/{groupId}")
+    Call<Group> updateGroup(@Header("Authorization") String accessToken, @Path("groupId") int groupId, @Field("name") String name);
+    @GET("group/{groupId}/members")
+    Call<List<User>> getAllMembers(@Header("Authorization") String accessToken, @Path("groupId") int id);
+    @POST("group/{groupId}/kick/{userId}")
+    Call<User> kickAMember(@Header("Authorization") String accessToken, @Path("groupId") int groupId,@Path("userId") int userId);
+
+    @GET("/group-join-request/{groupId}")
+    Call<List<JoinRequest>> getGroupRequest(@Header("Authorization") String accessToken, @Path("groupId") int groupId);
+    @POST("/group-join-request/{id}/reject")
+    Call<JoinRequest> rejectRequest(@Header("Authorization") String accessToken, @Path("id") int id);
+    @POST("/group-join-request/{id}/accept")
+    Call<JoinRequest> acceptRequest(@Header("Authorization") String accessToken, @Path("id") int id);
+    @POST("/group-join-request/request/{groupId}")
+    Call<JoinRequest> requestGroup(@Header("Authorization") String accessToken, @Path("groupId") int groupId);
 }

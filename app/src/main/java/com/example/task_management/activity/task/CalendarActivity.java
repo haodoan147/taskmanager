@@ -49,7 +49,7 @@ public class CalendarActivity extends AppCompatActivity {
         String accessToken = pref.getString("keyaccesstoken", "empty");
         String authHeader = "Bearer " + accessToken;
         APIService apiService = RetrofitClient.getInstance().create(APIService.class);
-        apiService.getAllTask(authHeader,1,100,"asc", "TODO","priority", "").enqueue(new Callback<PaginationTask>() {
+        apiService.getAllTask(authHeader,1,100,"asc",1, "TODO","priority", "").enqueue(new Callback<PaginationTask>() {
             @Override
             public void onResponse(Call<PaginationTask> call, Response<PaginationTask> response) {
                 if (response.isSuccessful()) {
