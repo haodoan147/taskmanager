@@ -24,9 +24,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.task_management.R;
-import com.example.task_management.adapter.ItemAdapter;
+import com.example.task_management.adapter.GroupTaskAdapter;
 import com.example.task_management.model.Category;
 import com.example.task_management.model.Task;
+import com.example.task_management.model.User;
 import com.example.task_management.service.APIService;
 import com.woxthebox.draglistview.BoardView;
 import com.woxthebox.draglistview.ColumnProperties;
@@ -46,6 +47,7 @@ public class MyGroupTaskFragment extends Fragment {
     List<Task> taskList= new ArrayList<>();
     List<Category> listCategory = new ArrayList<>();
 
+    List<User> memberList= new ArrayList<>();
 
     public static MyGroupTaskFragment newInstance() {
         return new MyGroupTaskFragment();
@@ -64,6 +66,7 @@ public class MyGroupTaskFragment extends Fragment {
             mItemArray.add(new Pair<>(id, taskList.get(i)));
         }
         listCategory  = (List<Category>) getArguments().getSerializable("newCateList");
+        memberList  = (List<User>) getArguments().getSerializable("newMemberList");
         View view = inflater.inflate(R.layout.board_layout, container, false);
         mBoardView = view.findViewById(R.id.board_view);
         mBoardView.setSnapToColumnsWhenScrolling(true);
@@ -139,7 +142,7 @@ public class MyGroupTaskFragment extends Fragment {
                 newMItemArray.add(task);
             }
         }
-        final ItemAdapter listAdapter = new ItemAdapter(newMItemArray, R.layout.column_item, R.id.item_layout, true,getActivity(),listCategory);
+        final GroupTaskAdapter listAdapter = new GroupTaskAdapter(newMItemArray, R.layout.column_item, R.id.item_layout, true,getActivity(),listCategory,memberList);
         final View header = View.inflate(getActivity(), R.layout.column_header, null);
         ((TextView) header.findViewById(R.id.text)).setText(status);
         ((TextView) header.findViewById(R.id.item_count)).setText("" + newMItemArray.size());

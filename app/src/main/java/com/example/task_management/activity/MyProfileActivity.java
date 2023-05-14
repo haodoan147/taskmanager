@@ -28,7 +28,7 @@ public class MyProfileActivity extends AppCompatActivity {
     Toolbar toolbar;
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.my_profile_new);
+        setContentView(R.layout.my_profile);
         initView();
         getMyProfile();
     }

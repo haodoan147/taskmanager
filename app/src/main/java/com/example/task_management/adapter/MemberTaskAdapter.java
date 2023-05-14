@@ -1,19 +1,3 @@
-/*
- * Copyright 2014 Magnus Woxblom
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.example.task_management.adapter;
 
 import android.app.AlertDialog;
@@ -22,33 +6,35 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
+import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.util.Pair;
-import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.task_management.R;
 import com.example.task_management.activity.task.DetailTaskActivity;
-import com.example.task_management.activity.task.NewTaskFragment;
 import com.example.task_management.model.Category;
 import com.example.task_management.model.Task;
+import com.example.task_management.model.User;
 import com.example.task_management.service.APIService;
 import com.example.task_management.utils.RetrofitClient;
 import com.example.task_management.utils.SharedPrefManager;
 import com.woxthebox.draglistview.DragItemAdapter;
 
-import java.io.Serializable;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,7 +42,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ItemAdapter extends DragItemAdapter<Pair<Long, Task>, ItemAdapter.ViewHolder> {
+public class MemberTaskAdapter extends DragItemAdapter<Pair<Long, Task>, MemberTaskAdapter.ViewHolder> {
 
     private int mLayoutId;
     private int mGrabHandleId;
@@ -70,8 +56,7 @@ public class ItemAdapter extends DragItemAdapter<Pair<Long, Task>, ItemAdapter.V
     }
     Context context;
     List<Category> listCategory;
-
-    public ItemAdapter(ArrayList<Pair<Long, Task>> list, int layoutId, int grabHandleId, boolean dragOnLongPress,Context context, List<Category> cateList) {
+    public MemberTaskAdapter(ArrayList<Pair<Long, Task>> list, int layoutId, int grabHandleId, boolean dragOnLongPress,Context context, List<Category> cateList) {
         this.context = context;
         mLayoutId = layoutId;
         mGrabHandleId = grabHandleId;
@@ -82,13 +67,13 @@ public class ItemAdapter extends DragItemAdapter<Pair<Long, Task>, ItemAdapter.V
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public MemberTaskAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(mLayoutId, parent, false);
-        return new ViewHolder(view);
+        return new MemberTaskAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MemberTaskAdapter.ViewHolder holder, int position) {
         super.onBindViewHolder(holder, position);
         Task task = mItemList.get(position).second;
         holder.tv_date.setText(task.getDueDate().substring(8,10));
@@ -205,7 +190,6 @@ public class ItemAdapter extends DragItemAdapter<Pair<Long, Task>, ItemAdapter.V
                     }, 3000);
                     break;
                 case R.id.menuAssign:
-                    showBottomDialog();
                     break;
             }
             return false;
@@ -285,14 +269,5 @@ public class ItemAdapter extends DragItemAdapter<Pair<Long, Task>, ItemAdapter.V
 
             }
         });
-    }
-    private void showBottomDialog() {
-        final Dialog dialog = new Dialog(context);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.assign_bottom_sheet_layout);
-        dialog.show();
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-        dialog.getWindow().setGravity(Gravity.BOTTOM);
     }
 }

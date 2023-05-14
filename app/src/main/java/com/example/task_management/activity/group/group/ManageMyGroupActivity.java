@@ -34,11 +34,11 @@ import com.example.task_management.activity.HomeActivity;
 import com.example.task_management.activity.MyProfileActivity;
 import com.example.task_management.activity.SignInActivity;
 import com.example.task_management.activity.group.member.MyGroupMemberFragment;
+import com.example.task_management.activity.group.task.MyGroupTaskFragment;
 import com.example.task_management.activity.group_task.CateByGroupFragment;
 import com.example.task_management.activity.group_task.CreateCategoryActivity;
 import com.example.task_management.activity.task.CalendarActivity;
 import com.example.task_management.activity.task.CreateTaskActivity;
-import com.example.task_management.activity.task.NewTaskFragment;
 import com.example.task_management.model.Category;
 import com.example.task_management.model.User;
 import com.example.task_management.model.PaginationTask;
@@ -67,6 +67,7 @@ public class ManageMyGroupActivity extends AppCompatActivity implements Navigati
     List<Task> taskList= new ArrayList<>();
     Integer idGroup;
     List<Category> listCategory= new ArrayList<>();
+    List<User> memberList= new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -95,18 +96,21 @@ public class ManageMyGroupActivity extends AppCompatActivity implements Navigati
             getAllTask("POSTPONED");
             getAllTask("CANCELED");
             getCategory();
+            getMyGroupMembers();
             switch (item.getItemId()) {
                 case R.id.task:
                     List<Task> newTaskList = taskList;
                     List<Category> newCateList = listCategory;
+                    List<User> newMemberList = memberList;
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
                             // Replace the current fragment with NewTaskFragment and pass the parameter
-                            Fragment newFragment = new NewTaskFragment();
+                            Fragment newFragment = new MyGroupTaskFragment();
                             Bundle args = new Bundle();
                             args.putSerializable("newTaskList", (Serializable) newTaskList);
                             args.putSerializable("newCateList", (Serializable) newCateList);
+                            args.putSerializable("newMemberList", (Serializable) newMemberList);
                             newFragment.setArguments(args);
                             replaceFragment(newFragment);
                         }
@@ -298,6 +302,30 @@ public class ManageMyGroupActivity extends AppCompatActivity implements Navigati
             @Override
             public void onFailure(Call<List<Category>> call, Throwable t) {
                 Log.d("TAG", "onFailure: " + t.getMessage());
+            }
+        });
+    }
+    private void getMyGroupMembers(){
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("ATAuthen", Context.MODE_PRIVATE);
+        String accessToken = pref.getString("keyaccesstoken", "empty");
+        String authHeader = "Bearer " + accessToken;
+        apiService = RetrofitClient.getInstance().create(APIService.class);
+        apiService.getAllMembers(authHeader,idGroup).enqueue(new Callback<List<User>>() {
+            @Override
+            public void onResponse(Call<List<User>> call, Response<List<User>> response) {
+                if (response.isSuccessful()) {
+                    memberList = response.body();
+                }else{
+                    try {
+                        Log.v("Error code 400",response.errorBody().string());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+            @Override
+            public void onFailure(Call<List<User>> call, Throwable t) {
+                Log.e("TAG", "onFailure: " + t.getMessage());
             }
         });
     }

@@ -53,7 +53,7 @@ public class JoinRequestAdapter extends RecyclerView.Adapter<JoinRequestAdapter.
     public void onBindViewHolder(@NonNull JoinRequestAdapter.MyViewHolder holder, int position) {
         JoinRequest joinRequest = joinRequestList.get(position);
         holder.tv_name.setText(joinRequest.getRequestBy().getName());
-        holder.tv_status.setText(joinRequest.getStatus());
+        holder.tv_status.setText("Đang chờ");
         holder.tv_reject.setOnClickListener(view -> requestReject(position));
         holder.tv_accept.setOnClickListener(view -> requestAccept(position));
     }

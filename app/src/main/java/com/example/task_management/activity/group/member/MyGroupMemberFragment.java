@@ -109,7 +109,13 @@ public class MyGroupMemberFragment extends Fragment {
             public void onResponse(Call<List<JoinRequest>> call, Response<List<JoinRequest>> response) {
                 if (response.isSuccessful()) {
                     joinRequestList = response.body();
-                    joinRequestAdapter = new JoinRequestAdapter(dialog.getContext(), joinRequestList);
+                    List<JoinRequest> newJoinRequestList = new ArrayList<>();
+                    for (JoinRequest joinRequest: joinRequestList) {
+                        if(joinRequest.getStatus().equals("PENDING")){
+                            newJoinRequestList.add(joinRequest);
+                        }
+                    }
+                    joinRequestAdapter = new JoinRequestAdapter(dialog.getContext(), newJoinRequestList);
                     RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity(),
                             LinearLayoutManager.VERTICAL, false);
                     rcv_request.setLayoutManager(layoutManager);

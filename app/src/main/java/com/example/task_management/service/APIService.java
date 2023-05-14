@@ -1,6 +1,7 @@
 package com.example.task_management.service;
 
 import com.example.task_management.model.AccessToken;
+import com.example.task_management.model.Assignee;
 import com.example.task_management.model.Category;
 import com.example.task_management.model.Comment;
 import com.example.task_management.model.CreateCategory;
@@ -96,4 +97,6 @@ public interface APIService {
     Call<JoinRequest> acceptRequest(@Header("Authorization") String accessToken, @Path("id") int id);
     @POST("/group-join-request/request/{groupId}")
     Call<JoinRequest> requestGroup(@Header("Authorization") String accessToken, @Path("groupId") int groupId);
+    @PATCH("/task/{id}/assign")
+    Call<Task> asignTask(@Header("Authorization") String accessToken, @Path("id") int id, @Body Assignee assignee);
 }

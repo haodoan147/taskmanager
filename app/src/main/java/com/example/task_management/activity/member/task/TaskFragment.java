@@ -24,7 +24,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.task_management.R;
-import com.example.task_management.adapter.ItemAdapter;
+import com.example.task_management.adapter.MemberTaskAdapter;
 import com.example.task_management.model.Category;
 import com.example.task_management.model.Task;
 import com.example.task_management.service.APIService;
@@ -139,7 +139,7 @@ public class TaskFragment extends Fragment {
                 newMItemArray.add(task);
             }
         }
-        final ItemAdapter listAdapter = new ItemAdapter(newMItemArray, R.layout.column_item, R.id.item_layout, true,getActivity(),listCategory);
+        final MemberTaskAdapter listAdapter = new MemberTaskAdapter(newMItemArray, R.layout.column_item, R.id.item_layout, true,getActivity(),listCategory);
         final View header = View.inflate(getActivity(), R.layout.column_header, null);
         ((TextView) header.findViewById(R.id.text)).setText(status);
         ((TextView) header.findViewById(R.id.item_count)).setText("" + newMItemArray.size());
