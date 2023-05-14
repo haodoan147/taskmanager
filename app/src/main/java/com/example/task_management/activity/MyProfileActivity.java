@@ -22,31 +22,19 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MyProfileActivity extends AppCompatActivity {
-    TextView id, userName, userEmail, name;
+    TextView userName, userEmail;
     Button logOutBtn;
     APIService apiService;
     Toolbar toolbar;
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.my_profile);
+        setContentView(R.layout.my_profile_new);
         initView();
         getMyProfile();
-        logOutBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(MyProfileActivity.this, "Test Clicked", Toast.LENGTH_SHORT).show();
-                SharedPrefManager.getInstance(getApplicationContext()).logout();
-                Intent intent = new Intent(MyProfileActivity.this, SignInActivity.class);
-                startActivity(intent);
-            }
-        });
     }
     private void initView() {
-        id = findViewById(R.id.textViewId);
-        userName = findViewById(R.id.textViewUsername);
-        userEmail = findViewById(R.id.textViewEmail);
-        name = findViewById(R.id.textViewName);
-        logOutBtn = findViewById(R.id.btnLogout);
+        userName = findViewById(R.id.edittext_name);
+        userEmail = findViewById(R.id.edittext_email);
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Thông tin cá nhân");
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -68,7 +56,6 @@ public class MyProfileActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     userName.setText(user.getName());
                     userEmail.setText(user.getEmail());
-                    name.setText(user.getName());
                 }
             }
             @Override
