@@ -1,4 +1,4 @@
-package com.example.task_management.activity.group_task;
+package com.example.task_management.activity.member.group;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -31,6 +31,10 @@ import com.example.task_management.R;
 import com.example.task_management.activity.HomeActivity;
 import com.example.task_management.activity.MyProfileActivity;
 import com.example.task_management.activity.SignInActivity;
+import com.example.task_management.activity.group_task.CateByGroupFragment;
+import com.example.task_management.activity.group_task.CreateCategoryActivity;
+import com.example.task_management.activity.group_task.SearchByGroupFragment;
+import com.example.task_management.activity.group_task.TaskByGroupFragment;
 import com.example.task_management.activity.task.CalendarActivity;
 import com.example.task_management.activity.task.CreateTaskActivity;
 import com.example.task_management.activity.task.HomeFragment;
@@ -45,7 +49,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class GroupTaskActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class DetailGroupActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     DrawerLayout drawerLayout;
     BottomNavigationView bottomNavigationView;
     APIService apiService;

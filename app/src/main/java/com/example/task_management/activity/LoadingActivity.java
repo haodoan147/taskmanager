@@ -8,7 +8,7 @@ import android.view.WindowManager;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.task_management.R;
-import com.example.task_management.activity.group_task.GroupTaskActivity;
+import com.example.task_management.activity.member.group.DetailGroupActivity;
 
 public class LoadingActivity extends AppCompatActivity {
     @Override
@@ -26,7 +26,7 @@ public class LoadingActivity extends AppCompatActivity {
                 String currentAct = intent.getStringExtra("currentContext");
                 switch (currentAct){
                     case "GroupActivity":
-                        startActivity(new Intent(getApplicationContext(), GroupTaskActivity.class));
+                        startActivity(new Intent(getApplicationContext(), DetailGroupActivity.class));
                         break;
                     case "HomeActivity":
                         startActivity(new Intent(getApplicationContext(), HomeActivity.class));

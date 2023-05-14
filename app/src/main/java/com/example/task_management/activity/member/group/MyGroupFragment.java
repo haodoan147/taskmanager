@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.task_management.R;
 import com.example.task_management.adapter.GroupAdapter;
+import com.example.task_management.adapter.MemberGroupAdapter;
 import com.example.task_management.model.Group;
 import com.example.task_management.model.JoinRequest;
 import com.example.task_management.service.APIService;
@@ -40,7 +41,7 @@ public class MyGroupFragment extends Fragment {
     APIService apiService;
     RecyclerView recyclerView;
     List<Group> listGroup= new ArrayList<>();
-    GroupAdapter groupAdapter;
+    MemberGroupAdapter groupAdapter;
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.my_group_as_member, container, false);
         recyclerView = view.findViewById(R.id.rcv_group);
@@ -67,7 +68,7 @@ public class MyGroupFragment extends Fragment {
                             newListGroup.add(group);
                         }
                     }
-                    groupAdapter = new GroupAdapter(getActivity(), newListGroup);
+                    groupAdapter = new MemberGroupAdapter(getActivity(), newListGroup);
                     GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(),
                             2);
                     recyclerView.setLayoutManager(gridLayoutManager);
