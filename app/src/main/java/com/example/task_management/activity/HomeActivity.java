@@ -22,12 +22,11 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.task_management.R;
-import com.example.task_management.activity.group.MyGroupActivity;
-import com.example.task_management.activity.group_task.GroupJoinedFragment;
-import com.example.task_management.activity.member.MyGroupFragment;
+import com.example.task_management.activity.group.group.MyGroupActivity;
+import com.example.task_management.activity.member.group.MyGroupFragment;
+import com.example.task_management.activity.member.task.TaskFragment;
 import com.example.task_management.activity.task.CalendarActivity;
-import com.example.task_management.activity.task.NewTaskFragment;
-import com.example.task_management.activity.task.SearchTaskFragment;
+import com.example.task_management.activity.member.task.SearchTaskFragment;
 import com.example.task_management.model.Category;
 import com.example.task_management.model.User;
 import com.example.task_management.model.PaginationTask;
@@ -69,17 +68,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.open,R.string.close);
         drawerLayout.addDrawerListener(drawerToggle);
         drawerToggle.syncState();
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SearchTaskFragment()).commit();
-            navigationView.setCheckedItem(R.id.nav_home);
-        }
         SharedPreferences pref = getApplicationContext().getSharedPreferences("ATAuthen", Context.MODE_PRIVATE);
-        replaceFragment(new SearchTaskFragment());
         navigationView.bringToFront();
 
         bottomNavigationView.setBackground(null);
         bottomNavigationView.setOnItemSelectedListener(item -> {
-            Intent intent;
             taskList.clear();
             getAllTask("TODO");
             getAllTask("IN_PROGRESS");
@@ -89,13 +82,13 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             getCategory();
             switch (item.getItemId()) {
                 case R.id.btm_home:
+                    toolbar.setTitle("Quản lí công việc");
                     List<Task> newTaskList = taskList;
                     List<Category> newCateList = listCategory;
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            // Replace the current fragment with NewTaskFragment and pass the parameter
-                            Fragment newFragment = new NewTaskFragment();
+                            Fragment newFragment = new TaskFragment();
                             Bundle args = new Bundle();
                             args.putSerializable("newTaskList", (Serializable) newTaskList);
                             args.putSerializable("newCateList", (Serializable) newCateList);
@@ -105,16 +98,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     }, 3000);
                     break;
                 case R.id.btm_search:
+                    toolbar.setTitle("Tìm kiếm");
                     replaceFragment(new SearchTaskFragment());
                     break;
                 case R.id.btm_group:
-//                    intent = new Intent(getApplicationContext(), LoadingActivity.class);
-//                    intent.putExtra("currentContext", "GroupActivity");
-//                    startActivity(intent);
+                    toolbar.setTitle("Nhóm");
                     replaceFragment(new MyGroupFragment());
-                    break;
-                case R.id.btm_notice:
-//                    replaceFragment(new LibraryFragment());
                     break;
             }
             return true;

@@ -1,15 +1,9 @@
 package com.example.task_management.adapter;
 
-import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
@@ -18,8 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.task_management.R;
-import com.example.task_management.activity.group.ManageMyGroupActivity;
-import com.example.task_management.model.Group;
 import com.example.task_management.model.User;
 import com.example.task_management.service.APIService;
 import com.example.task_management.utils.RetrofitClient;

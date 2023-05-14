@@ -1,6 +1,5 @@
-package com.example.task_management.activity.member;
+package com.example.task_management.activity.member.group;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -22,7 +21,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.task_management.R;
-import com.example.task_management.activity.group.MyGroupActivity;
 import com.example.task_management.adapter.GroupAdapter;
 import com.example.task_management.model.Group;
 import com.example.task_management.model.JoinRequest;

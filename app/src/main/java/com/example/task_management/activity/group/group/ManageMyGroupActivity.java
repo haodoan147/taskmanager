@@ -1,4 +1,4 @@
-package com.example.task_management.activity.group;
+package com.example.task_management.activity.group.group;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -33,6 +33,7 @@ import com.example.task_management.R;
 import com.example.task_management.activity.HomeActivity;
 import com.example.task_management.activity.MyProfileActivity;
 import com.example.task_management.activity.SignInActivity;
+import com.example.task_management.activity.group.member.MyGroupMemberFragment;
 import com.example.task_management.activity.group_task.CateByGroupFragment;
 import com.example.task_management.activity.group_task.CreateCategoryActivity;
 import com.example.task_management.activity.task.CalendarActivity;

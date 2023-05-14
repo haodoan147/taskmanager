@@ -16,7 +16,7 @@
                     android:theme="@style/ThemeOverlay.SearchView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="70dp"
+                    android:layout_marginTop="10dp"
                     app:iconifiedByDefault="false"
                     android:background="@drawable/search_task_bg"
                     android:textColor="#3b608c"
@@ -29,7 +29,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.498"
                     app:layout_constraintStart_toStartOf="parent"
-                    android:layout_marginTop="80dp"
+                    android:layout_marginTop="20dp"
                     android:onClick="btnFilter_onClick"
                     android:src="@drawable/baseline_filter_alt_24"/>
         </LinearLayout>
@@ -37,7 +37,7 @@
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="200dp"
+            android:layout_marginTop="100dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"

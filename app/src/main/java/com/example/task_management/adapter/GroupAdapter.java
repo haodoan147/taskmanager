@@ -1,10 +1,8 @@
 package com.example.task_management.adapter;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Handler;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,28 +11,20 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.task_management.R;
-import com.example.task_management.activity.HomeActivity;
-import com.example.task_management.activity.group.ManageMyGroupActivity;
-import com.example.task_management.activity.task.DetailTaskActivity;
-import com.example.task_management.model.Category;
+import com.example.task_management.activity.group.group.ManageMyGroupActivity;
 import com.example.task_management.model.Group;
-import com.example.task_management.model.Task;
 import com.example.task_management.service.APIService;
 import com.example.task_management.utils.RetrofitClient;
 import com.example.task_management.utils.SharedPrefManager;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import retrofit2.Call;
 import retrofit2.Callback;

@@ -1,25 +1,18 @@
-package com.example.task_management.activity.task;
+package com.example.task_management.activity.member.task;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.CalendarView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.task_management.R;
-import com.example.task_management.adapter.TaskAdapter;
 import com.example.task_management.model.PaginationTask;
 import com.example.task_management.model.Task;
 import com.example.task_management.service.APIService;
 import com.example.task_management.utils.RetrofitClient;
-import com.example.task_management.utils.SharedPrefManager;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -42,14 +35,6 @@ public class CalendarActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.calendar_view);
         calendarView = findViewById(R.id.calendarView);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("Lịch biểu");
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
         getHighlitedDays();
     }
     public void getHighlitedDays() {

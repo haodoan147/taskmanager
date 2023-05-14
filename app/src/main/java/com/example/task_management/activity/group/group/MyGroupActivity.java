@@ -1,8 +1,9 @@
-package com.example.task_management.activity.group;
+package com.example.task_management.activity.group.group;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -11,19 +12,15 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.task_management.R;
-import com.example.task_management.activity.MyProfileActivity;
-import com.example.task_management.adapter.CommentApdater;
 import com.example.task_management.adapter.GroupAdapter;
-import com.example.task_management.model.Comment;
 import com.example.task_management.model.Group;
 import com.example.task_management.service.APIService;
 import com.example.task_management.utils.RetrofitClient;
@@ -43,6 +40,7 @@ public class MyGroupActivity extends AppCompatActivity {
     List<Group> listGroup= new ArrayList<>();
     List<Group> newListGroup= new ArrayList<>();
     GroupAdapter groupAdapter;
+    Toolbar toolbar;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.my_group);
@@ -53,6 +51,14 @@ public class MyGroupActivity extends AppCompatActivity {
         View create_btn = findViewById(R.id.create_group);
         create_btn.setOnClickListener(view -> {
             showBottomDialogCreate();
+        });
+        toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("Quản lí nhóm");
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
         });
         getMyGroups();
     }
@@ -128,6 +134,7 @@ public class MyGroupActivity extends AppCompatActivity {
         });
         dialog.show();
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         dialog.getWindow().setGravity(Gravity.BOTTOM);
     }

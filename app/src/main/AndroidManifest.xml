@@ -34,15 +34,6 @@
 <!--            </intent-filter>-->
         </activity>
         <activity
-            android:name=".activity.group.GroupJoinRequestActivity"
-            android:exported="true">
-            <!--            <intent-filter>-->
-            <!--                <action android:name="android.intent.action.MAIN" />-->
-
-            <!--                <category android:name="android.intent.category.LAUNCHER" />-->
-            <!--            </intent-filter>-->
-        </activity>
-        <activity
             android:name=".activity.task.DetailTaskActivity"
             android:exported="true">
 <!--                        <intent-filter>-->
@@ -52,7 +43,7 @@
 <!--                        </intent-filter>-->
         </activity>
         <activity
-            android:name=".activity.group.MyGroupActivity"
+            android:name=".activity.group.group.MyGroupActivity"
             android:exported="true">
             <!--                        <intent-filter>-->
             <!--                            <action android:name="android.intent.action.MAIN" />-->
@@ -61,22 +52,13 @@
             <!--                        </intent-filter>-->
         </activity>
         <activity
-            android:name=".activity.group.ManageMyGroupActivity"
+            android:name=".activity.group.group.ManageMyGroupActivity"
             android:exported="true">
 <!--                <intent-filter>-->
 <!--                    <action android:name="android.intent.action.MAIN" />-->
 
 <!--                    <category android:name="android.intent.category.LAUNCHER" />-->
 <!--                </intent-filter>-->
-        </activity>
-        <activity
-            android:name=".activity.group.CreateGroupActivity"
-            android:exported="true">
-            <!--                <intent-filter>-->
-            <!--                    <action android:name="android.intent.action.MAIN" />-->
-
-            <!--                    <category android:name="android.intent.category.LAUNCHER" />-->
-            <!--                </intent-filter>-->
         </activity>
         <activity
             android:name=".activity.group_task.CreateCategoryActivity"

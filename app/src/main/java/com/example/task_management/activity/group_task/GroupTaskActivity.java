@@ -31,7 +31,6 @@ import com.example.task_management.R;
 import com.example.task_management.activity.HomeActivity;
 import com.example.task_management.activity.MyProfileActivity;
 import com.example.task_management.activity.SignInActivity;
-import com.example.task_management.activity.group.MyGroupMemberFragment;
 import com.example.task_management.activity.task.CalendarActivity;
 import com.example.task_management.activity.task.CreateTaskActivity;
 import com.example.task_management.activity.task.HomeFragment;

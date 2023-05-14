@@ -1,7 +1,6 @@
-package com.example.task_management.activity.task;
+package com.example.task_management.activity.member.task;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,7 +21,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.task_management.R;
-import com.example.task_management.activity.MyProfileActivity;
 import com.example.task_management.adapter.TaskAdapter;
 import com.example.task_management.model.Category;
 import com.example.task_management.model.PaginationTask;

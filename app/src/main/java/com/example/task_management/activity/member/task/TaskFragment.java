@@ -1,4 +1,4 @@
-package com.example.task_management.activity.group;
+package com.example.task_management.activity.member.task;
 
 import android.animation.ObjectAnimator;
 import android.content.Context;
@@ -35,7 +35,7 @@ import com.woxthebox.draglistview.DragItem;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyGroupTaskFragment extends Fragment {
+public class TaskFragment extends Fragment {
 
     private static int sCreatedItems = 0;
     private BoardView mBoardView;
@@ -47,8 +47,8 @@ public class MyGroupTaskFragment extends Fragment {
     List<Category> listCategory = new ArrayList<>();
 
 
-    public static MyGroupTaskFragment newInstance() {
-        return new MyGroupTaskFragment();
+    public static TaskFragment newInstance() {
+        return new TaskFragment();
     }
     @Override
     public void onCreate(Bundle savedInstanceState) {

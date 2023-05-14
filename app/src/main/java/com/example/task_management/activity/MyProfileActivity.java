@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.appcompat.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -24,8 +25,7 @@ public class MyProfileActivity extends AppCompatActivity {
     TextView id, userName, userEmail, name;
     Button logOutBtn;
     APIService apiService;
-    TextView appHeader;
-    ImageView profileBtn;
+    Toolbar toolbar;
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.my_profile);
@@ -47,12 +47,14 @@ public class MyProfileActivity extends AppCompatActivity {
         userEmail = findViewById(R.id.textViewEmail);
         name = findViewById(R.id.textViewName);
         logOutBtn = findViewById(R.id.btnLogout);
-        appHeader = findViewById((R.id.app_header));
-        appHeader.setText("My profile");
-        profileBtn = findViewById(R.id.right_icon);
-        if(appHeader.getText() =="My profile"){
-            profileBtn.setVisibility(View.INVISIBLE);
-        }
+        toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("Thông tin cá nhân");
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
     private void getMyProfile(){
 
