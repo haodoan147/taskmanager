@@ -53,11 +53,15 @@ public class MyGroupMemberFragment extends Fragment {
     JoinRequestAdapter joinRequestAdapter;
     int groupId;
     MemberApdater memberApdater;
+    TextView count_request;
+    int count = 0;
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.my_group_member, container, false);
         recyclerView = view.findViewById(R.id.rcv_group);
         Bundle arguments = getArguments();
         groupId  = arguments.getInt("idGroup");
+        count_request = view.findViewById(R.id.count);
+        Count_request();
         View create_btn = view.findViewById(R.id.show_join_request);
         create_btn.setOnClickListener(view1 -> {
             showBottomDialogRequest();
@@ -139,5 +143,36 @@ public class MyGroupMemberFragment extends Fragment {
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         dialog.getWindow().setGravity(Gravity.BOTTOM);
+    }
+    private void Count_request(){
+        String accessToken = (SharedPrefManager.getInstance(getActivity()).getAccessToken()).getAccessToken();
+        String authHeader = "Bearer " + accessToken;
+        APIService apiService = RetrofitClient.getInstance().create(APIService.class);
+        apiService.getGroupRequest(authHeader,groupId).enqueue(new Callback<List<JoinRequest>>() {
+            @Override
+            public void onResponse(Call<List<JoinRequest>> call, Response<List<JoinRequest>> response) {
+                if (response.isSuccessful()) {
+                    joinRequestList = response.body();
+                    List<JoinRequest> newJoinRequestList = new ArrayList<>();
+                    for (JoinRequest joinRequest: joinRequestList) {
+                        if(joinRequest.getStatus().equals("PENDING")){
+                            newJoinRequestList.add(joinRequest);
+                        }
+                        count = newJoinRequestList.size();
+                        count_request.setText(String.valueOf(count));
+                    }
+                }else{
+                    try {
+                        Log.v("Error code 400",response.errorBody().string());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+            @Override
+            public void onFailure(Call<List<JoinRequest>> call, Throwable t) {
+                Log.e("TAG", "onFailure: " + t.getMessage());
+            }
+        });
     }
 }

@@ -2,7 +2,9 @@ package com.example.task_management.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -11,6 +13,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.task_management.R;
@@ -30,13 +33,12 @@ public class SignInActivity extends AppCompatActivity {
     TextView signUpRedirectText;
     APIService apiService;
     String id, name, email;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.sign_in_new);
-
+        LoadingDialog loadingDialog = new LoadingDialog(SignInActivity.this);
         initView();
         if(SharedPrefManager.getInstance(getApplicationContext()).isLoggedIn())
         {
@@ -48,7 +50,15 @@ public class SignInActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                testLogin();
+                loadingDialog.startLoadingDialog();
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        testLogin();
+                        loadingDialog.dismissDialog();
+                    }
+                }, 3000);
             }
         });
         signUpRedirectText.setOnClickListener(new View.OnClickListener() {

@@ -18,6 +18,7 @@ import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.task_management.R;
@@ -46,11 +47,11 @@ public class SearchTaskFragment extends Fragment {
     ImageView profileBtn,filterBtn;
     SearchView searchView;
     List<Category> listCategory= new ArrayList<>();
-    BottomNavigationView navigationView;
-    ViewPager viewPager;
+    SwipeRefreshLayout swipeRefreshLayout;
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.search_task, container, false);
         recyclerView = view.findViewById(R.id.recyclerView);
+        swipeRefreshLayout = view.findViewById(R.id.swipefreshlayout);
         getAllTask("TODO");
         filterBtn = view.findViewById(R.id.filter_icon);
         filterBtn.setOnClickListener(new View.OnClickListener() {
@@ -71,6 +72,13 @@ public class SearchTaskFragment extends Fragment {
             public boolean onQueryTextChange(String newText) {
                 filterListener(newText);
                 return false;
+            }
+        });
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getAllTask("TODO");
+                swipeRefreshLayout.setRefreshing(false);
             }
         });
         return view;

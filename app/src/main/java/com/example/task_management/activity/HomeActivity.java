@@ -58,6 +58,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.base_activity);
+        LoadingDialog loadingDialog = new LoadingDialog(HomeActivity.this);
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
@@ -85,6 +86,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     toolbar.setTitle("Quản lí công việc");
                     List<Task> newTaskList = taskList;
                     List<Category> newCateList = listCategory;
+                    loadingDialog.startLoadingDialog();
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -94,6 +96,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                             args.putSerializable("newCateList", (Serializable) newCateList);
                             newFragment.setArguments(args);
                             replaceFragment(newFragment);
+                            loadingDialog.dismissDialog();
                         }
                     }, 3000);
                     break;
@@ -115,7 +118,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         fragmentTransaction.replace(R.id.fragment_container, fragment);
         fragmentTransaction.commit();
     }
-
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         Intent intent;

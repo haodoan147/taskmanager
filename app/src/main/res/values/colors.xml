@@ -19,5 +19,7 @@
     <color name="color7">#AE7CD6BD</color>
     <color name="color8">#A789CF</color>
     <color name="lavender">#4885ed</color>
+    <color name="shadow">#99000000</color>
+    <color name="red">#DC190A</color>
 
 </resources>

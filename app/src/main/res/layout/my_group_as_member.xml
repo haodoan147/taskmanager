@@ -25,4 +25,15 @@
         android:backgroundTint="@color/white"
         app:tint="@color/colorAccent"
         android:contentDescription="Enter How Much Cookies You Want"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Đăng nhập"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="36sp"
+            android:textStyle="bold"
+            android:layout_marginEnd="@dimen/fab_margin"
+            android:layout_marginBottom="70dp"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

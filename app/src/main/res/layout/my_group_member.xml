@@ -15,15 +15,34 @@
             android:layout_height="match_parent"
             android:layout_marginTop="4dp"></androidx.recyclerview.widget.RecyclerView>
     </LinearLayout>
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/show_join_request"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_marginEnd="@dimen/fab_margin"
-        android:layout_marginBottom="70dp"
-        android:src="@drawable/outline_filter_frames_24"
-        android:backgroundTint="@color/white"
-        app:tint="@color/colorAccent"
-        android:contentDescription="Enter How Much Cookies You Want"/>
+
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/show_join_request"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginEnd="@dimen/fab_margin"
+            android:layout_marginBottom="70dp"
+            android:backgroundTint="@color/white"
+            android:contentDescription="Enter How Much Cookies You Want"
+            android:src="@drawable/outline_filter_frames_24"
+            app:tint="@color/colorAccent" />
+
+        <TextView
+            android:layout_width="35dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginBottom="100dp"
+            android:layout_toEndOf="@id/show_join_request"
+            android:background="@drawable/floating_action_button_label"
+            android:paddingBottom="2dp"
+            android:paddingEnd="6dp"
+            android:paddingStart="12dp"
+            android:paddingTop="2dp"
+            android:elevation="7dp"
+            android:text="1"
+            android:textColor="@color/colorAccent"
+            android:textStyle="bold"
+            android:id="@+id/count"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
