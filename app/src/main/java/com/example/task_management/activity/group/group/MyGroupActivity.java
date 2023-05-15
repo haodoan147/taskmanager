@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.task_management.R;
 import com.example.task_management.adapter.GroupAdapter;
@@ -41,6 +42,7 @@ public class MyGroupActivity extends AppCompatActivity {
     List<Group> newListGroup= new ArrayList<>();
     GroupAdapter groupAdapter;
     Toolbar toolbar;
+    SwipeRefreshLayout swipeRefreshLayout;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.my_group);
@@ -48,6 +50,7 @@ public class MyGroupActivity extends AppCompatActivity {
     }
     private void initView() {
         recyclerView = findViewById(R.id.rcv_group);
+        swipeRefreshLayout = findViewById(R.id.swipefreshlayout);
         View create_btn = findViewById(R.id.create_group);
         create_btn.setOnClickListener(view -> {
             showBottomDialogCreate();
@@ -61,6 +64,14 @@ public class MyGroupActivity extends AppCompatActivity {
             }
         });
         getMyGroups();
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                newListGroup.clear();
+                getMyGroups();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
     }
     private void getMyGroups(){
         String accessToken = (SharedPrefManager.getInstance(getApplicationContext().getApplicationContext()).getAccessToken()).getAccessToken();

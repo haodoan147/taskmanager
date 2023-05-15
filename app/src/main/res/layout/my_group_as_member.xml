@@ -8,11 +8,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical" >
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipefreshlayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="4dp">
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rcv_group"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="4dp"></androidx.recyclerview.widget.RecyclerView>
+            android:layout_height="match_parent">
+        </androidx.recyclerview.widget.RecyclerView>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     </LinearLayout>
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/create_group"
@@ -26,14 +32,4 @@
         app:tint="@color/colorAccent"
         android:contentDescription="Enter How Much Cookies You Want"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Đăng nhập"
-            android:textAlignment="center"
-            android:textColor="@color/black"
-            android:textSize="36sp"
-            android:textStyle="bold"
-            android:layout_marginEnd="@dimen/fab_margin"
-            android:layout_marginBottom="70dp"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
