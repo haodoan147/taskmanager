@@ -15,7 +15,6 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -31,12 +30,12 @@ import com.example.task_management.R;
 import com.example.task_management.activity.HomeActivity;
 import com.example.task_management.activity.MyProfileActivity;
 import com.example.task_management.activity.SignInActivity;
-import com.example.task_management.activity.group_task.CateByGroupFragment;
-import com.example.task_management.activity.group_task.CreateCategoryActivity;
+import com.example.task_management.activity.group.category.MyGroupCreateCategoryActivity;
+import com.example.task_management.activity.group.category.MyGroupCategoryFragment;
 import com.example.task_management.activity.group_task.SearchByGroupFragment;
 import com.example.task_management.activity.group_task.TaskByGroupFragment;
 import com.example.task_management.activity.task.CalendarActivity;
-import com.example.task_management.activity.task.CreateTaskActivity;
+import com.example.task_management.activity.group.task.MyGroupCreateTaskActivity;
 import com.example.task_management.activity.task.HomeFragment;
 import com.example.task_management.model.User;
 import com.example.task_management.service.APIService;
@@ -85,7 +84,7 @@ public class DetailGroupActivity extends AppCompatActivity implements Navigation
                     replaceFragment(new TaskByGroupFragment());
                     break;
                 case R.id.cate:
-                    replaceFragment(new CateByGroupFragment());
+                    replaceFragment(new MyGroupCategoryFragment());
                     break;
                 case R.id.search:
                     replaceFragment(new SearchByGroupFragment());
@@ -146,9 +145,8 @@ public class DetailGroupActivity extends AppCompatActivity implements Navigation
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.bottomsheetlayout);
 
-        LinearLayout layoutTask = dialog.findViewById(R.id.layoutTask);
-        LinearLayout layoutCate = dialog.findViewById(R.id.layoutCate);
-        LinearLayout layoutGroup = dialog.findViewById(R.id.layoutGroup);
+        LinearLayout layoutTask = dialog.findViewById(R.id.create_task);
+        LinearLayout layoutCate = dialog.findViewById(R.id.create_cate);
         ImageView cancelButton = dialog.findViewById(R.id.cancelButton);
 
         layoutTask.setOnClickListener(new View.OnClickListener() {
@@ -157,7 +155,7 @@ public class DetailGroupActivity extends AppCompatActivity implements Navigation
             public void onClick(View v) {
 
                 dialog.dismiss();
-                intent = new Intent(getApplicationContext(), CreateTaskActivity.class);
+                intent = new Intent(getApplicationContext(), MyGroupCreateTaskActivity.class);
                 startActivity(intent);
 
             }
@@ -168,22 +166,11 @@ public class DetailGroupActivity extends AppCompatActivity implements Navigation
             public void onClick(View v) {
                 Intent intent;
                 dialog.dismiss();
-                intent = new Intent(getApplicationContext(), CreateCategoryActivity.class);
+                intent = new Intent(getApplicationContext(), MyGroupCreateCategoryActivity.class);
                 startActivity(intent);
 
             }
         });
-
-        layoutGroup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                dialog.dismiss();
-                Toast.makeText(getApplicationContext(),"Go live is Clicked",Toast.LENGTH_SHORT).show();
-
-            }
-        });
-
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

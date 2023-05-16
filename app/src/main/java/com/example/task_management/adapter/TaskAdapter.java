@@ -6,24 +6,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.task_management.R;
-import com.example.task_management.activity.group_task.CreateCategoryActivity;
-import com.example.task_management.activity.task.CreateTaskActivity;
 import com.example.task_management.activity.task.DetailTaskActivity;
 import com.example.task_management.model.Category;
 import com.example.task_management.model.Task;
@@ -64,7 +59,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
 
     public class TaskViewHolder extends RecyclerView.ViewHolder {
         public ImageView iv_options;
-        public TextView tv_title, tv_des, tv_duration, tv_category,tv_label,tv_priority,tv_status,tv_date,tv_month;
+        public TextView tv_title, tv_des, tv_duration, tv_category,tv_label,tv_priority,tv_status,tv_date,tv_month,tv_assignee;
         public TaskViewHolder(final View itemView) {
             super(itemView);
             iv_options = itemView.findViewById(R.id.iv_options);
@@ -77,6 +72,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
             tv_status = itemView.findViewById(R.id.tv_status);
             tv_date = itemView.findViewById(R.id.tv_date);
             tv_month = itemView.findViewById(R.id.tv_month);
+            tv_assignee = itemView.findViewById(R.id.tv_assignee);
 
         }
     }
@@ -136,6 +132,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
                 holder.tv_status.setBackgroundResource(R.drawable.status_view_round_5);
                 break;
         }
+        holder.tv_assignee.setText(task.getAssignee().getName());
 
     }
 

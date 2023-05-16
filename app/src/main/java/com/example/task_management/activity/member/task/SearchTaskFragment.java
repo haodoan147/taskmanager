@@ -1,6 +1,7 @@
 package com.example.task_management.activity.member.task;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -48,9 +49,12 @@ public class SearchTaskFragment extends Fragment {
     SearchView searchView;
     List<Category> listCategory= new ArrayList<>();
     SwipeRefreshLayout swipeRefreshLayout;
+    Integer idGroup;
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.search_task, container, false);
         recyclerView = view.findViewById(R.id.recyclerView);
+        Bundle arguments = getArguments();
+        idGroup  = arguments.getInt("idGroup", 1);
         swipeRefreshLayout = view.findViewById(R.id.swipefreshlayout);
         getAllTask("TODO");
         filterBtn = view.findViewById(R.id.filter_icon);
@@ -163,7 +167,7 @@ public class SearchTaskFragment extends Fragment {
         String accessToken = pref.getString("keyaccesstoken", "empty");
         String authHeader = "Bearer " + accessToken;
         APIService apiService = RetrofitClient.getInstance().create(APIService.class);
-        apiService.getAllCategory(authHeader).enqueue(new Callback<List<Category>>() {
+        apiService.getAllCategory(authHeader,1,100,"asc",idGroup).enqueue(new Callback<List<Category>>() {
             @Override
             public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
                 if (response.isSuccessful()) {

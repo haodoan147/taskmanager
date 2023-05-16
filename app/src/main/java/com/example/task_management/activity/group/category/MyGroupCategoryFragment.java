@@ -1,9 +1,8 @@
-package com.example.task_management.activity.group_task;
+package com.example.task_management.activity.group.category;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,14 +25,17 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CateByGroupFragment extends Fragment {
+public class MyGroupCategoryFragment extends Fragment {
     RecyclerView recyclerView;
     CategoryAdapter categoryAdapter;
     APIService apiService;
     List<Category> categoryList;
+    int groupId;
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.category, container, false);
         recyclerView = view.findViewById(R.id.rcv_cate);
+        Bundle arguments = getArguments();
+        groupId  = arguments.getInt("idGroup",1);
         getCategory();
         return view;
     }
@@ -42,7 +44,7 @@ public class CateByGroupFragment extends Fragment {
         String accessToken = pref.getString("keyaccesstoken", "empty");
         String authHeader = "Bearer " + accessToken;
         apiService = RetrofitClient.getInstance().create(APIService.class);
-        apiService.getAllCategory(authHeader).enqueue(new Callback<List<Category>>() {
+        apiService.getAllCategory(authHeader,1,100,"asc",groupId).enqueue(new Callback<List<Category>>() {
             @Override
             public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
                 if (response.isSuccessful()) {

@@ -4,10 +4,16 @@
     <item android:title="Chi tiết"
         android:orderInCategory="1"
         android:id="@+id/menuDetail"/>
-    <item android:title="Xóa"
+    <item android:title="Cập nhật"
         android:orderInCategory="2"
+        android:id="@+id/menuUpdate"/>
+    <item android:title="Xóa"
+        android:orderInCategory="3"
         android:id="@+id/menuDelete"/>
     <item android:title="Gán người thực hiện"
-        android:orderInCategory="2"
+        android:orderInCategory="4"
         android:id="@+id/menuAssign"/>
+    <item android:title="Bỏ gán"
+        android:orderInCategory="5"
+        android:id="@+id/menuUnAssign"/>
 </menu>

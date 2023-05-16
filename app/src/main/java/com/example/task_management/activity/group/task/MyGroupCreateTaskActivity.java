@@ -1,10 +1,9 @@
-package com.example.task_management.activity.task;
+package com.example.task_management.activity.group.task;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -14,19 +13,19 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.task_management.R;
 import com.example.task_management.activity.HomeActivity;
 import com.example.task_management.model.Category;
 import com.example.task_management.model.CreateTask;
 import com.example.task_management.model.Label;
+import com.example.task_management.model.ResponseLabel;
 import com.example.task_management.model.Task;
 import com.example.task_management.service.APIService;
 import com.example.task_management.utils.RetrofitClient;
 import com.example.task_management.utils.SharedPrefManager;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -42,8 +41,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CreateTaskActivity extends AppCompatActivity {
-    EditText edtTaskName, edtTaskDescription;
+public class MyGroupCreateTaskActivity extends AppCompatActivity {
+    EditText edtTaskName, edtTaskDescription, edtTaskDuration;
     DatePicker deadlineDatePicker;
     ArrayList<String> labelItems  = new ArrayList<>();
     ArrayList<String> cateItems  = new ArrayList<>();
@@ -56,14 +55,18 @@ public class CreateTaskActivity extends AppCompatActivity {
     List<Label> listLabel = new ArrayList<>();
     List<Category> listCategory = new ArrayList<>();
     ImageView btnBack;
+    Toolbar toolbar;
     public enum Priority
     {
         NONE, LOW, MEDIUM, HIGH, URGENT
     }
+    int idGroup;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.create_new_task);
+        Intent intent = getIntent();
+        idGroup = intent.getIntExtra("idGroup", 1);
         initView();
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,6 +81,7 @@ public class CreateTaskActivity extends AppCompatActivity {
         final String taskCate = edtTaskCate.getText().toString();
         final String taskLabel = edtTaskLabel.getText().toString();
         final String taskPriority = edtTaskPriority.getText().toString();
+        final String taskDuration = edtTaskDuration.getText().toString();
         final int taskCateID = getCateId();
         final int taskLabelID = getLabelId();
         final int taskPriorityID = getPriorityId();
@@ -108,29 +112,31 @@ public class CreateTaskActivity extends AppCompatActivity {
             edtTaskPriority.requestFocus();
             return;
         }
-        Date dueDate = new Date();
+        if (TextUtils.isEmpty(taskDuration)) {
+            edtTaskDuration.setError("Vui lòng nhập lại");
+            edtTaskDuration.requestFocus();
+            return;
+        }
         int day = deadlineDatePicker.getDayOfMonth();
         int month = deadlineDatePicker.getMonth();
         int year = deadlineDatePicker.getYear();
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month, day);
         Date dlDate = calendar.getTime();
-        int diffInDays = (int) ((dlDate.getTime() - dueDate.getTime())
-                / (1000 * 60 * 60 * 24));
         SimpleDateFormat isoDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
         isoDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         String isoDate = isoDateFormat.format(dlDate);
         apiService = RetrofitClient.getInstance().create(APIService.class);
         Integer[] newlist = {taskLabelID};
-        CreateTask newTask = new CreateTask(taskName, taskDes, isoDate, diffInDays, Arrays.asList(newlist), taskCateID, taskPriorityID);
+        CreateTask newTask = new CreateTask(taskName, taskDes, isoDate, Integer.parseInt(taskDuration), Arrays.asList(newlist), taskCateID, taskPriorityID,idGroup);
         try{
             apiService.getCreateNewTask(authHeader, newTask).enqueue(new Callback<Task>() {
                 @Override
                 public void onResponse(Call<Task> call, Response<Task> response) {
                     if (response.isSuccessful()) {
                         Task task = response.body();
-                        Toast.makeText(CreateTaskActivity.this, "Create Task Success", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(CreateTaskActivity.this, HomeActivity.class);
+                        Toast.makeText(MyGroupCreateTaskActivity.this, "Create Task Success", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(MyGroupCreateTaskActivity.this, HomeActivity.class);
                         startActivity(intent);
                     }else{
                         try {
@@ -142,7 +148,7 @@ public class CreateTaskActivity extends AppCompatActivity {
                 }
                 @Override
                 public void onFailure(Call<Task> call, Throwable t) {
-                    Toast.makeText(CreateTaskActivity.this, "Create Task Failure", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MyGroupCreateTaskActivity.this, "Create Task Failure", Toast.LENGTH_SHORT).show();
                 }
             });
         }catch(Exception e){
@@ -151,6 +157,8 @@ public class CreateTaskActivity extends AppCompatActivity {
 
     }
     private void initView(){
+        toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("Tạo task");
         String accessToken = (SharedPrefManager.getInstance(getApplicationContext()).getAccessToken()).getAccessToken();
         authHeader = "Bearer " + accessToken;
         priorityItems.add("NONE");
@@ -164,7 +172,12 @@ public class CreateTaskActivity extends AppCompatActivity {
         edtTaskCate = findViewById(R.id.edittext_category);
         edtTaskLabel = findViewById(R.id.edittext_label);
         edtTaskPriority = findViewById(R.id.edittext_priority);
+        edtTaskDuration  = findViewById(R.id.edittext_duration);
         deadlineDatePicker = findViewById(R.id.dlDatePicker);
+        listCategory.add(new Category(1,"cong viec ca nhan",1));
+        for (Category value: listCategory) {
+            cateItems.add(value.getName());
+        }
         getLabel();
         getCategory();
         adapterItems = new ArrayAdapter<String>(this,R.layout.dropdown_select_option,cateItems);
@@ -173,31 +186,34 @@ public class CreateTaskActivity extends AppCompatActivity {
         edtTaskLabel.setAdapter(adapterItems);
         adapterItems = new ArrayAdapter<String>(this,R.layout.dropdown_select_option,priorityItems);
         edtTaskPriority.setAdapter(adapterItems);
-        btnBack = findViewById(R.id.btn_back_to_context);
-        btnBack.setOnClickListener(view -> finish());
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
     private void getLabel(){
         apiService = RetrofitClient.getInstance().create(APIService.class);
-        apiService.getAllLabel(authHeader).enqueue(new Callback<List<Label>>() {
+        apiService.getAllLabel(authHeader,1,100,"asc",idGroup).enqueue(new Callback<ResponseLabel>() {
             @Override
-            public void onResponse(Call<List<Label>> call, Response<List<Label>> response) {
+            public void onResponse(Call<ResponseLabel> call, Response<ResponseLabel> response) {
                 if (response.isSuccessful()) {
-                    listLabel = response.body();
+                    listLabel.addAll(response.body().getData());
                     for (Label value: listLabel) {
                         labelItems.add(value.getName());
                     }
                 }
             }
             @Override
-            public void onFailure(Call<List<Label>> call, Throwable t) {
+            public void onFailure(Call<ResponseLabel> call, Throwable t) {
                 Log.d("TAG", "onFailure: " + t.getMessage());
             }
         });
     }
     private void getCategory(){
-        Log.e("acess",authHeader);
         apiService = RetrofitClient.getInstance().create(APIService.class);
-        apiService.getAllCategory(authHeader).enqueue(new Callback<List<Category>>() {
+        apiService.getAllCategory(authHeader,1,100,"asc",idGroup).enqueue(new Callback<List<Category>>() {
             @Override
             public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
                 if (response.isSuccessful()) {

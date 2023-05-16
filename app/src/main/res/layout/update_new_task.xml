@@ -116,6 +116,27 @@
                 android:textColor="@color/black"
                 android:background="@drawable/edittext_background"/>
         </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="30dp"
+            android:background="@drawable/edittext_background"
+            android:ems="10"
+            android:drawablePadding="16dp"
+            android:drawableStart="@drawable/email"
+            android:hint="Trạng thái"
+            android:textColorHint="#756C6C"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+            <AutoCompleteTextView
+                android:id="@+id/edittext_status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none"
+                android:textColor="@color/black"
+                android:background="@drawable/edittext_background"/>
+        </com.google.android.material.textfield.TextInputLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -127,7 +148,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="30dp"
                 android:ems="10"
-                android:hint="Ngày thực hiện"
+                android:hint="Ngày đến hạn"
                 android:padding="8dp"
                 android:textColor="#3b608c"
                 android:textColorHint="#756C6C" />
@@ -142,20 +163,7 @@
                 android:theme="@style/MyDatePicker"
                 android:background="@drawable/edittext_background"/>
         </LinearLayout>
-        <EditText
-            android:id="@+id/edittext_duration"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="30dp"
-            android:background="@drawable/edittext_background"
-            android:drawablePadding="16dp"
-            android:ems="10"
-            android:hint="Thời hạn"
-            android:padding="8dp"
-            android:textColor="#3b608c"
-            android:textColorHint="#756C6C" />
+
         <Button
             android:id="@+id/btn_submit"
             android:layout_width="match_parent"
@@ -163,8 +171,7 @@
             android:layout_marginEnd="30dp"
             android:layout_marginStart="250dp"
             android:gravity="center"
-            android:inputType="numberDecimal"
-            android:text="Tạo task"></Button>
+            android:text="Cập nhật task"></Button>
     </LinearLayout>
 
 </RelativeLayout>

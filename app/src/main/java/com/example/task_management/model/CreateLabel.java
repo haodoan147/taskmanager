@@ -3,23 +3,22 @@ package com.example.task_management.model;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.List;
 
-public class CreateCategory implements Serializable {
-
+public class CreateLabel implements Serializable {
     @SerializedName("name")
     private String name;
-
-    @SerializedName("priority")
-    private int priority;
+    @SerializedName("color")
+    private String color;
     @SerializedName("groupId")
-    private int groupId;
+    private Integer groupId;
 
-    public CreateCategory(String name, int priority, int groupId) {
-
+    public CreateLabel(String name, String color,Integer groupId) {
         this.name = name;
-        this.priority = priority;
+        this.color = color;
         this.groupId = groupId;
     }
+
     public String getName() {
         return name;
     }
@@ -27,19 +26,20 @@ public class CreateCategory implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
-    public void setPriority(int priority) {
-        this.priority = priority;
+
+    public String getColor() {
+        return color;
     }
 
-    public int getPriority() {
-        return priority;
+    public void setColor(String color) {
+        this.color = color;
     }
 
-    public int getGroupId() {
+    public Integer getGroupId() {
         return groupId;
     }
 
-    public void setGroupId(int groupId) {
+    public void setGroupId(Integer groupId) {
         this.groupId = groupId;
     }
 }

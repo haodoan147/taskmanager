@@ -23,7 +23,7 @@
         android:layout_marginTop="100dp"
         android:orientation="vertical">
         <EditText
-            android:id="@+id/edittext_category"
+            android:id="@+id/edittext_label"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginStart="30dp"
@@ -32,32 +32,25 @@
             android:background="@drawable/edittext_background"
             android:drawablePadding="16dp"
             android:ems="10"
-            android:hint="Tên loại"
+            android:hint="Tên nhãn"
             android:padding="8dp"
             android:textColor="#3b608c"
             android:textColorHint="#756C6C" />
 
-        <com.google.android.material.textfield.TextInputLayout
+        <EditText
+            android:id="@+id/edittext_color"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_marginStart="30dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="30dp"
             android:background="@drawable/edittext_background"
-            android:ems="10"
             android:drawablePadding="16dp"
-            android:drawableStart="@drawable/email"
-            android:hint="Độ ưu tiên"
-            android:textColorHint="#756C6C"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
-            <AutoCompleteTextView
-                android:id="@+id/edittext_priority"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="text"
-                android:textColor="@color/black"
-                android:background="@drawable/edittext_background"/>
-        </com.google.android.material.textfield.TextInputLayout>
+            android:ems="10"
+            android:hint="Tên màu"
+            android:padding="8dp"
+            android:textColor="#3b608c"
+            android:textColorHint="#756C6C"/>
         <Button
             android:id="@+id/btn_submit"
             android:layout_width="match_parent"
@@ -66,6 +59,6 @@
             android:layout_marginStart="250dp"
             android:layout_marginTop="50dp"
             android:gravity="center"
-            android:text="Tạo Loại Task"></Button>
+            android:text="Tạo Nhãn"></Button>
     </LinearLayout>
 </RelativeLayout>

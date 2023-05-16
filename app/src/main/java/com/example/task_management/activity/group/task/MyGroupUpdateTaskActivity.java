@@ -1,30 +1,30 @@
-package com.example.task_management.activity.task;
+package com.example.task_management.activity.group.task;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.task_management.R;
+import com.example.task_management.activity.HomeActivity;
+import com.example.task_management.adapter.TaskAdapter;
 import com.example.task_management.model.Category;
 import com.example.task_management.model.CreateTask;
 import com.example.task_management.model.Label;
+import com.example.task_management.model.ResponseLabel;
 import com.example.task_management.model.Task;
+import com.example.task_management.model.UpdateTask;
 import com.example.task_management.service.APIService;
 import com.example.task_management.utils.RetrofitClient;
 import com.example.task_management.utils.SharedPrefManager;
@@ -43,64 +43,50 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CreateTaskFragment extends Fragment {
+public class MyGroupUpdateTaskActivity extends AppCompatActivity {
     EditText edtTaskName, edtTaskDescription;
     DatePicker deadlineDatePicker;
     ArrayList<String> labelItems  = new ArrayList<>();
     ArrayList<String> cateItems  = new ArrayList<>();
     ArrayList<String> priorityItems  = new ArrayList<>();
-    AutoCompleteTextView edtTaskCate,edtTaskLabel,edtTaskPriority;
+    ArrayList<String> statusItems  = new ArrayList<>();
+    AutoCompleteTextView edtTaskCate,edtTaskLabel,edtTaskPriority, edtTaskStatus;
     ArrayAdapter<String> adapterItems;
     APIService apiService;
     Button btnSubmit;
     String authHeader ;
     List<Label> listLabel = new ArrayList<>();
     List<Category> listCategory = new ArrayList<>();
+    ImageView btnBack;
+    Toolbar toolbar;
     public enum Priority
     {
         NONE, LOW, MEDIUM, HIGH, URGENT
     }
-    @Nullable
+    int idGroup;
+    Task oldTask;
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.create_new_task, container, false);
-        SharedPreferences pref = getActivity().getSharedPreferences("ATAuthen",Context.MODE_PRIVATE);
-        String accessToken = pref.getString("keyaccesstoken", "empty");
-        authHeader = "Bearer " + accessToken;
-        priorityItems.add("NONE");
-        priorityItems.add("LOW");
-        priorityItems.add("MEDIUM");
-        priorityItems.add("HIGH");
-        priorityItems.add("URGENT");
-        edtTaskName = view.findViewById(R.id.edittext_task);
-        edtTaskDescription =  view.findViewById(R.id.edittext_description);
-        btnSubmit = view.findViewById(R.id.btn_submit);
-        edtTaskCate = view.findViewById(R.id.edittext_category);
-        edtTaskLabel = view.findViewById(R.id.edittext_label);
-        edtTaskPriority = view.findViewById(R.id.edittext_priority);
-        deadlineDatePicker = view.findViewById(R.id.dlDatePicker);
-        getLabel();
-        getCategory();
-        adapterItems = new ArrayAdapter<String>(view.getContext(),R.layout.dropdown_select_option,cateItems);
-        edtTaskCate.setAdapter(adapterItems);
-        adapterItems = new ArrayAdapter<String>(view.getContext(),R.layout.dropdown_select_option,labelItems);
-        edtTaskLabel.setAdapter(adapterItems);
-        adapterItems = new ArrayAdapter<String>(view.getContext(),R.layout.dropdown_select_option,priorityItems);
-        edtTaskPriority.setAdapter(adapterItems);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.update_new_task);
+        Intent intent = getIntent();
+        oldTask = (Task) intent.getSerializableExtra("oldTask");
+        idGroup = intent.getIntExtra("idGroup", 1);
+        initView();
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createtask();
+                updateTask();
             }
         });
-        return view;
     }
-    private void createtask() {
+    private void updateTask() {
         final String taskName = edtTaskName.getText().toString();
         final String taskDes = edtTaskDescription.getText().toString();
         final String taskCate = edtTaskCate.getText().toString();
         final String taskLabel = edtTaskLabel.getText().toString();
         final String taskPriority = edtTaskPriority.getText().toString();
+        final String taskStatus = edtTaskStatus.getText().toString();
         final int taskCateID = getCateId();
         final int taskLabelID = getLabelId();
         final int taskPriorityID = getPriorityId();
@@ -131,6 +117,11 @@ public class CreateTaskFragment extends Fragment {
             edtTaskPriority.requestFocus();
             return;
         }
+        if (TextUtils.isEmpty(taskStatus)) {
+            edtTaskStatus.setError("Vui lòng nhập lại");
+            edtTaskStatus.requestFocus();
+            return;
+        }
         Date dueDate = new Date();
         int day = deadlineDatePicker.getDayOfMonth();
         int month = deadlineDatePicker.getMonth();
@@ -145,16 +136,16 @@ public class CreateTaskFragment extends Fragment {
         String isoDate = isoDateFormat.format(dlDate);
         apiService = RetrofitClient.getInstance().create(APIService.class);
         Integer[] newlist = {taskLabelID};
-        CreateTask newTask = new CreateTask(taskName, taskDes, isoDate, diffInDays, Arrays.asList(newlist), taskCateID, taskPriorityID);
+        UpdateTask newTask = new UpdateTask(taskStatus,taskName, taskDes, isoDate, diffInDays, Arrays.asList(newlist), taskCateID, taskPriorityID);
         try{
-            apiService.getCreateNewTask(authHeader, newTask).enqueue(new Callback<Task>() {
+            apiService.updateTask(authHeader,oldTask.getId(), newTask).enqueue(new Callback<Task>() {
                 @Override
                 public void onResponse(Call<Task> call, Response<Task> response) {
                     if (response.isSuccessful()) {
                         Task task = response.body();
-                        Toast.makeText(getActivity(), "Create Task Success", Toast.LENGTH_SHORT).show();
-//                        Intent intent = new Intent(CreateTaskActivity.this, TaskActivity.class);
-//                        startActivity(intent);
+                        Toast.makeText(MyGroupUpdateTaskActivity.this, "Cập nhật thành công", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(MyGroupUpdateTaskActivity.this, HomeActivity.class);
+                        startActivity(intent);
                     }else{
                         try {
                             Log.v("Error code 400",response.errorBody().string());
@@ -165,7 +156,7 @@ public class CreateTaskFragment extends Fragment {
                 }
                 @Override
                 public void onFailure(Call<Task> call, Throwable t) {
-                    Toast.makeText(getActivity(), "Create Task Failure", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MyGroupUpdateTaskActivity.this, "Cập nhật thất bại", Toast.LENGTH_SHORT).show();
                 }
             });
         }catch(Exception e){
@@ -173,27 +164,77 @@ public class CreateTaskFragment extends Fragment {
         }
 
     }
+    private void initView(){
+        toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("Tạo task");
+        String accessToken = (SharedPrefManager.getInstance(getApplicationContext()).getAccessToken()).getAccessToken();
+        authHeader = "Bearer " + accessToken;
+        priorityItems.add("NONE");
+        priorityItems.add("LOW");
+        priorityItems.add("MEDIUM");
+        priorityItems.add("HIGH");
+        priorityItems.add("URGENT");
+        statusItems.add("TODO");
+        statusItems.add("IN_PROGRESS");
+        statusItems.add("DONE");
+        statusItems.add("POSTPONED");
+        statusItems.add("CANCELED");
+        edtTaskName = findViewById(R.id.edittext_task);
+        edtTaskDescription =  findViewById(R.id.edittext_description);
+        btnSubmit = findViewById(R.id.btn_submit);
+        edtTaskCate = findViewById(R.id.edittext_category);
+        edtTaskLabel = findViewById(R.id.edittext_label);
+        edtTaskPriority = findViewById(R.id.edittext_priority);
+        edtTaskStatus = findViewById(R.id.edittext_status);
+        deadlineDatePicker = findViewById(R.id.dlDatePicker);
+        listCategory.add(new Category(1,"cong viec ca nhan",1));
+        for (Category value: listCategory) {
+            cateItems.add(value.getName());
+        }
+        getLabel();
+        getCategory();
+        adapterItems = new ArrayAdapter<String>(this,R.layout.dropdown_select_option,cateItems);
+        edtTaskCate.setAdapter(adapterItems);
+        adapterItems = new ArrayAdapter<String>(this,R.layout.dropdown_select_option,labelItems);
+        edtTaskLabel.setAdapter(adapterItems);
+        adapterItems = new ArrayAdapter<String>(this,R.layout.dropdown_select_option,priorityItems);
+        edtTaskPriority.setAdapter(adapterItems);
+        adapterItems = new ArrayAdapter<String>(this,R.layout.dropdown_select_option,statusItems);
+        edtTaskStatus.setAdapter(adapterItems);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        edtTaskName.setText(oldTask.getTitle());
+        edtTaskDescription.setText(oldTask.getDescription());
+        edtTaskCate.setText(getCateName());
+        edtTaskLabel.setText(oldTask.getLabels().get(0).getName());
+        edtTaskPriority.setText(String.valueOf(Priority.values()[oldTask.getPriority()]));
+        edtTaskStatus.setText(oldTask.getStatus());
+    }
     private void getLabel(){
         apiService = RetrofitClient.getInstance().create(APIService.class);
-        apiService.getAllLabel(authHeader).enqueue(new Callback<List<Label>>() {
+        apiService.getAllLabel(authHeader,1,100,"asc",idGroup).enqueue(new Callback<ResponseLabel>() {
             @Override
-            public void onResponse(Call<List<Label>> call, Response<List<Label>> response) {
+            public void onResponse(Call<ResponseLabel> call, Response<ResponseLabel> response) {
                 if (response.isSuccessful()) {
-                    listLabel = response.body();
+                    listLabel.addAll(response.body().getData());
                     for (Label value: listLabel) {
                         labelItems.add(value.getName());
                     }
                 }
             }
             @Override
-            public void onFailure(Call<List<Label>> call, Throwable t) {
+            public void onFailure(Call<ResponseLabel> call, Throwable t) {
                 Log.d("TAG", "onFailure: " + t.getMessage());
             }
         });
     }
     private void getCategory(){
         apiService = RetrofitClient.getInstance().create(APIService.class);
-        apiService.getAllCategory(authHeader).enqueue(new Callback<List<Category>>() {
+        apiService.getAllCategory(authHeader,1,100,"asc",idGroup).enqueue(new Callback<List<Category>>() {
             @Override
             public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
                 if (response.isSuccessful()) {
@@ -228,5 +269,14 @@ public class CreateTaskFragment extends Fragment {
     private Integer getPriorityId(){
         int selectedId = Priority.valueOf(edtTaskPriority.getText().toString()).ordinal();;
         return selectedId;
+    }
+
+    private String getCateName(){
+        int selectedId = 0;
+        for (Category value: listCategory) {
+            if(value.getId() == oldTask.getCategoryId())
+                return value.getName();
+        }
+        return null;
     }
 }

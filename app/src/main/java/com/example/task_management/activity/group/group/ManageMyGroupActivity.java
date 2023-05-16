@@ -17,7 +17,6 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -31,14 +30,17 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.task_management.R;
 import com.example.task_management.activity.HomeActivity;
+import com.example.task_management.activity.LoadingDialog;
 import com.example.task_management.activity.MyProfileActivity;
 import com.example.task_management.activity.SignInActivity;
+import com.example.task_management.activity.group.category.MyGroupCreateCategoryActivity;
+import com.example.task_management.activity.group.label.MyGroupCreateLabelActivity;
+import com.example.task_management.activity.group.label.MyGroupLabelFragment;
 import com.example.task_management.activity.group.member.MyGroupMemberFragment;
 import com.example.task_management.activity.group.task.MyGroupTaskFragment;
-import com.example.task_management.activity.group_task.CateByGroupFragment;
-import com.example.task_management.activity.group_task.CreateCategoryActivity;
+import com.example.task_management.activity.group.category.MyGroupCategoryFragment;
 import com.example.task_management.activity.task.CalendarActivity;
-import com.example.task_management.activity.task.CreateTaskActivity;
+import com.example.task_management.activity.group.task.MyGroupCreateTaskActivity;
 import com.example.task_management.model.Category;
 import com.example.task_management.model.User;
 import com.example.task_management.model.PaginationTask;
@@ -72,6 +74,7 @@ public class ManageMyGroupActivity extends AppCompatActivity implements Navigati
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.base_my_group_activity);
+        LoadingDialog loadingDialog = new LoadingDialog(ManageMyGroupActivity.this);
         Intent intent = getIntent();
         idGroup = intent.getIntExtra("idGroup", 1);
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
@@ -86,47 +89,61 @@ public class ManageMyGroupActivity extends AppCompatActivity implements Navigati
         drawerLayout.addDrawerListener(drawerToggle);
         drawerToggle.syncState();
         navigationView.bringToFront();
-
         bottomNavigationView.setBackground(null);
         bottomNavigationView.setOnItemSelectedListener(item -> {
-            taskList.clear();
-            getAllTask("TODO");
-            getAllTask("IN_PROGRESS");
-            getAllTask("DONE");
-            getAllTask("POSTPONED");
-            getAllTask("CANCELED");
-            getCategory();
-            getMyGroupMembers();
             switch (item.getItemId()) {
                 case R.id.task:
-                    List<Task> newTaskList = taskList;
-                    List<Category> newCateList = listCategory;
-                    List<User> newMemberList = memberList;
+                    toolbar.setTitle("Quản lí công việc");
+                    taskList.clear();
+                    memberList.clear();
+                    listCategory.clear();
+                    getAllTask("TODO");
+                    getAllTask("IN_PROGRESS");
+                    getAllTask("DONE");
+                    getAllTask("POSTPONED");
+                    getAllTask("CANCELED");
+                    getCategory();
+                    getMyGroupMembers();
+                    loadingDialog.startLoadingDialog();
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
                             // Replace the current fragment with NewTaskFragment and pass the parameter
                             Fragment newFragment = new MyGroupTaskFragment();
                             Bundle args = new Bundle();
-                            args.putSerializable("newTaskList", (Serializable) newTaskList);
-                            args.putSerializable("newCateList", (Serializable) newCateList);
-                            args.putSerializable("newMemberList", (Serializable) newMemberList);
+                            args.putSerializable("newTaskList", (Serializable) taskList);
+                            args.putSerializable("newCateList", (Serializable) listCategory);
+                            args.putSerializable("newMemberList", (Serializable) memberList);
+                            args.putInt("idGroup", idGroup);
                             newFragment.setArguments(args);
                             replaceFragment(newFragment);
+                            loadingDialog.dismissDialog();
                         }
-                    }, 3000);
+                    }, 2000);
                     break;
                 case R.id.cate:
-                    replaceFragment(new CateByGroupFragment());
+                    toolbar.setTitle("Quản lí thành viên");
+                    MyGroupCategoryFragment cateFragment = new MyGroupCategoryFragment();
+                    Bundle cateArgs = new Bundle();
+                    cateArgs.putInt("idGroup", idGroup);
+                    cateFragment.setArguments(cateArgs);
+                    replaceFragment(cateFragment);
                     break;
                 case R.id.member:
-                    MyGroupMemberFragment fragment = new MyGroupMemberFragment();
-                    Bundle args = new Bundle();
-                    args.putInt("idGroup", idGroup);
-                    fragment.setArguments(args);
-                    replaceFragment(fragment);
+                    toolbar.setTitle("Quản lí loại task");
+                    MyGroupMemberFragment memberFragment = new MyGroupMemberFragment();
+                    Bundle memberArgs = new Bundle();
+                    memberArgs.putInt("idGroup", idGroup);
+                    memberFragment.setArguments(memberArgs);
+                    replaceFragment(memberFragment);
                     break;
                 case R.id.label:
+                    toolbar.setTitle("Quản lí nhãn");
+                    MyGroupLabelFragment labelFragment = new MyGroupLabelFragment();
+                    Bundle labelArgs = new Bundle();
+                    labelArgs.putInt("idGroup", idGroup);
+                    labelFragment.setArguments(labelArgs);
+                    replaceFragment(labelFragment);
                     break;
             }
             return true;
@@ -185,9 +202,9 @@ public class ManageMyGroupActivity extends AppCompatActivity implements Navigati
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.bottomsheetlayout);
 
-        LinearLayout layoutTask = dialog.findViewById(R.id.layoutTask);
-        LinearLayout layoutCate = dialog.findViewById(R.id.layoutCate);
-        LinearLayout layoutGroup = dialog.findViewById(R.id.layoutGroup);
+        LinearLayout layoutTask = dialog.findViewById(R.id.create_task);
+        LinearLayout layoutCate = dialog.findViewById(R.id.create_cate);
+        LinearLayout layoutLabel = dialog.findViewById(R.id.create_label);
         ImageView cancelButton = dialog.findViewById(R.id.cancelButton);
 
         layoutTask.setOnClickListener(new View.OnClickListener() {
@@ -196,7 +213,8 @@ public class ManageMyGroupActivity extends AppCompatActivity implements Navigati
             public void onClick(View v) {
 
                 dialog.dismiss();
-                intent = new Intent(getApplicationContext(), CreateTaskActivity.class);
+                intent = new Intent(getApplicationContext(), MyGroupCreateTaskActivity.class);
+                intent.putExtra("idGroup", idGroup);
                 startActivity(intent);
 
             }
@@ -207,18 +225,20 @@ public class ManageMyGroupActivity extends AppCompatActivity implements Navigati
             public void onClick(View v) {
                 Intent intent;
                 dialog.dismiss();
-                intent = new Intent(getApplicationContext(), CreateCategoryActivity.class);
+                intent = new Intent(getApplicationContext(), MyGroupCreateCategoryActivity.class);
+                intent.putExtra("idGroup", idGroup);
                 startActivity(intent);
 
             }
         });
-
-        layoutGroup.setOnClickListener(new View.OnClickListener() {
+        layoutLabel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent;
                 dialog.dismiss();
-                Toast.makeText(getApplicationContext(),"Go live is Clicked",Toast.LENGTH_SHORT).show();
+                intent = new Intent(getApplicationContext(), MyGroupCreateLabelActivity.class);
+                intent.putExtra("idGroup", idGroup);
+                startActivity(intent);
 
             }
         });
@@ -292,11 +312,17 @@ public class ManageMyGroupActivity extends AppCompatActivity implements Navigati
         String accessToken = pref.getString("keyaccesstoken", "empty");
         String authHeader = "Bearer " + accessToken;
         APIService apiService = RetrofitClient.getInstance().create(APIService.class);
-        apiService.getAllCategory(authHeader).enqueue(new Callback<List<Category>>() {
+        apiService.getAllCategory(authHeader,1,100,"asc",idGroup).enqueue(new Callback<List<Category>>() {
             @Override
             public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
                 if (response.isSuccessful()) {
                     listCategory = response.body();
+                }else{
+                    try {
+                        Log.v("Error code 400",response.errorBody().string());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
             @Override

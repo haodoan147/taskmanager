@@ -151,8 +151,6 @@
                     android:alpha="0.5"
                     android:id="@+id/tv_assignee"
                     android:textSize="10sp"
-                    android:paddingStart="10dp"
-                    android:paddingEnd="10dp"
                     android:textColor="@android:color/black" />
                 <TextView
                     android:layout_width="wrap_content"

@@ -5,9 +5,7 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.util.List;
 
-public class Task implements Serializable {
-    @SerializedName("id")
-    private Integer id;
+public class UpdateTask implements Serializable {
     @SerializedName("title")
     private String title;
     @SerializedName("description")
@@ -19,36 +17,21 @@ public class Task implements Serializable {
     @SerializedName("duration")
     private Integer duration;
     @SerializedName("labels")
-    private List<Label> labels;
+    private List<Integer> labels;
     @SerializedName("categoryId")
     private Integer categoryId;
     @SerializedName("priority")
     private Integer priority;
-    @SerializedName("groupId")
-    private Integer groupId;
-    @SerializedName("assignee")
-    private User assignee;
 
-    public Task(Integer id, String title, String description, String dueDate, String status, Integer duration, List<Label> labels, Integer categoryId, Integer priority, User assignee, int groupId) {
-        this.id = id;
+    public UpdateTask(String status, String title, String description, String dueDate, Integer duration, List<Integer> labels, Integer categoryId, Integer priority) {
+        this.status = status;
         this.title = title;
         this.description = description;
         this.dueDate = dueDate;
-        this.status = status;
         this.duration = duration;
         this.labels = labels;
         this.categoryId = categoryId;
         this.priority = priority;
-        this.groupId = groupId;
-        this.assignee = assignee;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public String getTitle() {
@@ -91,11 +74,11 @@ public class Task implements Serializable {
         this.duration = duration;
     }
 
-    public List<Label> getLabels() {
+    public List<Integer> getLabels() {
         return labels;
     }
 
-    public void setLabels(List<Label> labels) {
+    public void setLabels(List<Integer> labels) {
         this.labels = labels;
     }
 
@@ -113,21 +96,5 @@ public class Task implements Serializable {
 
     public void setPriority(Integer priority) {
         this.priority = priority;
-    }
-
-    public User getAssignee() {
-        return assignee;
-    }
-
-    public void setAssignee(User assignee) {
-        this.assignee = assignee;
-    }
-
-    public Integer getGroupId() {
-        return groupId;
-    }
-
-    public void setGroupId(Integer groupId) {
-        this.groupId = groupId;
     }
 }

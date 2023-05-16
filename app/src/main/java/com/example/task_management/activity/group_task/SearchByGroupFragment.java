@@ -48,7 +48,10 @@ public class SearchByGroupFragment extends Fragment {
     List<Category> listCategory= new ArrayList<>();
     BottomNavigationView navigationView;
     ViewPager viewPager;
+    int groupId;
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        Bundle arguments = getArguments();
+        groupId  = arguments.getInt("idGroup",1);
         View view = inflater.inflate(R.layout.search_task, container, false);
         recyclerView = view.findViewById(R.id.recyclerView);
         getAllTask("TODO");
@@ -155,7 +158,7 @@ public class SearchByGroupFragment extends Fragment {
         String accessToken = pref.getString("keyaccesstoken", "empty");
         String authHeader = "Bearer " + accessToken;
         APIService apiService = RetrofitClient.getInstance().create(APIService.class);
-        apiService.getAllCategory(authHeader).enqueue(new Callback<List<Category>>() {
+        apiService.getAllCategory(authHeader,1,100,"asc",groupId).enqueue(new Callback<List<Category>>() {
             @Override
             public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
                 if (response.isSuccessful()) {

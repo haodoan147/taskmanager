@@ -17,15 +17,6 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".activity.category.CategoryActivity"
-            android:exported="true">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
-
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
-        </activity>
-        <activity
             android:name=".activity.task.DetailTaskActivity"
             android:exported="true">
 <!--                        <intent-filter>-->
@@ -53,13 +44,31 @@
 <!--                </intent-filter>-->
         </activity>
         <activity
-            android:name=".activity.group_task.CreateCategoryActivity"
+            android:name=".activity.group.category.MyGroupCreateCategoryActivity"
             android:exported="true">
 <!--            <intent-filter>-->
 <!--                <action android:name="android.intent.action.MAIN" />-->
 
 <!--                <category android:name="android.intent.category.LAUNCHER" />-->
 <!--            </intent-filter>-->
+        </activity>
+        <activity
+            android:name=".activity.group.task.MyGroupUpdateTaskActivity"
+            android:exported="true">
+            <!--            <intent-filter>-->
+            <!--                <action android:name="android.intent.action.MAIN" />-->
+
+            <!--                <category android:name="android.intent.category.LAUNCHER" />-->
+            <!--            </intent-filter>-->
+        </activity>
+        <activity
+            android:name=".activity.group.label.MyGroupCreateLabelActivity"
+            android:exported="true">
+            <!--            <intent-filter>-->
+            <!--                <action android:name="android.intent.action.MAIN" />-->
+
+            <!--                <category android:name="android.intent.category.LAUNCHER" />-->
+            <!--            </intent-filter>-->
         </activity>
         <activity
             android:name=".activity.SignInActivity"
@@ -116,7 +125,7 @@
             <!--            </intent-filter>-->
         </activity>
         <activity
-            android:name=".activity.task.CreateTaskActivity"
+            android:name=".activity.group.task.MyGroupCreateTaskActivity"
             android:exported="true">
 <!--                        <intent-filter>-->
 <!--                            <action android:name="android.intent.action.MAIN" />-->

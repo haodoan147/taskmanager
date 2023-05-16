@@ -74,7 +74,6 @@ public class MyGroupMemberFragment extends Fragment {
         String accessToken = pref.getString("keyaccesstoken", "empty");
         String authHeader = "Bearer " + accessToken;
         apiService = RetrofitClient.getInstance().create(APIService.class);
-        Log.e("123", String.valueOf(groupId));
         apiService.getAllMembers(authHeader,groupId).enqueue(new Callback<List<User>>() {
             @Override
             public void onResponse(Call<List<User>> call, Response<List<User>> response) {

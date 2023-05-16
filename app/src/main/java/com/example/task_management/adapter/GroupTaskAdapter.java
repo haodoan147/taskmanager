@@ -41,10 +41,12 @@ import androidx.annotation.NonNull;
 import androidx.core.util.Pair;
 
 import com.example.task_management.R;
+import com.example.task_management.activity.group.task.MyGroupUpdateTaskActivity;
 import com.example.task_management.activity.task.DetailTaskActivity;
 import com.example.task_management.model.Assignee;
 import com.example.task_management.model.Category;
 import com.example.task_management.model.Task;
+import com.example.task_management.model.UnAssignee;
 import com.example.task_management.model.User;
 import com.example.task_management.service.APIService;
 import com.example.task_management.utils.RetrofitClient;
@@ -147,6 +149,12 @@ public class GroupTaskAdapter extends DragItemAdapter<Pair<Long, Task>, GroupTas
                 holder.tv_status.setBackgroundResource(R.drawable.status_view_round_5);
                 break;
         }
+        if(task.getAssignee()==null){
+            holder.tv_assignee.setText("Người thực hiện: chưa có");
+        }
+        else{
+            holder.tv_assignee.setText("Người thực hiện: "+ task.getAssignee().getName());
+        }
     }
 
     @Override
@@ -156,7 +164,7 @@ public class GroupTaskAdapter extends DragItemAdapter<Pair<Long, Task>, GroupTas
 
     class ViewHolder extends DragItemAdapter.ViewHolder {
         public ImageView iv_options;
-        public TextView tv_title, tv_des, tv_duration, tv_category,tv_label,tv_priority,tv_status,tv_date,tv_month;
+        public TextView tv_title, tv_des, tv_duration, tv_category,tv_label,tv_priority,tv_status,tv_date,tv_month,tv_assignee;
 
         ViewHolder(final View itemView) {
             super(itemView, mGrabHandleId, mDragOnLongPress);
@@ -170,6 +178,7 @@ public class GroupTaskAdapter extends DragItemAdapter<Pair<Long, Task>, GroupTas
             tv_status = itemView.findViewById(R.id.tv_status);
             tv_date = itemView.findViewById(R.id.tv_date);
             tv_month = itemView.findViewById(R.id.tv_month);
+            tv_assignee = itemView.findViewById(R.id.tv_assignee);
         }
     }
     public void showPopUpMenu(View view, int position) {
@@ -211,6 +220,12 @@ public class GroupTaskAdapter extends DragItemAdapter<Pair<Long, Task>, GroupTas
                 case R.id.menuAssign:
                     showBottomDialog(position);
                     break;
+                case R.id.menuUnAssign:
+                    unAssignTask(mItemList.get(position).second.getId(),1);
+                case R.id.menuUpdate:
+                    Intent detailContext = new Intent(context, MyGroupUpdateTaskActivity.class);
+                    detailContext.putExtra("oldTask", mItemList.get(position).second);
+                    context.startActivity(detailContext);
             }
             return false;
         });
@@ -332,7 +347,31 @@ public class GroupTaskAdapter extends DragItemAdapter<Pair<Long, Task>, GroupTas
                 if (response.isSuccessful()) {
                     Toast.makeText(context, "Đã gán thành công", Toast.LENGTH_SHORT).show();
                 }else{
+                    try {
+                        Log.v("Error code 400",response.errorBody().string());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                     Toast.makeText(context, "Có thành viên đã làm task này rồi", Toast.LENGTH_SHORT).show();
+                }
+            }
+            @Override
+            public void onFailure(Call<Task> call, Throwable t) {
+            }
+        });
+    }
+    private void unAssignTask(int id, int groupId){
+        String accessToken = (SharedPrefManager.getInstance(context.getApplicationContext()).getAccessToken()).getAccessToken();
+        String authHeader = "Bearer " + accessToken;
+        UnAssignee unassignee = new UnAssignee(groupId);
+        APIService apiService = RetrofitClient.getInstance().create(APIService.class);
+        apiService.unAsignTask(authHeader,id,unassignee).enqueue(new Callback<Task>() {
+            @Override
+            public void onResponse(Call<Task> call, Response<Task> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(context, "Đã bỏ gán thành công", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(context, "Bỏ gán thất bại", Toast.LENGTH_SHORT).show();
                 }
             }
             @Override

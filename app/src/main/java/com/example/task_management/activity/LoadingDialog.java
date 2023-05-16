@@ -13,10 +13,10 @@ import com.github.ybq.android.spinkit.style.CubeGrid;
 public class LoadingDialog {
     Activity activity;
     AlertDialog dialog;
-    LoadingDialog(Activity myActivity){
+    public LoadingDialog(Activity myActivity){
         activity = myActivity;
     }
-    void startLoadingDialog(){
+    public void startLoadingDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         LayoutInflater inflater = activity.getLayoutInflater();
         View view = inflater.inflate(R.layout.custom_dialog_loading, null);
@@ -28,7 +28,7 @@ public class LoadingDialog {
         dialog.show();
         dialog.getWindow().setLayout(500, 400);
     }
-    void dismissDialog(){
+    public void dismissDialog(){
         dialog.dismiss();
     }
 }

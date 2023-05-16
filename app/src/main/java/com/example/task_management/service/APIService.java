@@ -5,10 +5,14 @@ import com.example.task_management.model.Assignee;
 import com.example.task_management.model.Category;
 import com.example.task_management.model.Comment;
 import com.example.task_management.model.CreateCategory;
+import com.example.task_management.model.CreateLabel;
 import com.example.task_management.model.CreateTask;
 import com.example.task_management.model.Group;
 import com.example.task_management.model.JoinRequest;
 import com.example.task_management.model.Label;
+import com.example.task_management.model.ResponseLabel;
+import com.example.task_management.model.UnAssignee;
+import com.example.task_management.model.UpdateTask;
 import com.example.task_management.model.User;
 import com.example.task_management.model.PaginationTask;
 import com.example.task_management.model.Task;
@@ -57,9 +61,11 @@ public interface APIService {
     @DELETE("task/{id}")
     Call<Task> deleteTask(@Header("Authorization") String accessToken, @Path("id") int id);
     @GET("label")
-    Call<List<Label>> getAllLabel(@Header("Authorization") String accessToken);
+    Call<ResponseLabel> getAllLabel(@Header("Authorization") String accessToken, @Query("page") int page , @Query("limit") int limit,
+                                          @Query("order") String order, @Query("groupId") int groupId);
     @GET("category")
-    Call<List<Category>> getAllCategory(@Header("Authorization") String accessToken);
+    Call<List<Category>> getAllCategory(@Header("Authorization") String accessToken,@Query("page") int page , @Query("limit") int limit,
+                                        @Query("order") String order,@Query("groupId") int groupId);
     @FormUrlEncoded
     @PATCH("task/{id}/status")
     Call<Task> updateStatusTask(@Header("Authorization") String accessToken, @Path("id") int id,@Field("status") String status);
@@ -99,4 +105,12 @@ public interface APIService {
     Call<JoinRequest> requestGroup(@Header("Authorization") String accessToken, @Path("groupId") int groupId);
     @PATCH("/task/{id}/assign")
     Call<Task> asignTask(@Header("Authorization") String accessToken, @Path("id") int id, @Body Assignee assignee);
+    @POST("label")
+    Call<Label> getCreateNewLabel(@Header("Authorization") String accessToken, @Body CreateLabel label);
+    @DELETE("label/{id}")
+    Call<Label> deleteLabel(@Header("Authorization") String accessToken, @Path("id") int id);
+    @PATCH("/task/{id}/unassign")
+    Call<Task> unAsignTask(@Header("Authorization") String accessToken, @Path("id") int id,@Body UnAssignee unassignee);
+    @PATCH("/task/{id}")
+    Call<Task> updateTask(@Header("Authorization") String accessToken, @Path("id") int id,@Body UpdateTask updateTask);
 }

@@ -11,12 +11,10 @@
         android:src="@drawable/ic_round_remove_24"
         android:layout_gravity="center|top"
         android:scaleType="centerCrop"/>
-
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal">
-
     <TextView
         android:id="@+id/createText"
         android:layout_width="wrap_content"
@@ -28,7 +26,6 @@
         android:layout_marginStart="12dp"
         android:layout_marginTop="5dp"
         android:textSize="25dp" />
-
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -36,44 +33,18 @@
         android:layout_marginLeft="250dp"
         android:layout_marginTop="8dp"
         android:id="@+id/cancelButton"/>
-
 </LinearLayout>
-
     <LinearLayout
-        android:id="@+id/layoutGroup"
+        android:id="@+id/create_task"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:padding="10dp">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/baseline_group_24"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Tạo nhóm"
-            android:textColor="@color/color1"
-            android:layout_marginLeft="30dp"
-            android:textSize="16sp"/>
-
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/layoutTask"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:padding="10dp">
-
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/baseline_edit_note_24"/>
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -81,22 +52,18 @@
             android:textColor="@color/color1"
             android:layout_marginLeft="30dp"
             android:textSize="16sp"/>
-
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/layoutCate"
+        android:id="@+id/create_cate"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp">
-
-
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/baseline_category_24"/>
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -107,7 +74,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/layoutLabel"
+        android:id="@+id/create_label"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -115,13 +82,10 @@
         android:paddingRight="10dp"
         android:paddingTop="10dp"
         android:paddingBottom="30dp">
-
-
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/baseline_mode_comment_24"/>
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -129,7 +93,6 @@
             android:textColor="@color/color1"
             android:layout_marginLeft="30dp"
             android:textSize="16sp"/>
-
     </LinearLayout>
 
 </LinearLayout>

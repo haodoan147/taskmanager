@@ -22,8 +22,10 @@ public class CreateTask implements Serializable {
     private Integer categoryId;
     @SerializedName("priority")
     private Integer priority;
+    @SerializedName("groupId")
+    private Integer groupId;
 
-    public CreateTask(String title, String description, String dueDate, Integer duration, List<Integer> labels, Integer categoryId, Integer priority) {
+    public CreateTask(String title, String description, String dueDate, Integer duration, List<Integer> labels, Integer categoryId, Integer priority, Integer groupId) {
         this.title = title;
         this.description = description;
         this.dueDate = dueDate;
@@ -31,6 +33,7 @@ public class CreateTask implements Serializable {
         this.labels = labels;
         this.categoryId = categoryId;
         this.priority = priority;
+        this.groupId = groupId;
     }
 
 
@@ -96,5 +99,13 @@ public class CreateTask implements Serializable {
 
     public void setPriority(Integer priority) {
         this.priority = priority;
+    }
+
+    public Integer getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(Integer groupId) {
+        this.groupId = groupId;
     }
 }

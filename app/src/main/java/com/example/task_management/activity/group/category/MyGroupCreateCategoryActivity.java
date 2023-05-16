@@ -1,4 +1,4 @@
-package com.example.task_management.activity.group_task;
+package com.example.task_management.activity.group.category;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,9 +13,9 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.task_management.R;
-import com.example.task_management.activity.category.CategoryActivity;
 import com.example.task_management.model.Category;
 import com.example.task_management.model.CreateCategory;
 import com.example.task_management.service.APIService;
@@ -29,7 +29,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CreateCategoryActivity extends AppCompatActivity {
+public class MyGroupCreateCategoryActivity extends AppCompatActivity {
     EditText edittext_category;
     ArrayList<String> priorityItems  = new ArrayList<>();
     AutoCompleteTextView edtTaskPriority;
@@ -38,14 +38,18 @@ public class CreateCategoryActivity extends AppCompatActivity {
     Button btnSubmit;
     String authHeader ;
     ImageView btnBack;
+    int idGroup;
     public enum Priority
     {
         NONE, LOW, MEDIUM, HIGH, URGENT
     }
+    Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.create_new_cate);
+        Intent intent = getIntent();
+        idGroup = intent.getIntExtra("idGroup", 1);
         initView();
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,15 +74,14 @@ public class CreateCategoryActivity extends AppCompatActivity {
             return;
         }
         apiService = RetrofitClient.getInstance().create(APIService.class);
-        CreateCategory newCate = new CreateCategory(taskName, taskPriorityID);
+        CreateCategory newCate = new CreateCategory(taskName, taskPriorityID, idGroup);
         try{
             apiService.getCreateNewCategory(authHeader, newCate).enqueue(new Callback<Category>() {
                 @Override
                 public void onResponse(Call<Category> call, Response<Category> response) {
                     if (response.isSuccessful()) {
                         Toast.makeText(getApplicationContext(), "Create Cate Success", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(getApplicationContext(), CategoryActivity.class);
-                        startActivity(intent);
+                        finish();
                     }else{
                         try {
                             Log.v("Error code 400",response.errorBody().string());
@@ -98,6 +101,8 @@ public class CreateCategoryActivity extends AppCompatActivity {
 
     }
     private void initView(){
+        toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("Tạo loại task");
         String accessToken = (SharedPrefManager.getInstance(getApplicationContext()).getAccessToken()).getAccessToken();
         authHeader = "Bearer " + accessToken;
         priorityItems.add("NONE");
@@ -110,11 +115,15 @@ public class CreateCategoryActivity extends AppCompatActivity {
         edtTaskPriority = findViewById(R.id.edittext_priority);
         adapterItems = new ArrayAdapter<String>(this,R.layout.dropdown_select_option,priorityItems);
         edtTaskPriority.setAdapter(adapterItems);
-        btnBack = findViewById(R.id.btn_back_to_context);
-        btnBack.setOnClickListener(view -> finish());
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
     private Integer getPriorityId(){
-        int selectedId = Priority.valueOf(edtTaskPriority.getText().toString()).ordinal();;
+        int selectedId = MyGroupCreateCategoryActivity.Priority.valueOf(edtTaskPriority.getText().toString()).ordinal();;
         return selectedId;
     }
 }
