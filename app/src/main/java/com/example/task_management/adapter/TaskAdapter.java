@@ -132,8 +132,12 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
                 holder.tv_status.setBackgroundResource(R.drawable.status_view_round_5);
                 break;
         }
-        holder.tv_assignee.setText(task.getAssignee().getName());
-
+        if(task.getAssignee()==null){
+            holder.tv_assignee.setText("Người thực hiện: chưa có");
+        }
+        else{
+            holder.tv_assignee.setText("Người thực hiện: "+ task.getAssignee().getName());
+        }
     }
 
     @Override

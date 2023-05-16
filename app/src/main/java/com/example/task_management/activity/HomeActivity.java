@@ -102,7 +102,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     break;
                 case R.id.btm_search:
                     toolbar.setTitle("Tìm kiếm");
-                    replaceFragment(new SearchTaskFragment());
+                    Fragment newFragment = new SearchTaskFragment();
+                    Bundle args = new Bundle();
+                    args.putSerializable("idGroup", (Serializable) 1);
+                    newFragment.setArguments(args);
+                    replaceFragment(newFragment);
                     break;
                 case R.id.btm_group:
                     toolbar.setTitle("Nhóm");

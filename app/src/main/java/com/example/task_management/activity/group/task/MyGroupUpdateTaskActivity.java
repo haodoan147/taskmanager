@@ -166,7 +166,7 @@ public class MyGroupUpdateTaskActivity extends AppCompatActivity {
     }
     private void initView(){
         toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("Tạo task");
+        toolbar.setTitle("Cập nhật task");
         String accessToken = (SharedPrefManager.getInstance(getApplicationContext()).getAccessToken()).getAccessToken();
         authHeader = "Bearer " + accessToken;
         priorityItems.add("NONE");
