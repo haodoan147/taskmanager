@@ -13,6 +13,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,6 +22,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.task_management.R;
+import com.example.task_management.activity.SignInActivity;
 import com.example.task_management.adapter.GroupAdapter;
 import com.example.task_management.adapter.MemberGroupAdapter;
 import com.example.task_management.model.Group;
@@ -98,31 +100,29 @@ public class MyGroupFragment extends Fragment {
         EditText input_text = dialog.findViewById(R.id.input_text);
         Button btn_submit = dialog.findViewById(R.id.btn_submit);
         title.setText("Tham gia vào nhóm");
-        label.setText("Tên nhóm");
+        label.setText("Id của nhóm");
         btn_submit.setText("Yêu cầu");
         input_text.setHint("Tên nhóm");
         btn_submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int temp = 1;
-//                for (Group group: listGroup) {
-//                    if(group.getName().equals( String.valueOf(input_text.getText()))){
-//                        temp = group.getId();
-//                    }
-//                }
-//                Log.e("123", String.valueOf(temp));
+                int temp = -1;
+                    temp = Integer.parseInt(String.valueOf(input_text.getText()));
+
                 if(temp!=-1)
                 {
                     dialog.dismiss();
                     String accessToken = (SharedPrefManager.getInstance(getActivity()).getAccessToken()).getAccessToken();
                     String authHeader = "Bearer " + accessToken;
                     APIService apiService = RetrofitClient.getInstance().create(APIService.class);
-                    apiService.requestGroup(authHeader,1).enqueue(new Callback<JoinRequest>() {
+                    apiService.requestGroup(authHeader,temp).enqueue(new Callback<JoinRequest>() {
                         @Override
                         public void onResponse(Call<JoinRequest> call, Response<JoinRequest> response) {
+                            Toast.makeText(getActivity(), "Yêu cầu thành công", Toast.LENGTH_SHORT).show();
                         }
                         @Override
                         public void onFailure(Call<JoinRequest> call, Throwable t) {
+                            Toast.makeText(getActivity(), "Yêu cầu thất bại", Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
