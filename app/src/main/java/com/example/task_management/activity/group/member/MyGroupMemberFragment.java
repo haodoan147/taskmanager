@@ -24,6 +24,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.task_management.R;
 import com.example.task_management.activity.SignInActivity;
@@ -58,6 +59,7 @@ public class MyGroupMemberFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.my_group_member, container, false);
         recyclerView = view.findViewById(R.id.rcv_group);
+        SwipeRefreshLayout swipeRefreshLayout = view.findViewById(R.id.swipefreshlayout);
         Bundle arguments = getArguments();
         groupId  = arguments.getInt("idGroup");
         count_request = view.findViewById(R.id.count);
@@ -67,6 +69,13 @@ public class MyGroupMemberFragment extends Fragment {
             showBottomDialogRequest();
         });
         getMyGroupMembers();
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getMyGroupMembers();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
         return view;
     }
     private void getMyGroupMembers(){

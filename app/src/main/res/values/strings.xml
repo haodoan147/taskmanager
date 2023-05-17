@@ -9,10 +9,10 @@
         <item>two</item>
         <item>three</item>
     </string-array>
-    <string name="delete_confirmation">Confirmation</string>
-    <string name="sureToDelete">Are you sure you want to delete the task</string>
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
+    <string name="delete_confirmation">Xác nhận</string>
+    <string name="sureToDelete">Bạn có chắc là xóa task</string>
+    <string name="yes">Có</string>
+    <string name="no">Không</string>
     <string name="confirmation">Completed the task!..</string>
     <string name="sureToMarkAsComplete">Are you sure you want to mark this task as completed.</string>
     <string name="congrats_you_have_completed_the_task_successfully">Congrats!... You have completed the task successfully..</string>

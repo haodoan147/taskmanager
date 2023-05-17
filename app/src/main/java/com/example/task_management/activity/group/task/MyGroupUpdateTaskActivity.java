@@ -73,6 +73,8 @@ public class MyGroupUpdateTaskActivity extends AppCompatActivity {
         Intent intent = getIntent();
         oldTask = (Task) intent.getSerializableExtra("oldTask");
         idGroup = intent.getIntExtra("idGroup", 1);
+        listCategory = (List<Category>) intent.getSerializableExtra("newCateList");
+        listLabel = (List<Label>) intent.getSerializableExtra("newLabelList");
         initView();
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -173,8 +175,12 @@ public class MyGroupUpdateTaskActivity extends AppCompatActivity {
         toolbar.setTitle("Cập nhật task");
         String accessToken = (SharedPrefManager.getInstance(getApplicationContext()).getAccessToken()).getAccessToken();
         authHeader = "Bearer " + accessToken;
-        getLabel();
-        getCategory();
+        for (Category value: listCategory) {
+            cateItems.add(value.getName());
+        }
+        for (Label value: listLabel) {
+            labelItems.add(value.getName());
+        }
         priorityItems.add("NONE");
         priorityItems.add("LOW");
         priorityItems.add("MEDIUM");
@@ -194,7 +200,6 @@ public class MyGroupUpdateTaskActivity extends AppCompatActivity {
         edtTaskStatus = findViewById(R.id.edittext_status);
         edtTaskDuration  = findViewById(R.id.edittext_duration);
         deadlineDatePicker = findViewById(R.id.dlDatePicker);
-        listCategory.add(new Category(1,"cong viec ca nhan",1));
         for (Category value: listCategory) {
             cateItems.add(value.getName());
         }

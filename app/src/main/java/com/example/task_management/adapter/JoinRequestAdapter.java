@@ -54,8 +54,8 @@ public class JoinRequestAdapter extends RecyclerView.Adapter<JoinRequestAdapter.
         JoinRequest joinRequest = joinRequestList.get(position);
         holder.tv_name.setText(joinRequest.getRequestBy().getName());
         holder.tv_status.setText("Đang chờ");
-        holder.tv_reject.setOnClickListener(view -> requestReject(position));
-        holder.tv_accept.setOnClickListener(view -> requestAccept(position));
+        holder.tv_reject.setOnClickListener(view -> {requestReject(position);removeItem(position);});
+        holder.tv_accept.setOnClickListener(view -> {requestAccept(position);removeItem(position);});
     }
 
     @Override
@@ -88,10 +88,10 @@ public class JoinRequestAdapter extends RecyclerView.Adapter<JoinRequestAdapter.
         apiService.acceptRequest(authHeader,joinRequestList.get(position).getId()).enqueue(new Callback<JoinRequest>() {
             @Override
             public void onResponse(Call<JoinRequest> call, Response<JoinRequest> response) {
+
             }
             @Override
             public void onFailure(Call<JoinRequest> call, Throwable t) {
-
             }
         });
     }

@@ -16,6 +16,7 @@
 
 package com.example.task_management.adapter;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -41,10 +42,15 @@ import androidx.annotation.NonNull;
 import androidx.core.util.Pair;
 
 import com.example.task_management.R;
+import com.example.task_management.activity.HomeActivity;
+import com.example.task_management.activity.LoadingDialog;
 import com.example.task_management.activity.group.task.MyGroupUpdateTaskActivity;
 import com.example.task_management.activity.task.DetailTaskActivity;
 import com.example.task_management.model.Assignee;
 import com.example.task_management.model.Category;
+import com.example.task_management.model.Label;
+import com.example.task_management.model.ResponseCate;
+import com.example.task_management.model.ResponseLabel;
 import com.example.task_management.model.Task;
 import com.example.task_management.model.UnAssignee;
 import com.example.task_management.model.User;
@@ -54,6 +60,7 @@ import com.example.task_management.utils.SharedPrefManager;
 import com.woxthebox.draglistview.DragItemAdapter;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,13 +83,17 @@ public class GroupTaskAdapter extends DragItemAdapter<Pair<Long, Task>, GroupTas
     Context context;
     List<Category> listCategory;
     List<User> memberList= new ArrayList<>();
-    public GroupTaskAdapter(ArrayList<Pair<Long, Task>> list, int layoutId, int grabHandleId, boolean dragOnLongPress, Context context, List<Category> cateList, List<User> memberList) {
+    List<Category> listCategoryForUpdate = new ArrayList<>();
+    List<Label> listLabelForUpdate = new ArrayList<>();
+    int idGroup;
+    public GroupTaskAdapter(ArrayList<Pair<Long, Task>> list, int layoutId, int grabHandleId, boolean dragOnLongPress, Context context, List<Category> cateList, List<User> memberList, int idGroup) {
         this.context = context;
         mLayoutId = layoutId;
         mGrabHandleId = grabHandleId;
         mDragOnLongPress = dragOnLongPress;
         this.listCategory = cateList;
         this.memberList = memberList;
+        this.idGroup = idGroup;
         setItemList(list);
     }
 
@@ -184,6 +195,7 @@ public class GroupTaskAdapter extends DragItemAdapter<Pair<Long, Task>, GroupTas
     public void showPopUpMenu(View view, int position) {
         PopupMenu popupMenu = new PopupMenu(context, view);
         popupMenu.getMenuInflater().inflate(R.menu.my_group_task_option, popupMenu.getMenu());
+        LoadingDialog loadingDialog = new LoadingDialog((Activity) context);
         popupMenu.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()) {
                 case R.id.menuDelete:
@@ -207,6 +219,7 @@ public class GroupTaskAdapter extends DragItemAdapter<Pair<Long, Task>, GroupTas
                             .setNegativeButton(R.string.no, (dialog, which) -> dialog.cancel()).show();
                     break;
                 case R.id.menuDetail:
+                    loadingDialog.startLoadingDialog();
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -214,6 +227,7 @@ public class GroupTaskAdapter extends DragItemAdapter<Pair<Long, Task>, GroupTas
                             Intent detailContext = new Intent(context, DetailTaskActivity.class);
                             detailContext.putExtra("idTask", mItemList.get(position).second.getId());
                             context.startActivity(detailContext);
+                            loadingDialog.dismissDialog();
                         }
                     }, 3000);
                     break;
@@ -222,10 +236,23 @@ public class GroupTaskAdapter extends DragItemAdapter<Pair<Long, Task>, GroupTas
                     break;
                 case R.id.menuUnAssign:
                     unAssignTask(mItemList.get(position).second.getId(),1);
+                    break;
                 case R.id.menuUpdate:
-                    Intent detailContext = new Intent(context, MyGroupUpdateTaskActivity.class);
-                    detailContext.putExtra("oldTask", mItemList.get(position).second);
-                    context.startActivity(detailContext);
+                    loadingDialog.startLoadingDialog();
+                    getLabel();
+                    getCategory();
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Intent detailContext = new Intent(context, MyGroupUpdateTaskActivity.class);
+                            detailContext.putExtra("oldTask", mItemList.get(position).second);
+                            detailContext.putExtra("newCateList", (Serializable) listCategoryForUpdate);
+                            detailContext.putExtra("newLabelList", (Serializable) listLabelForUpdate);
+                            context.startActivity(detailContext);
+                            loadingDialog.dismissDialog();
+                        }
+                    }, 3000);
+                    break;
             }
             return false;
         });
@@ -341,7 +368,6 @@ public class GroupTaskAdapter extends DragItemAdapter<Pair<Long, Task>, GroupTas
         String authHeader = "Bearer " + accessToken;
         Assignee assignee = new Assignee(groupId,userId);
         APIService apiService = RetrofitClient.getInstance().create(APIService.class);
-        Log.e("123", String.valueOf(id));
         apiService.asignTask(authHeader,id,assignee).enqueue(new Callback<Task>() {
             @Override
             public void onResponse(Call<Task> call, Response<Task> response) {
@@ -377,6 +403,54 @@ public class GroupTaskAdapter extends DragItemAdapter<Pair<Long, Task>, GroupTas
             }
             @Override
             public void onFailure(Call<Task> call, Throwable t) {
+            }
+        });
+    }
+    private void getLabel(){
+        String accessToken = (SharedPrefManager.getInstance(context.getApplicationContext()).getAccessToken()).getAccessToken();
+        String authHeader = "Bearer " + accessToken;
+        APIService apiService = RetrofitClient.getInstance().create(APIService.class);
+        apiService.getAllLabel(authHeader,1,100,"asc",idGroup).enqueue(new Callback<ResponseLabel>() {
+            @Override
+            public void onResponse(Call<ResponseLabel> call, Response<ResponseLabel> response) {
+                if (response.isSuccessful()) {
+                    listLabelForUpdate.addAll(response.body().getData());
+                }
+                else{
+                    try {
+                        Log.v("Error code 400",response.errorBody().string());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+            @Override
+            public void onFailure(Call<ResponseLabel> call, Throwable t) {
+                Log.d("TAG", "onFailure: " + t.getMessage());
+            }
+        });
+    }
+    private void getCategory(){
+        String accessToken = (SharedPrefManager.getInstance(context.getApplicationContext()).getAccessToken()).getAccessToken();
+        String authHeader = "Bearer " + accessToken;
+        APIService apiService = RetrofitClient.getInstance().create(APIService.class);
+        apiService.getAllCategory(authHeader,1,100,"asc",idGroup).enqueue(new Callback<ResponseCate>() {
+            @Override
+            public void onResponse(Call<ResponseCate> call, Response<ResponseCate> response) {
+                if (response.isSuccessful()) {
+                    listCategoryForUpdate.addAll(response.body().getData());
+                }
+                else{
+                    try {
+                        Log.v("Error code 400",response.errorBody().string());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+            @Override
+            public void onFailure(Call<ResponseCate> call, Throwable t) {
+                Log.d("TAG", "onFailure: " + t.getMessage());
             }
         });
     }

@@ -78,7 +78,7 @@ public class LabelApdater extends RecyclerView.Adapter<LabelApdater.MyViewHolder
     }
     public void showPopUpMenu(View view,int position) {
         PopupMenu popupMenu = new PopupMenu(context, view);
-        popupMenu.getMenuInflater().inflate(R.menu.cate_option, popupMenu.getMenu());
+        popupMenu.getMenuInflater().inflate(R.menu.label_option, popupMenu.getMenu());
         popupMenu.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()) {
                 case R.id.menuDelete:

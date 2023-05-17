@@ -58,7 +58,7 @@ public class MemberApdater extends RecyclerView.Adapter<MemberApdater.MyViewHold
     }
     public void showPopUpMenu(View view,int position) {
         PopupMenu popupMenu = new PopupMenu(context, view);
-        popupMenu.getMenuInflater().inflate(R.menu.cate_option, popupMenu.getMenu());
+        popupMenu.getMenuInflater().inflate(R.menu.kick_member_option, popupMenu.getMenu());
         popupMenu.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()) {
                 case R.id.menuDelete:

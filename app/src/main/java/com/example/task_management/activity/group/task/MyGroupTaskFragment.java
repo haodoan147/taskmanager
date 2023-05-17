@@ -49,6 +49,7 @@ public class MyGroupTaskFragment extends Fragment {
     List<Category> listCategory = new ArrayList<>();
 
     List<User> memberList= new ArrayList<>();
+    int idGroup;
 
     public static MyGroupTaskFragment newInstance() {
         return new MyGroupTaskFragment();
@@ -62,6 +63,7 @@ public class MyGroupTaskFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         taskList = (List<Task>) getArguments().getSerializable("newTaskList");
+        idGroup = getArguments().getInt("idGroup");
         for (int i = 0; i < taskList.size(); i++) {
             long id = sCreatedItems++;
             mItemArray.add(new Pair<>(id, taskList.get(i)));
@@ -143,7 +145,7 @@ public class MyGroupTaskFragment extends Fragment {
                 newMItemArray.add(task);
             }
         }
-        final GroupTaskAdapter listAdapter = new GroupTaskAdapter(newMItemArray, R.layout.column_item, R.id.item_layout, true,getActivity(),listCategory,memberList);
+        final GroupTaskAdapter listAdapter = new GroupTaskAdapter(newMItemArray, R.layout.column_item, R.id.item_layout, true,getActivity(),listCategory,memberList,idGroup);
         final View header = View.inflate(getActivity(), R.layout.column_header, null);
         ((TextView) header.findViewById(R.id.text)).setText(status);
         ((TextView) header.findViewById(R.id.item_count)).setText("" + newMItemArray.size());

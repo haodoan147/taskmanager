@@ -123,28 +123,49 @@ public class ManageMyGroupActivity extends AppCompatActivity implements Navigati
                     }, 2000);
                     break;
                 case R.id.cate:
-                    toolbar.setTitle("Quản lí thành viên");
-                    MyGroupCategoryFragment cateFragment = new MyGroupCategoryFragment();
-                    Bundle cateArgs = new Bundle();
-                    cateArgs.putInt("idGroup", idGroup);
-                    cateFragment.setArguments(cateArgs);
-                    replaceFragment(cateFragment);
+                    toolbar.setTitle("Quản lí danh mục");
+                    loadingDialog.startLoadingDialog();
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            MyGroupCategoryFragment cateFragment = new MyGroupCategoryFragment();
+                            Bundle cateArgs = new Bundle();
+                            cateArgs.putInt("idGroup", idGroup);
+                            cateFragment.setArguments(cateArgs);
+                            replaceFragment(cateFragment);
+                            loadingDialog.dismissDialog();
+                        }
+                    }, 2000);
                     break;
                 case R.id.member:
-                    toolbar.setTitle("Quản lí loại task");
-                    MyGroupMemberFragment memberFragment = new MyGroupMemberFragment();
-                    Bundle memberArgs = new Bundle();
-                    memberArgs.putInt("idGroup", idGroup);
-                    memberFragment.setArguments(memberArgs);
-                    replaceFragment(memberFragment);
+                    loadingDialog.startLoadingDialog();
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            toolbar.setTitle("Quản lí thành viên");
+                            MyGroupMemberFragment memberFragment = new MyGroupMemberFragment();
+                            Bundle memberArgs = new Bundle();
+                            memberArgs.putInt("idGroup", idGroup);
+                            memberFragment.setArguments(memberArgs);
+                            replaceFragment(memberFragment);
+                            loadingDialog.dismissDialog();
+                        }
+                    }, 2000);
                     break;
                 case R.id.label:
-                    toolbar.setTitle("Quản lí nhãn");
-                    MyGroupLabelFragment labelFragment = new MyGroupLabelFragment();
-                    Bundle labelArgs = new Bundle();
-                    labelArgs.putInt("idGroup", idGroup);
-                    labelFragment.setArguments(labelArgs);
-                    replaceFragment(labelFragment);
+                    loadingDialog.startLoadingDialog();
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                                toolbar.setTitle("Quản lí nhãn");
+                                MyGroupLabelFragment labelFragment = new MyGroupLabelFragment();
+                                Bundle labelArgs = new Bundle();
+                                labelArgs.putInt("idGroup", idGroup);
+                                labelFragment.setArguments(labelArgs);
+                                replaceFragment(labelFragment);
+                                loadingDialog.dismissDialog();
+                        }
+                    }, 2000);
                     break;
             }
             return true;

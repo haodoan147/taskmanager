@@ -103,15 +103,29 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     break;
                 case R.id.btm_search:
                     toolbar.setTitle("Tìm kiếm");
-                    Fragment newFragment = new SearchTaskFragment();
-                    Bundle args = new Bundle();
-                    args.putSerializable("idGroup", (Serializable) 1);
-                    newFragment.setArguments(args);
-                    replaceFragment(newFragment);
+                    loadingDialog.startLoadingDialog();
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Fragment newFragment = new SearchTaskFragment();
+                            Bundle args = new Bundle();
+                            args.putSerializable("idGroup", (Serializable) 1);
+                            newFragment.setArguments(args);
+                            replaceFragment(newFragment);
+                            loadingDialog.dismissDialog();
+                        }
+                    }, 3000);
                     break;
                 case R.id.btm_group:
                     toolbar.setTitle("Nhóm");
-                    replaceFragment(new MyGroupFragment());
+                    loadingDialog.startLoadingDialog();
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            replaceFragment(new MyGroupFragment());
+                            loadingDialog.dismissDialog();
+                        }
+                    }, 3000);
                     break;
             }
             return true;

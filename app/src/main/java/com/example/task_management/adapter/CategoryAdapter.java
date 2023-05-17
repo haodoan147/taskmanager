@@ -80,7 +80,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyView
     }
     public void showPopUpMenu(View view,int position) {
         PopupMenu popupMenu = new PopupMenu(context, view);
-        popupMenu.getMenuInflater().inflate(R.menu.cate_option, popupMenu.getMenu());
+        popupMenu.getMenuInflater().inflate(R.menu.category_option, popupMenu.getMenu());
         popupMenu.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()) {
                 case R.id.menuDelete:
@@ -97,6 +97,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyView
                         }
                     });
                     removeItem(position);
+                    break;
+                case R.id.menuUpdate:
                     break;
 
             }
