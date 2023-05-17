@@ -22,6 +22,7 @@ import com.example.task_management.adapter.TaskAdapter;
 import com.example.task_management.model.Category;
 import com.example.task_management.model.CreateTask;
 import com.example.task_management.model.Label;
+import com.example.task_management.model.ResponseCate;
 import com.example.task_management.model.ResponseLabel;
 import com.example.task_management.model.Task;
 import com.example.task_management.model.UpdateTask;
@@ -44,7 +45,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MyGroupUpdateTaskActivity extends AppCompatActivity {
-    EditText edtTaskName, edtTaskDescription;
+    EditText edtTaskName, edtTaskDescription,edtTaskDuration;
     DatePicker deadlineDatePicker;
     ArrayList<String> labelItems  = new ArrayList<>();
     ArrayList<String> cateItems  = new ArrayList<>();
@@ -87,6 +88,7 @@ public class MyGroupUpdateTaskActivity extends AppCompatActivity {
         final String taskLabel = edtTaskLabel.getText().toString();
         final String taskPriority = edtTaskPriority.getText().toString();
         final String taskStatus = edtTaskStatus.getText().toString();
+        final String taskDuration = edtTaskDuration.getText().toString();
         final int taskCateID = getCateId();
         final int taskLabelID = getLabelId();
         final int taskPriorityID = getPriorityId();
@@ -122,21 +124,23 @@ public class MyGroupUpdateTaskActivity extends AppCompatActivity {
             edtTaskStatus.requestFocus();
             return;
         }
-        Date dueDate = new Date();
+        if (TextUtils.isEmpty(taskDuration)) {
+            edtTaskDuration.setError("Vui lòng nhập lại");
+            edtTaskDuration.requestFocus();
+            return;
+        }
         int day = deadlineDatePicker.getDayOfMonth();
         int month = deadlineDatePicker.getMonth();
         int year = deadlineDatePicker.getYear();
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month, day);
         Date dlDate = calendar.getTime();
-        int diffInDays = (int) ((dlDate.getTime() - dueDate.getTime())
-                / (1000 * 60 * 60 * 24));
         SimpleDateFormat isoDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
         isoDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         String isoDate = isoDateFormat.format(dlDate);
         apiService = RetrofitClient.getInstance().create(APIService.class);
         Integer[] newlist = {taskLabelID};
-        UpdateTask newTask = new UpdateTask(taskStatus,taskName, taskDes, isoDate, diffInDays, Arrays.asList(newlist), taskCateID, taskPriorityID);
+        UpdateTask newTask = new UpdateTask(taskStatus,taskName, taskDes, isoDate, Integer.parseInt(taskDuration), Arrays.asList(newlist), taskCateID, taskPriorityID);
         try{
             apiService.updateTask(authHeader,oldTask.getId(), newTask).enqueue(new Callback<Task>() {
                 @Override
@@ -169,6 +173,8 @@ public class MyGroupUpdateTaskActivity extends AppCompatActivity {
         toolbar.setTitle("Cập nhật task");
         String accessToken = (SharedPrefManager.getInstance(getApplicationContext()).getAccessToken()).getAccessToken();
         authHeader = "Bearer " + accessToken;
+        getLabel();
+        getCategory();
         priorityItems.add("NONE");
         priorityItems.add("LOW");
         priorityItems.add("MEDIUM");
@@ -186,13 +192,12 @@ public class MyGroupUpdateTaskActivity extends AppCompatActivity {
         edtTaskLabel = findViewById(R.id.edittext_label);
         edtTaskPriority = findViewById(R.id.edittext_priority);
         edtTaskStatus = findViewById(R.id.edittext_status);
+        edtTaskDuration  = findViewById(R.id.edittext_duration);
         deadlineDatePicker = findViewById(R.id.dlDatePicker);
         listCategory.add(new Category(1,"cong viec ca nhan",1));
         for (Category value: listCategory) {
             cateItems.add(value.getName());
         }
-        getLabel();
-        getCategory();
         adapterItems = new ArrayAdapter<String>(this,R.layout.dropdown_select_option,cateItems);
         edtTaskCate.setAdapter(adapterItems);
         adapterItems = new ArrayAdapter<String>(this,R.layout.dropdown_select_option,labelItems);
@@ -213,6 +218,7 @@ public class MyGroupUpdateTaskActivity extends AppCompatActivity {
         edtTaskLabel.setText(oldTask.getLabels().get(0).getName());
         edtTaskPriority.setText(String.valueOf(Priority.values()[oldTask.getPriority()]));
         edtTaskStatus.setText(oldTask.getStatus());
+        edtTaskDuration.setText(String.valueOf(oldTask.getDuration()));
     }
     private void getLabel(){
         apiService = RetrofitClient.getInstance().create(APIService.class);
@@ -221,8 +227,17 @@ public class MyGroupUpdateTaskActivity extends AppCompatActivity {
             public void onResponse(Call<ResponseLabel> call, Response<ResponseLabel> response) {
                 if (response.isSuccessful()) {
                     listLabel.addAll(response.body().getData());
+                    Log.e("Error code 400",listLabel.get(0).getName());
                     for (Label value: listLabel) {
                         labelItems.add(value.getName());
+                    }
+
+                }
+                else{
+                    try {
+                        Log.v("Error code 400",response.errorBody().string());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
                     }
                 }
             }
@@ -234,18 +249,25 @@ public class MyGroupUpdateTaskActivity extends AppCompatActivity {
     }
     private void getCategory(){
         apiService = RetrofitClient.getInstance().create(APIService.class);
-        apiService.getAllCategory(authHeader,1,100,"asc",idGroup).enqueue(new Callback<List<Category>>() {
+        apiService.getAllCategory(authHeader,1,100,"asc",idGroup).enqueue(new Callback<ResponseCate>() {
             @Override
-            public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
+            public void onResponse(Call<ResponseCate> call, Response<ResponseCate> response) {
                 if (response.isSuccessful()) {
-                    listCategory = response.body();
+                    listCategory.addAll(response.body().getData());
                     for (Category value: listCategory) {
                         cateItems.add(value.getName());
                     }
                 }
+                else{
+                    try {
+                        Log.v("Error code 400",response.errorBody().string());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
             }
             @Override
-            public void onFailure(Call<List<Category>> call, Throwable t) {
+            public void onFailure(Call<ResponseCate> call, Throwable t) {
                 Log.d("TAG", "onFailure: " + t.getMessage());
             }
         });

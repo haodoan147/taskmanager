@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -14,26 +13,17 @@
             android:layout_height="wrap_content"
             android:orientation="vertical" >
 
-            <RelativeLayout
-                android:id="@+id/constraint"
+            <androidx.appcompat.widget.Toolbar
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:background="@color/white"
-                app:title="Chi tiết sảo phẩm"
-                app:titleTextColor="@color/colorAccent">
-
-                <ImageView
-                    android:id="@+id/btn_back_to_context"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/baseline_arrow_back_ios_24" />
-            </RelativeLayout>
+                android:id="@+id/toolbar"
+                android:elevation="4dp"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/color4"
+                android:theme="@style/Theme.Task_management"
+                android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                app:navigationIcon="?attr/homeAsUpIndicator"
+                tools:ignore="MissingConstraints"
+                android:alpha="0.7"/>
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/card_detail_task"

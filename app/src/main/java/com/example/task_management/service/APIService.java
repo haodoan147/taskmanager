@@ -10,6 +10,7 @@ import com.example.task_management.model.CreateTask;
 import com.example.task_management.model.Group;
 import com.example.task_management.model.JoinRequest;
 import com.example.task_management.model.Label;
+import com.example.task_management.model.ResponseCate;
 import com.example.task_management.model.ResponseLabel;
 import com.example.task_management.model.UnAssignee;
 import com.example.task_management.model.UpdateTask;
@@ -64,8 +65,8 @@ public interface APIService {
     Call<ResponseLabel> getAllLabel(@Header("Authorization") String accessToken, @Query("page") int page , @Query("limit") int limit,
                                           @Query("order") String order, @Query("groupId") int groupId);
     @GET("category")
-    Call<List<Category>> getAllCategory(@Header("Authorization") String accessToken,@Query("page") int page , @Query("limit") int limit,
-                                        @Query("order") String order,@Query("groupId") int groupId);
+    Call<ResponseCate> getAllCategory(@Header("Authorization") String accessToken, @Query("page") int page , @Query("limit") int limit,
+                                      @Query("order") String order, @Query("groupId") int groupId);
     @FormUrlEncoded
     @PATCH("task/{id}/status")
     Call<Task> updateStatusTask(@Header("Authorization") String accessToken, @Path("id") int id,@Field("status") String status);

@@ -16,9 +16,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.task_management.R;
 import com.example.task_management.adapter.CategoryAdapter;
 import com.example.task_management.model.Category;
+import com.example.task_management.model.ResponseCate;
 import com.example.task_management.service.APIService;
 import com.example.task_management.utils.RetrofitClient;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -29,7 +31,7 @@ public class MyGroupCategoryFragment extends Fragment {
     RecyclerView recyclerView;
     CategoryAdapter categoryAdapter;
     APIService apiService;
-    List<Category> categoryList;
+    List<Category> categoryList =new ArrayList<>();
     int groupId;
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.category, container, false);
@@ -44,11 +46,11 @@ public class MyGroupCategoryFragment extends Fragment {
         String accessToken = pref.getString("keyaccesstoken", "empty");
         String authHeader = "Bearer " + accessToken;
         apiService = RetrofitClient.getInstance().create(APIService.class);
-        apiService.getAllCategory(authHeader,1,100,"asc",groupId).enqueue(new Callback<List<Category>>() {
+        apiService.getAllCategory(authHeader,1,100,"asc",groupId).enqueue(new Callback<ResponseCate>() {
             @Override
-            public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
+            public void onResponse(Call<ResponseCate> call, Response<ResponseCate> response) {
                 if (response.isSuccessful()) {
-                    categoryList = response.body();
+                    categoryList.addAll(response.body().getData());
                     categoryAdapter = new CategoryAdapter(getActivity(), categoryList);
                     GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(),2);
                     recyclerView.setLayoutManager(gridLayoutManager);
@@ -57,7 +59,7 @@ public class MyGroupCategoryFragment extends Fragment {
                 }
             }
             @Override
-            public void onFailure(Call<List<Category>> call, Throwable t) {
+            public void onFailure(Call<ResponseCate> call, Throwable t) {
             }
         });
     }

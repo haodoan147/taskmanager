@@ -24,6 +24,7 @@ import com.example.task_management.R;
 import com.example.task_management.adapter.TaskAdapter;
 import com.example.task_management.model.Category;
 import com.example.task_management.model.PaginationTask;
+import com.example.task_management.model.ResponseCate;
 import com.example.task_management.model.Task;
 import com.example.task_management.service.APIService;
 import com.example.task_management.utils.RetrofitClient;
@@ -158,15 +159,15 @@ public class SearchByGroupFragment extends Fragment {
         String accessToken = pref.getString("keyaccesstoken", "empty");
         String authHeader = "Bearer " + accessToken;
         APIService apiService = RetrofitClient.getInstance().create(APIService.class);
-        apiService.getAllCategory(authHeader,1,100,"asc",groupId).enqueue(new Callback<List<Category>>() {
+        apiService.getAllCategory(authHeader,1,100,"asc",groupId).enqueue(new Callback<ResponseCate>() {
             @Override
-            public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
+            public void onResponse(Call<ResponseCate> call, Response<ResponseCate> response) {
                 if (response.isSuccessful()) {
-                    listCategory = response.body();
+                    listCategory.addAll(response.body().getData());
                 }
             }
             @Override
-            public void onFailure(Call<List<Category>> call, Throwable t) {
+            public void onFailure(Call<ResponseCate> call, Throwable t) {
                 Log.d("TAG", "onFailure: " + t.getMessage());
             }
         });

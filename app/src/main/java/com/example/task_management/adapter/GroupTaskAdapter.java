@@ -341,6 +341,7 @@ public class GroupTaskAdapter extends DragItemAdapter<Pair<Long, Task>, GroupTas
         String authHeader = "Bearer " + accessToken;
         Assignee assignee = new Assignee(groupId,userId);
         APIService apiService = RetrofitClient.getInstance().create(APIService.class);
+        Log.e("123", String.valueOf(id));
         apiService.asignTask(authHeader,id,assignee).enqueue(new Callback<Task>() {
             @Override
             public void onResponse(Call<Task> call, Response<Task> response) {

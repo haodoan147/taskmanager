@@ -42,6 +42,7 @@ import com.example.task_management.activity.group.category.MyGroupCategoryFragme
 import com.example.task_management.activity.task.CalendarActivity;
 import com.example.task_management.activity.group.task.MyGroupCreateTaskActivity;
 import com.example.task_management.model.Category;
+import com.example.task_management.model.ResponseCate;
 import com.example.task_management.model.User;
 import com.example.task_management.model.PaginationTask;
 import com.example.task_management.model.Task;
@@ -312,11 +313,11 @@ public class ManageMyGroupActivity extends AppCompatActivity implements Navigati
         String accessToken = pref.getString("keyaccesstoken", "empty");
         String authHeader = "Bearer " + accessToken;
         APIService apiService = RetrofitClient.getInstance().create(APIService.class);
-        apiService.getAllCategory(authHeader,1,100,"asc",idGroup).enqueue(new Callback<List<Category>>() {
+        apiService.getAllCategory(authHeader,1,100,"asc",idGroup).enqueue(new Callback<ResponseCate>() {
             @Override
-            public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
+            public void onResponse(Call<ResponseCate> call, Response<ResponseCate> response) {
                 if (response.isSuccessful()) {
-                    listCategory = response.body();
+                    listCategory.addAll(response.body().getData());
                 }else{
                     try {
                         Log.v("Error code 400",response.errorBody().string());
@@ -326,7 +327,7 @@ public class ManageMyGroupActivity extends AppCompatActivity implements Navigati
                 }
             }
             @Override
-            public void onFailure(Call<List<Category>> call, Throwable t) {
+            public void onFailure(Call<ResponseCate> call, Throwable t) {
                 Log.d("TAG", "onFailure: " + t.getMessage());
             }
         });

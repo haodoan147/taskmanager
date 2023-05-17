@@ -21,6 +21,7 @@ import com.example.task_management.activity.HomeActivity;
 import com.example.task_management.model.Category;
 import com.example.task_management.model.CreateTask;
 import com.example.task_management.model.Label;
+import com.example.task_management.model.ResponseCate;
 import com.example.task_management.model.ResponseLabel;
 import com.example.task_management.model.Task;
 import com.example.task_management.service.APIService;
@@ -67,6 +68,10 @@ public class MyGroupCreateTaskActivity extends AppCompatActivity {
         setContentView(R.layout.create_new_task);
         Intent intent = getIntent();
         idGroup = intent.getIntExtra("idGroup", 1);
+        String accessToken = (SharedPrefManager.getInstance(getApplicationContext()).getAccessToken()).getAccessToken();
+        authHeader = "Bearer " + accessToken;
+        getLabel();
+        getCategory();
         initView();
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -159,8 +164,6 @@ public class MyGroupCreateTaskActivity extends AppCompatActivity {
     private void initView(){
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Tạo task");
-        String accessToken = (SharedPrefManager.getInstance(getApplicationContext()).getAccessToken()).getAccessToken();
-        authHeader = "Bearer " + accessToken;
         priorityItems.add("NONE");
         priorityItems.add("LOW");
         priorityItems.add("MEDIUM");
@@ -174,12 +177,9 @@ public class MyGroupCreateTaskActivity extends AppCompatActivity {
         edtTaskPriority = findViewById(R.id.edittext_priority);
         edtTaskDuration  = findViewById(R.id.edittext_duration);
         deadlineDatePicker = findViewById(R.id.dlDatePicker);
-        listCategory.add(new Category(1,"cong viec ca nhan",1));
         for (Category value: listCategory) {
             cateItems.add(value.getName());
         }
-        getLabel();
-        getCategory();
         adapterItems = new ArrayAdapter<String>(this,R.layout.dropdown_select_option,cateItems);
         edtTaskCate.setAdapter(adapterItems);
         adapterItems = new ArrayAdapter<String>(this,R.layout.dropdown_select_option,labelItems);
@@ -213,18 +213,18 @@ public class MyGroupCreateTaskActivity extends AppCompatActivity {
     }
     private void getCategory(){
         apiService = RetrofitClient.getInstance().create(APIService.class);
-        apiService.getAllCategory(authHeader,1,100,"asc",idGroup).enqueue(new Callback<List<Category>>() {
+        apiService.getAllCategory(authHeader,1,100,"asc",idGroup).enqueue(new Callback<ResponseCate>() {
             @Override
-            public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
+            public void onResponse(Call<ResponseCate> call, Response<ResponseCate> response) {
                 if (response.isSuccessful()) {
-                    listCategory = response.body();
+                    listCategory.addAll(response.body().getData());
                     for (Category value: listCategory) {
                         cateItems.add(value.getName());
                     }
                 }
             }
             @Override
-            public void onFailure(Call<List<Category>> call, Throwable t) {
+            public void onFailure(Call<ResponseCate> call, Throwable t) {
                 Log.d("TAG", "onFailure: " + t.getMessage());
             }
         });

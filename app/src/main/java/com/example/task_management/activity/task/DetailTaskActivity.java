@@ -13,6 +13,7 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,6 +21,7 @@ import com.example.task_management.R;
 import com.example.task_management.adapter.CommentApdater;
 import com.example.task_management.model.Category;
 import com.example.task_management.model.Comment;
+import com.example.task_management.model.ResponseCate;
 import com.example.task_management.model.Task;
 import com.example.task_management.service.APIService;
 import com.example.task_management.utils.RetrofitClient;
@@ -61,6 +63,8 @@ public class DetailTaskActivity extends AppCompatActivity {
     }
 
     private void initView() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("Chi tiết task");
         tv_title = findViewById(R.id.tv_title);
         recyclerView = findViewById(R.id.rcv_comment);
         tv_dueDate = findViewById(R.id.tv_dueDate);
@@ -73,8 +77,12 @@ public class DetailTaskActivity extends AppCompatActivity {
         getDetailTask();
         getAllComment();
         tv_status.setOnClickListener(view -> showPopUpStatusMenu(view));
-        btnBack = findViewById(R.id.btn_back_to_context);
-        btnBack.setOnClickListener(view -> finish());
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         txt_des = findViewById(R.id.text_your_des);
         submit_btn = findViewById(R.id.btn_submit);
         submit_btn.setOnClickListener(view -> createComment(String.valueOf(txt_des.getText())));
@@ -158,15 +166,21 @@ public class DetailTaskActivity extends AppCompatActivity {
         String accessToken = pref.getString("keyaccesstoken", "empty");
         String authHeader = "Bearer " + accessToken;
         APIService apiService = RetrofitClient.getInstance().create(APIService.class);
-        apiService.getAllCategory(authHeader,1,100,"asc",1).enqueue(new Callback<List<Category>>() {
+        apiService.getAllCategory(authHeader,1,100,"asc",1).enqueue(new Callback<ResponseCate>() {
             @Override
-            public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
+            public void onResponse(Call<ResponseCate> call, Response<ResponseCate> response) {
                 if (response.isSuccessful()) {
-                    listCategory = response.body();
+                    listCategory.addAll(response.body().getData());
+                }else{
+                    try {
+                        Log.v("Error code 400",response.errorBody().string());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
             @Override
-            public void onFailure(Call<List<Category>> call, Throwable t) {
+            public void onFailure(Call<ResponseCate> call, Throwable t) {
                 Log.d("TAG", "onFailure: " + t.getMessage());
             }
         });
