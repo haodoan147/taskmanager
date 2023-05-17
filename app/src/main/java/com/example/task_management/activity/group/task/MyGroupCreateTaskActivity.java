@@ -140,9 +140,7 @@ public class MyGroupCreateTaskActivity extends AppCompatActivity {
                 public void onResponse(Call<Task> call, Response<Task> response) {
                     if (response.isSuccessful()) {
                         Task task = response.body();
-                        Toast.makeText(MyGroupCreateTaskActivity.this, "Create Task Success", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(MyGroupCreateTaskActivity.this, HomeActivity.class);
-                        startActivity(intent);
+                        Toast.makeText(MyGroupCreateTaskActivity.this, "Tạo task thành công", Toast.LENGTH_SHORT).show();
                     }else{
                         try {
                             Log.v("Error code 400",response.errorBody().string());
