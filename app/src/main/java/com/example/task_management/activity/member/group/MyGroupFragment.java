@@ -100,9 +100,9 @@ public class MyGroupFragment extends Fragment {
         EditText input_text = dialog.findViewById(R.id.input_text);
         Button btn_submit = dialog.findViewById(R.id.btn_submit);
         title.setText("Tham gia vào nhóm");
-        label.setText("Id của nhóm");
+        label.setText("ID của nhóm");
         btn_submit.setText("Yêu cầu");
-        input_text.setHint("Tên nhóm");
+        input_text.setHint("ID nhóm");
         btn_submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
