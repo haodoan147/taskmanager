@@ -1,4 +1,4 @@
-package com.example.task_management.activity.group.task;
+package com.example.task_management.activity.member.task;
 
 import android.animation.ObjectAnimator;
 import android.content.Context;
@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,29 +26,18 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.task_management.R;
-import com.example.task_management.activity.LoadingDialog;
-import com.example.task_management.activity.group.group.ManageMyGroupActivity;
-import com.example.task_management.adapter.GroupTaskAdapter;
+import com.example.task_management.adapter.MemberTaskAdapter;
 import com.example.task_management.model.Category;
-import com.example.task_management.model.PaginationTask;
 import com.example.task_management.model.Task;
-import com.example.task_management.model.User;
 import com.example.task_management.service.APIService;
-import com.example.task_management.utils.RetrofitClient;
 import com.woxthebox.draglistview.BoardView;
 import com.woxthebox.draglistview.ColumnProperties;
 import com.woxthebox.draglistview.DragItem;
 
-import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-public class MyGroupTaskFragment extends Fragment {
+public class TaskByMemberFragment extends Fragment {
 
     private static int sCreatedItems = 0;
     private BoardView mBoardView;
@@ -60,11 +48,9 @@ public class MyGroupTaskFragment extends Fragment {
     List<Task> taskList= new ArrayList<>();
     List<Category> listCategory = new ArrayList<>();
 
-    List<User> memberList= new ArrayList<>();
-    int idGroup;
 
-    public static MyGroupTaskFragment newInstance() {
-        return new MyGroupTaskFragment();
+    public static TaskByMemberFragment newInstance() {
+        return new TaskByMemberFragment();
     }
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -75,38 +61,18 @@ public class MyGroupTaskFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         taskList = (List<Task>) getArguments().getSerializable("newTaskList");
-        idGroup = getArguments().getInt("idGroup");
+        SharedPreferences pref = getActivity().getSharedPreferences("ATAuthen", Context.MODE_PRIVATE);
+        int userId = Integer.parseInt(pref.getString("keyid", "empty"));
         for (int i = 0; i < taskList.size(); i++) {
-            long id = sCreatedItems++;
-            mItemArray.add(new Pair<>(id, taskList.get(i)));
+            if(taskList.get(i).getAssignee()!=null) {
+                if ((taskList.get(i).getAssignee().getId() == userId)) {
+                    long id = sCreatedItems++;
+                    mItemArray.add(new Pair<>(id, taskList.get(i)));
+                }
+            }
         }
         listCategory  = (List<Category>) getArguments().getSerializable("newCateList");
-        memberList  = (List<User>) getArguments().getSerializable("newMemberList");
         View view = inflater.inflate(R.layout.board_layout, container, false);
-        View reload_btn = view.findViewById(R.id.reload);
-        LoadingDialog loadingDialog = new LoadingDialog(getActivity());
-        reload_btn.setOnClickListener(view1 -> {
-            taskList.clear();
-            getAllTask("TODO");
-            getAllTask("IN_PROGRESS");
-            getAllTask("DONE");
-            getAllTask("POSTPONED");
-            getAllTask("CANCELED");
-            loadingDialog.startLoadingDialog();
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    // Replace the current fragment with NewTaskFragment and pass the parameter
-                    mItemArray.clear();
-                    for (int i = 0; i < taskList.size(); i++) {
-                        long id = sCreatedItems++;
-                        mItemArray.add(new Pair<>(id, taskList.get(i)));
-                    }
-                    resetBoard();
-                    loadingDialog.dismissDialog();
-                }
-            }, 4000);
-        });
         mBoardView = view.findViewById(R.id.board_view);
         mBoardView.setSnapToColumnsWhenScrolling(true);
         mBoardView.setSnapToColumnWhenDragging(true);
@@ -165,8 +131,8 @@ public class MyGroupTaskFragment extends Fragment {
 
     private void resetBoard() {
         mBoardView.clearBoard();
-        mBoardView.setCustomDragItem(new MyDragItem(getActivity(), R.layout.column_item));
-        mBoardView.setCustomColumnDragItem( new MyColumnDragItem(getActivity(), R.layout.column_drag_layout));
+        mBoardView.setCustomDragItem(new TaskByMemberFragment.MyDragItem(getActivity(), R.layout.column_item));
+        mBoardView.setCustomColumnDragItem( new TaskByMemberFragment.MyColumnDragItem(getActivity(), R.layout.column_drag_layout));
         addColumn("TODO");
         addColumn("IN_PROGRESS");
         addColumn("DONE");
@@ -181,7 +147,7 @@ public class MyGroupTaskFragment extends Fragment {
                 newMItemArray.add(task);
             }
         }
-        final GroupTaskAdapter listAdapter = new GroupTaskAdapter(newMItemArray, R.layout.column_item, R.id.item_layout, true,getActivity(),listCategory,memberList,idGroup);
+        final MemberTaskAdapter listAdapter = new MemberTaskAdapter(newMItemArray, R.layout.column_item, R.id.item_layout, true,getActivity(),listCategory);
         final View header = View.inflate(getActivity(), R.layout.column_header, null);
         ((TextView) header.findViewById(R.id.text)).setText(status);
         ((TextView) header.findViewById(R.id.item_count)).setText("" + newMItemArray.size());
@@ -332,29 +298,5 @@ public class MyGroupTaskFragment extends Fragment {
             anim.start();
 
         }
-    }
-    private void getAllTask(String status){
-        SharedPreferences pref = getActivity().getSharedPreferences("ATAuthen",Context.MODE_PRIVATE);
-        String accessToken = pref.getString("keyaccesstoken", "empty");
-        String authHeader = "Bearer " + accessToken;
-        apiService = RetrofitClient.getInstance().create(APIService.class);
-        apiService.getAllTask(authHeader,1,100,"asc",idGroup, status,"priority", "").enqueue(new Callback<PaginationTask>() {
-            @Override
-            public void onResponse(Call<PaginationTask> call, Response<PaginationTask> response) {
-                if (response.isSuccessful()) {
-                    taskList.addAll(response.body().getData());
-                }else{
-                    try {
-                        Log.v("Error code 400",response.errorBody().string());
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            }
-            @Override
-            public void onFailure(Call<PaginationTask> call, Throwable t) {
-                Log.e("TAG", "onFailure: " + t.getMessage());
-            }
-        });
     }
 }

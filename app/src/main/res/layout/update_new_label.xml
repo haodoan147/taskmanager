@@ -6,32 +6,24 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:theme="@style/Theme.Task_management">
-    <RelativeLayout
-        android:id="@+id/constraint"
+    <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@color/white"
-        app:title="Chi tiết sảo phẩm"
-        app:titleTextColor="@color/colorAccent">
-        <ImageView
-            android:id="@+id/btn_back_to_context"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/baseline_arrow_back_ios_24"/>
-    </RelativeLayout>
+        android:id="@+id/toolbar"
+        android:elevation="4dp"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/color4"
+        android:theme="@style/Theme.Task_management"
+        android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:navigationIcon="?attr/homeAsUpIndicator"
+        tools:ignore="MissingConstraints"
+        android:alpha="0.7"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
         android:orientation="vertical">
         <EditText
-            android:id="@+id/edittext_name"
+            android:id="@+id/edittext_label"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginStart="30dp"
@@ -40,11 +32,25 @@
             android:background="@drawable/edittext_background"
             android:drawablePadding="16dp"
             android:ems="10"
-            android:hint="Tên group"
+            android:hint="Tên nhãn"
             android:padding="8dp"
             android:textColor="#3b608c"
             android:textColorHint="#756C6C" />
 
+        <EditText
+            android:id="@+id/edittext_color"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="30dp"
+            android:background="@drawable/edittext_background"
+            android:drawablePadding="16dp"
+            android:ems="10"
+            android:hint="Tên màu"
+            android:padding="8dp"
+            android:textColor="#3b608c"
+            android:textColorHint="#756C6C"/>
         <Button
             android:id="@+id/btn_submit"
             android:layout_width="match_parent"
@@ -53,8 +59,7 @@
             android:layout_marginStart="250dp"
             android:layout_marginTop="50dp"
             android:gravity="center"
-            android:text="Tạo"
+            android:text="Cập nhật"
             android:background="@drawable/btn_background"></Button>
     </LinearLayout>
-
 </RelativeLayout>

@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 <com.woxthebox.draglistview.BoardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/board_view"
@@ -6,5 +11,17 @@
     android:layout_height="match_parent"
     app:boardEdges="@dimen/boardEdges"
     app:columnSpacing="@dimen/columnSpacing"/>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/reload"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:layout_marginBottom="70dp"
+        android:src="@drawable/baseline_replay_24"
+        android:backgroundTint="@color/white"
+        app:tint="@color/colorAccent"
+        android:contentDescription="Enter How Much Cookies You Want"/>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 

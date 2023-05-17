@@ -25,6 +25,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.example.task_management.R;
 import com.example.task_management.adapter.TaskAdapter;
 import com.example.task_management.model.Category;
+import com.example.task_management.model.Group;
 import com.example.task_management.model.PaginationTask;
 import com.example.task_management.model.ResponseCate;
 import com.example.task_management.model.Task;
@@ -51,13 +52,14 @@ public class SearchTaskFragment extends Fragment {
     List<Category> listCategory= new ArrayList<>();
     SwipeRefreshLayout swipeRefreshLayout;
     Integer idGroup;
+    List<Group> listGroup= new ArrayList<>();
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.search_task, container, false);
         recyclerView = view.findViewById(R.id.recyclerView);
         Bundle arguments = getArguments();
         idGroup  = arguments.getInt("idGroup", 1);
         swipeRefreshLayout = view.findViewById(R.id.swipefreshlayout);
-        getAllTask("TODO");
+        getMyGroups("TODO");
         filterBtn = view.findViewById(R.id.filter_icon);
         filterBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,7 +84,7 @@ public class SearchTaskFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getAllTask("TODO");
+                getMyGroups("TODO");
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
@@ -90,14 +92,13 @@ public class SearchTaskFragment extends Fragment {
     }
 
 
-    private void getAllTask(String status){
+    private void getAllTask(String status,int GroupId){
         SharedPreferences pref = getActivity().getSharedPreferences("ATAuthen", Context.MODE_PRIVATE);
         String accessToken = pref.getString("keyaccesstoken", "empty");
         String authHeader = "Bearer " + accessToken;
-        Log.e("123", authHeader);
-        getCategory();
+        getCategory(GroupId);
         apiService = RetrofitClient.getInstance().create(APIService.class);
-        apiService.getAllTask(authHeader,1,100,"asc",1, status,"priority", "").enqueue(new Callback<PaginationTask>() {
+        apiService.getAllTask(authHeader,1,100,"asc",GroupId, status,"priority", "").enqueue(new Callback<PaginationTask>() {
             @Override
             public void onResponse(Call<PaginationTask> call, Response<PaginationTask> response) {
                 if (response.isSuccessful()) {
@@ -131,19 +132,19 @@ public class SearchTaskFragment extends Fragment {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.menuTodo:
-                        getAllTask("TODO");
+                        getMyGroups("TODO");
                         break;
                     case R.id.menuInprocess:
-                        getAllTask("IN_PROGRESS");
+                        getMyGroups("IN_PROGRESS");
                         break;
                     case R.id.menuDone:
-                        getAllTask("DONE");
+                        getMyGroups("DONE");
                         break;
                     case R.id.menuPostPoned:
-                        getAllTask("POSTPONED");
+                        getMyGroups("POSTPONED");
                         break;
                     case R.id.menuCanceled:
-                        getAllTask("CANCELED");
+                        getMyGroups("CANCELED");
                         break;
 
                 }
@@ -163,15 +164,16 @@ public class SearchTaskFragment extends Fragment {
             taskAdapter.setListenerList(list);
         }
     }
-    private void getCategory(){
+    private void getCategory(int GroupId){
         SharedPreferences pref = getActivity().getSharedPreferences("ATAuthen",Context.MODE_PRIVATE);
         String accessToken = pref.getString("keyaccesstoken", "empty");
         String authHeader = "Bearer " + accessToken;
         APIService apiService = RetrofitClient.getInstance().create(APIService.class);
-        apiService.getAllCategory(authHeader,1,100,"asc",idGroup).enqueue(new Callback<ResponseCate>() {
+        apiService.getAllCategory(authHeader,1,100,"asc",GroupId).enqueue(new Callback<ResponseCate>() {
             @Override
             public void onResponse(Call<ResponseCate> call, Response<ResponseCate> response) {
                 if (response.isSuccessful()) {
+                    listCategory.clear();
                     listCategory.addAll(response.body().getData());
                 }else{
                     try {
@@ -184,6 +186,36 @@ public class SearchTaskFragment extends Fragment {
             @Override
             public void onFailure(Call<ResponseCate> call, Throwable t) {
                 Log.d("TAG", "onFailure: " + t.getMessage());
+            }
+        });
+    }
+    private void getMyGroups(String status) {
+        SharedPreferences pref = getActivity().getSharedPreferences("ATAuthen", Context.MODE_PRIVATE);
+        String accessToken = pref.getString("keyaccesstoken", "empty");
+        String authHeader = "Bearer " + accessToken;
+        apiService = RetrofitClient.getInstance().create(APIService.class);
+        apiService.getMyGroups(authHeader).enqueue(new Callback<List<Group>>() {
+            @Override
+            public void onResponse(Call<List<Group>> call, Response<List<Group>> response) {
+                if (response.isSuccessful()) {
+                    listGroup = response.body();
+                    for (Group group : listGroup) {
+                        if (group.getRole().equals("group_member")) {
+                            getAllTask(status,group.getId());
+                        }
+                    }
+                } else {
+                    try {
+                        Log.v("Error code 400", response.errorBody().string());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Group>> call, Throwable t) {
+                Log.e("TAG", "onFailure: " + t.getMessage());
             }
         });
     }

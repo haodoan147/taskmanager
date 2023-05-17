@@ -206,6 +206,10 @@ public class ManageMyGroupActivity extends AppCompatActivity implements Navigati
                 intent = new Intent(getApplicationContext(), CalendarActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.nav_group:
+                intent = new Intent(getApplicationContext(), MyGroupActivity.class);
+                startActivity(intent);
+                break;
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;

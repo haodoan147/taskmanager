@@ -225,58 +225,6 @@ public class MyGroupUpdateTaskActivity extends AppCompatActivity {
         edtTaskStatus.setText(oldTask.getStatus());
         edtTaskDuration.setText(String.valueOf(oldTask.getDuration()));
     }
-    private void getLabel(){
-        apiService = RetrofitClient.getInstance().create(APIService.class);
-        apiService.getAllLabel(authHeader,1,100,"asc",idGroup).enqueue(new Callback<ResponseLabel>() {
-            @Override
-            public void onResponse(Call<ResponseLabel> call, Response<ResponseLabel> response) {
-                if (response.isSuccessful()) {
-                    listLabel.addAll(response.body().getData());
-                    Log.e("Error code 400",listLabel.get(0).getName());
-                    for (Label value: listLabel) {
-                        labelItems.add(value.getName());
-                    }
-
-                }
-                else{
-                    try {
-                        Log.v("Error code 400",response.errorBody().string());
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            }
-            @Override
-            public void onFailure(Call<ResponseLabel> call, Throwable t) {
-                Log.d("TAG", "onFailure: " + t.getMessage());
-            }
-        });
-    }
-    private void getCategory(){
-        apiService = RetrofitClient.getInstance().create(APIService.class);
-        apiService.getAllCategory(authHeader,1,100,"asc",idGroup).enqueue(new Callback<ResponseCate>() {
-            @Override
-            public void onResponse(Call<ResponseCate> call, Response<ResponseCate> response) {
-                if (response.isSuccessful()) {
-                    listCategory.addAll(response.body().getData());
-                    for (Category value: listCategory) {
-                        cateItems.add(value.getName());
-                    }
-                }
-                else{
-                    try {
-                        Log.v("Error code 400",response.errorBody().string());
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            }
-            @Override
-            public void onFailure(Call<ResponseCate> call, Throwable t) {
-                Log.d("TAG", "onFailure: " + t.getMessage());
-            }
-        });
-    }
     private Integer getLabelId(){
         int selectedId = 0;
         for (Label value: listLabel) {

@@ -128,6 +128,12 @@ public class MemberTaskAdapter extends DragItemAdapter<Pair<Long, Task>, MemberT
                 holder.tv_status.setBackgroundResource(R.drawable.status_view_round_5);
                 break;
         }
+        if(task.getAssignee()==null){
+            holder.tv_assignee.setText("Người thực hiện: chưa có");
+        }
+        else{
+            holder.tv_assignee.setText("Người thực hiện: "+ task.getAssignee().getName());
+        }
     }
 
     @Override
@@ -137,7 +143,7 @@ public class MemberTaskAdapter extends DragItemAdapter<Pair<Long, Task>, MemberT
 
     class ViewHolder extends DragItemAdapter.ViewHolder {
         public ImageView iv_options;
-        public TextView tv_title, tv_des, tv_duration, tv_category,tv_label,tv_priority,tv_status,tv_date,tv_month;
+        public TextView tv_title, tv_des, tv_duration, tv_category,tv_label,tv_priority,tv_status,tv_date,tv_month,tv_assignee;
 
         ViewHolder(final View itemView) {
             super(itemView, mGrabHandleId, mDragOnLongPress);
@@ -151,11 +157,12 @@ public class MemberTaskAdapter extends DragItemAdapter<Pair<Long, Task>, MemberT
             tv_status = itemView.findViewById(R.id.tv_status);
             tv_date = itemView.findViewById(R.id.tv_date);
             tv_month = itemView.findViewById(R.id.tv_month);
+            tv_assignee = itemView.findViewById(R.id.tv_assignee);
         }
     }
     public void showPopUpMenu(View view, int position) {
         PopupMenu popupMenu = new PopupMenu(context, view);
-        popupMenu.getMenuInflater().inflate(R.menu.my_group_task_option, popupMenu.getMenu());
+        popupMenu.getMenuInflater().inflate(R.menu.member_task_option, popupMenu.getMenu());
         popupMenu.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()) {
                 case R.id.menuDelete:

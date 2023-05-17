@@ -20,6 +20,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.example.task_management.R;
 import com.example.task_management.activity.group.group.MyGroupActivity;
@@ -27,7 +28,9 @@ import com.example.task_management.activity.member.group.MyGroupFragment;
 import com.example.task_management.activity.member.task.TaskFragment;
 import com.example.task_management.activity.task.CalendarActivity;
 import com.example.task_management.activity.member.task.SearchTaskFragment;
+import com.example.task_management.adapter.MemberGroupAdapter;
 import com.example.task_management.model.Category;
+import com.example.task_management.model.Group;
 import com.example.task_management.model.ResponseCate;
 import com.example.task_management.model.User;
 import com.example.task_management.model.PaginationTask;
@@ -55,6 +58,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     NavigationView navigationView;
     List<Task> taskList= new ArrayList<>();
     List<Category> listCategory= new ArrayList<>();
+    List<Group> listGroup= new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -70,31 +74,24 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.open,R.string.close);
         drawerLayout.addDrawerListener(drawerToggle);
         drawerToggle.syncState();
-        SharedPreferences pref = getApplicationContext().getSharedPreferences("ATAuthen", Context.MODE_PRIVATE);
         navigationView.bringToFront();
 
         bottomNavigationView.setBackground(null);
         bottomNavigationView.setOnItemSelectedListener(item -> {
             taskList.clear();
-            getAllTask("TODO");
-            getAllTask("IN_PROGRESS");
-            getAllTask("DONE");
-            getAllTask("POSTPONED");
-            getAllTask("CANCELED");
-            getCategory();
+            listCategory.clear();
+            getMyGroups();
             switch (item.getItemId()) {
                 case R.id.btm_home:
                     toolbar.setTitle("Quản lí công việc");
-                    List<Task> newTaskList = taskList;
-                    List<Category> newCateList = listCategory;
                     loadingDialog.startLoadingDialog();
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
                             Fragment newFragment = new TaskFragment();
                             Bundle args = new Bundle();
-                            args.putSerializable("newTaskList", (Serializable) newTaskList);
-                            args.putSerializable("newCateList", (Serializable) newCateList);
+                            args.putSerializable("newTaskList", (Serializable) taskList);
+                            args.putSerializable("newCateList", (Serializable) listCategory);
                             newFragment.setArguments(args);
                             replaceFragment(newFragment);
                             loadingDialog.dismissDialog();
@@ -199,12 +196,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             }
         });
     }
-    private void getAllTask(String status){
+    private void getAllTask(String status,int groupId){
         SharedPreferences pref = getApplicationContext().getSharedPreferences("ATAuthen",Context.MODE_PRIVATE);
         String accessToken = pref.getString("keyaccesstoken", "empty");
         String authHeader = "Bearer " + accessToken;
         apiService = RetrofitClient.getInstance().create(APIService.class);
-        apiService.getAllTask(authHeader,1,100,"asc",1, status,"priority", "").enqueue(new Callback<PaginationTask>() {
+        apiService.getAllTask(authHeader,1,100,"asc",groupId, status,"priority", "").enqueue(new Callback<PaginationTask>() {
             @Override
             public void onResponse(Call<PaginationTask> call, Response<PaginationTask> response) {
                 if (response.isSuccessful()) {
@@ -223,12 +220,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             }
         });
     }
-    private void getCategory(){
+    private void getCategory(int groupId){
         SharedPreferences pref = getApplicationContext().getSharedPreferences("ATAuthen",Context.MODE_PRIVATE);
         String accessToken = pref.getString("keyaccesstoken", "empty");
         String authHeader = "Bearer " + accessToken;
         APIService apiService = RetrofitClient.getInstance().create(APIService.class);
-        apiService.getAllCategory(authHeader,1,100,"asc",1).enqueue(new Callback<ResponseCate>() {
+        apiService.getAllCategory(authHeader,1,100,"asc",groupId).enqueue(new Callback<ResponseCate>() {
             @Override
             public void onResponse(Call<ResponseCate> call, Response<ResponseCate> response) {
                 if (response.isSuccessful()) {
@@ -244,6 +241,41 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onFailure(Call<ResponseCate> call, Throwable t) {
                 Log.d("TAG", "onFailure: " + t.getMessage());
+            }
+        });
+    }
+    private void getMyGroups() {
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("ATAuthen", Context.MODE_PRIVATE);
+        String accessToken = pref.getString("keyaccesstoken", "empty");
+        String authHeader = "Bearer " + accessToken;
+        apiService = RetrofitClient.getInstance().create(APIService.class);
+        apiService.getMyGroups(authHeader).enqueue(new Callback<List<Group>>() {
+            @Override
+            public void onResponse(Call<List<Group>> call, Response<List<Group>> response) {
+                if (response.isSuccessful()) {
+                    listGroup = response.body();
+                    for (Group group : listGroup) {
+                        if (group.getRole().equals("group_member")) {
+                            getAllTask("TODO",group.getId());
+                            getAllTask("IN_PROGRESS",group.getId());
+                            getAllTask("DONE",group.getId());
+                            getAllTask("POSTPONED",group.getId());
+                            getAllTask("CANCELED",group.getId());
+                            getCategory(group.getId());
+                        }
+                    }
+                } else {
+                    try {
+                        Log.v("Error code 400", response.errorBody().string());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Group>> call, Throwable t) {
+                Log.e("TAG", "onFailure: " + t.getMessage());
             }
         });
     }

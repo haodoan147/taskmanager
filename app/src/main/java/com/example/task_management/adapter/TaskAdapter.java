@@ -73,7 +73,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
             tv_date = itemView.findViewById(R.id.tv_date);
             tv_month = itemView.findViewById(R.id.tv_month);
             tv_assignee = itemView.findViewById(R.id.tv_assignee);
-
         }
     }
 

@@ -1,19 +1,13 @@
 package com.example.task_management.activity.member.group;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.view.Gravity;
+import android.os.Handler;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -28,21 +22,30 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.task_management.R;
 import com.example.task_management.activity.HomeActivity;
+import com.example.task_management.activity.LoadingDialog;
 import com.example.task_management.activity.MyProfileActivity;
 import com.example.task_management.activity.SignInActivity;
-import com.example.task_management.activity.group.category.MyGroupCreateCategoryActivity;
-import com.example.task_management.activity.group.category.MyGroupCategoryFragment;
-import com.example.task_management.activity.group_task.SearchByGroupFragment;
 import com.example.task_management.activity.group_task.TaskByGroupFragment;
+import com.example.task_management.activity.member.task.SearchByGroupFragment;
+import com.example.task_management.activity.member.task.SearchTaskFragment;
+import com.example.task_management.activity.member.task.TaskByMemberFragment;
+import com.example.task_management.activity.member.task.TaskFragment;
 import com.example.task_management.activity.task.CalendarActivity;
-import com.example.task_management.activity.group.task.MyGroupCreateTaskActivity;
-import com.example.task_management.activity.task.HomeFragment;
+import com.example.task_management.model.Category;
+import com.example.task_management.model.PaginationTask;
+import com.example.task_management.model.ResponseCate;
+import com.example.task_management.model.Task;
 import com.example.task_management.model.User;
 import com.example.task_management.service.APIService;
 import com.example.task_management.utils.RetrofitClient;
 import com.example.task_management.utils.SharedPrefManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -54,13 +57,20 @@ public class DetailGroupActivity extends AppCompatActivity implements Navigation
     APIService apiService;
     String id, name, email;
     NavigationView navigationView;
+    int idGroup;
+    List<Task> taskList= new ArrayList<>();
+    List<Category> listCategory= new ArrayList<>();
+    List<User> memberList= new ArrayList<>();
+    int UserId;
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.base_group_activivy);
+        LoadingDialog loadingDialog = new LoadingDialog(DetailGroupActivity.this);
+        Intent intent = getIntent();
+        idGroup = intent.getIntExtra("idGroup", 1);
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         drawerLayout = findViewById(R.id.drawer_layout);
-        View fab = findViewById(R.id.fab);
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         getMyProfile();
@@ -69,11 +79,6 @@ public class DetailGroupActivity extends AppCompatActivity implements Navigation
         ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.open,R.string.close);
         drawerLayout.addDrawerListener(drawerToggle);
         drawerToggle.syncState();
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new TaskByGroupFragment()).commit();
-            navigationView.setCheckedItem(R.id.nav_home);
-        }
-        replaceFragment(new HomeFragment());
         navigationView.bringToFront();
 
         bottomNavigationView.setBackground(null);
@@ -81,22 +86,80 @@ public class DetailGroupActivity extends AppCompatActivity implements Navigation
 
             switch (item.getItemId()) {
                 case R.id.task:
-                    replaceFragment(new TaskByGroupFragment());
+                    taskList.clear();
+                    memberList.clear();
+                    listCategory.clear();
+                    getAllTask("TODO");
+                    getAllTask("IN_PROGRESS");
+                    getAllTask("DONE");
+                    getAllTask("POSTPONED");
+                    getAllTask("CANCELED");
+                    getCategory();
+                    getMyGroupMembers();
+                    loadingDialog.startLoadingDialog();
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            // Replace the current fragment with NewTaskFragment and pass the parameter
+                            toolbar.setTitle("Công việc của nhóm");
+                            Fragment newFragment = new TaskFragment();
+                            Bundle args = new Bundle();
+                            args.putSerializable("newTaskList", (Serializable) taskList);
+                            args.putSerializable("newCateList", (Serializable) listCategory);
+                            args.putSerializable("newMemberList", (Serializable) memberList);
+                            args.putInt("idGroup", idGroup);
+                            newFragment.setArguments(args);
+                            replaceFragment(newFragment);
+                            loadingDialog.dismissDialog();
+                        }
+                    }, 2000);
                     break;
                 case R.id.cate:
-                    replaceFragment(new MyGroupCategoryFragment());
+                    taskList.clear();
+                    memberList.clear();
+                    listCategory.clear();
+                    getAllTask("TODO");
+                    getAllTask("IN_PROGRESS");
+                    getAllTask("DONE");
+                    getAllTask("POSTPONED");
+                    getAllTask("CANCELED");
+                    getCategory();
+                    getMyGroupMembers();
+                    loadingDialog.startLoadingDialog();
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            // Replace the current fragment with NewTaskFragment and pass the parameter
+                            toolbar.setTitle("Công việc của nhóm");
+                            Fragment newFragment = new TaskByMemberFragment();
+                            Bundle args = new Bundle();
+                            args.putSerializable("newTaskList", (Serializable) taskList);
+                            args.putSerializable("newCateList", (Serializable) listCategory);
+                            args.putSerializable("newMemberList", (Serializable) memberList);
+                            args.putInt("idGroup", idGroup);
+                            newFragment.setArguments(args);
+                            replaceFragment(newFragment);
+                            loadingDialog.dismissDialog();
+                        }
+                    }, 2000);
                     break;
                 case R.id.search:
-                    replaceFragment(new SearchByGroupFragment());
+                    toolbar.setTitle("Tìm kiếm");
+                    loadingDialog.startLoadingDialog();
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Fragment newFragment = new SearchByGroupFragment();
+                            Bundle args = new Bundle();
+                            args.putSerializable("idGroup", (Serializable) 1);
+                            newFragment.setArguments(args);
+                            replaceFragment(newFragment);
+                            loadingDialog.dismissDialog();
+                        }
+                    }, 1000);
                     break;
             }
             return true;
-        });
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showBottomDialog();
-            }
         });
     }
     private  void replaceFragment(Fragment fragment) {
@@ -139,52 +202,6 @@ public class DetailGroupActivity extends AppCompatActivity implements Navigation
             super.onBackPressed();
         }
     }
-    private void showBottomDialog() {
-
-        final Dialog dialog = new Dialog(this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.bottomsheetlayout);
-
-        LinearLayout layoutTask = dialog.findViewById(R.id.create_task);
-        LinearLayout layoutCate = dialog.findViewById(R.id.create_cate);
-        ImageView cancelButton = dialog.findViewById(R.id.cancelButton);
-
-        layoutTask.setOnClickListener(new View.OnClickListener() {
-            Intent intent;
-            @Override
-            public void onClick(View v) {
-
-                dialog.dismiss();
-                intent = new Intent(getApplicationContext(), MyGroupCreateTaskActivity.class);
-                startActivity(intent);
-
-            }
-        });
-
-        layoutCate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent;
-                dialog.dismiss();
-                intent = new Intent(getApplicationContext(), MyGroupCreateCategoryActivity.class);
-                startActivity(intent);
-
-            }
-        });
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
-
-        dialog.show();
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-        dialog.getWindow().setGravity(Gravity.BOTTOM);
-
-    }
     private void getMyProfile(){
         SharedPreferences pref = getApplicationContext().getSharedPreferences("ATAuthen", Context.MODE_PRIVATE);
         String accessToken = pref.getString("keyaccesstoken", "empty");
@@ -208,6 +225,78 @@ public class DetailGroupActivity extends AppCompatActivity implements Navigation
             }
             @Override
             public void onFailure(Call<User> call, Throwable t) {
+            }
+        });
+    }
+    private void getAllTask(String status){
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("ATAuthen",Context.MODE_PRIVATE);
+        String accessToken = pref.getString("keyaccesstoken", "empty");
+        String authHeader = "Bearer " + accessToken;
+        apiService = RetrofitClient.getInstance().create(APIService.class);
+        apiService.getAllTask(authHeader,1,100,"asc",idGroup, status,"priority", "").enqueue(new Callback<PaginationTask>() {
+            @Override
+            public void onResponse(Call<PaginationTask> call, Response<PaginationTask> response) {
+                if (response.isSuccessful()) {
+                    taskList.addAll(response.body().getData());
+                }else{
+                    try {
+                        Log.v("Error code 400",response.errorBody().string());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+            @Override
+            public void onFailure(Call<PaginationTask> call, Throwable t) {
+                Log.e("TAG", "onFailure: " + t.getMessage());
+            }
+        });
+    }
+    private void getCategory(){
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("ATAuthen",Context.MODE_PRIVATE);
+        String accessToken = pref.getString("keyaccesstoken", "empty");
+        String authHeader = "Bearer " + accessToken;
+        APIService apiService = RetrofitClient.getInstance().create(APIService.class);
+        apiService.getAllCategory(authHeader,1,100,"asc",idGroup).enqueue(new Callback<ResponseCate>() {
+            @Override
+            public void onResponse(Call<ResponseCate> call, Response<ResponseCate> response) {
+                if (response.isSuccessful()) {
+                    listCategory.addAll(response.body().getData());
+                }else{
+                    try {
+                        Log.v("Error code 400",response.errorBody().string());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+            @Override
+            public void onFailure(Call<ResponseCate> call, Throwable t) {
+                Log.d("TAG", "onFailure: " + t.getMessage());
+            }
+        });
+    }
+    private void getMyGroupMembers(){
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("ATAuthen", Context.MODE_PRIVATE);
+        String accessToken = pref.getString("keyaccesstoken", "empty");
+        String authHeader = "Bearer " + accessToken;
+        apiService = RetrofitClient.getInstance().create(APIService.class);
+        apiService.getAllMembers(authHeader,idGroup).enqueue(new Callback<List<User>>() {
+            @Override
+            public void onResponse(Call<List<User>> call, Response<List<User>> response) {
+                if (response.isSuccessful()) {
+                    memberList = response.body();
+                }else{
+                    try {
+                        Log.v("Error code 400",response.errorBody().string());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+            @Override
+            public void onFailure(Call<List<User>> call, Throwable t) {
+                Log.e("TAG", "onFailure: " + t.getMessage());
             }
         });
     }

@@ -66,7 +66,7 @@
             android:layout_marginStart="250dp"
             android:layout_marginTop="50dp"
             android:gravity="center"
-            android:text="Tạo Loại Task"
+            android:text="Cập nhật"
             android:background="@drawable/btn_background"></Button>
     </LinearLayout>
 </RelativeLayout>

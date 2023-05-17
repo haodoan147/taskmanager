@@ -1,6 +1,7 @@
 package com.example.task_management.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.task_management.R;
+import com.example.task_management.activity.group.category.MyGroupUpdateCategoryActivity;
+import com.example.task_management.activity.group.label.MyGroupUpdateLabelActivity;
 import com.example.task_management.model.Category;
 import com.example.task_management.model.Label;
 import com.example.task_management.service.APIService;
@@ -95,6 +98,11 @@ public class LabelApdater extends RecyclerView.Adapter<LabelApdater.MyViewHolder
                         }
                     });
                     removeItem(position);
+                    break;
+                case R.id.menuUpdate:
+                    Intent detailContext = new Intent(context, MyGroupUpdateLabelActivity.class);
+                    detailContext.putExtra("oldLabel", labelList.get(position));
+                    context.startActivity(detailContext);
                     break;
 
             }

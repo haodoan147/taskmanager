@@ -59,6 +59,7 @@
             android:layout_marginStart="250dp"
             android:layout_marginTop="50dp"
             android:gravity="center"
-            android:text="Tạo Nhãn"></Button>
+            android:text="Tạo Nhãn"
+            android:background="@drawable/btn_background"></Button>
     </LinearLayout>
 </RelativeLayout>

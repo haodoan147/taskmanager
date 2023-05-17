@@ -9,12 +9,9 @@
 
     <item
         android:id="@+id/cate"
-        android:title="Category"
+        android:title="Assigned"
         android:icon="@drawable/outline_category_24"
         />
-    <item
-        android:title=""/>
-
     <item
         android:id="@+id/search"
         android:title="Search"

@@ -192,7 +192,8 @@
                         android:layout_marginEnd="30dp"
                         android:layout_marginStart="250dp"
                         android:gravity="center"
-                        android:text="Cập nhật task"></Button>
+                        android:text="Cập nhật"
+                        android:background="@drawable/btn_background"></Button>
                 </LinearLayout>
         </LinearLayout>
     </ScrollView>

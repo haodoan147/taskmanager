@@ -13,6 +13,8 @@ import com.example.task_management.model.Label;
 import com.example.task_management.model.ResponseCate;
 import com.example.task_management.model.ResponseLabel;
 import com.example.task_management.model.UnAssignee;
+import com.example.task_management.model.UpdateCate;
+import com.example.task_management.model.UpdateLabel;
 import com.example.task_management.model.UpdateTask;
 import com.example.task_management.model.User;
 import com.example.task_management.model.PaginationTask;
@@ -114,4 +116,8 @@ public interface APIService {
     Call<Task> unAsignTask(@Header("Authorization") String accessToken, @Path("id") int id,@Body UnAssignee unassignee);
     @PATCH("/task/{id}")
     Call<Task> updateTask(@Header("Authorization") String accessToken, @Path("id") int id,@Body UpdateTask updateTask);
+    @PATCH("/category/{id}")
+    Call<Category> updateCate(@Header("Authorization") String accessToken, @Path("id") int id,@Body UpdateCate updateCate);
+    @PATCH("/label/{id}")
+    Call<Label> updateLabel(@Header("Authorization") String accessToken, @Path("id") int id,@Body UpdateLabel updateLabel);
 }

@@ -1,6 +1,8 @@
 package com.example.task_management.activity;
 
 import android.app.Activity;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -25,6 +27,7 @@ public class LoadingDialog {
         builder.setView(view);
         builder.setCancelable(false);
         dialog = builder.create();
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.show();
         dialog.getWindow().setLayout(500, 400);
     }

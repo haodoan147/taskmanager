@@ -1,6 +1,7 @@
 package com.example.task_management.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,12 +17,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.task_management.R;
+import com.example.task_management.activity.group.category.MyGroupUpdateCategoryActivity;
+import com.example.task_management.activity.group.task.MyGroupUpdateTaskActivity;
 import com.example.task_management.model.Category;
 import com.example.task_management.model.Task;
 import com.example.task_management.service.APIService;
 import com.example.task_management.utils.RetrofitClient;
 import com.example.task_management.utils.SharedPrefManager;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -99,8 +103,10 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyView
                     removeItem(position);
                     break;
                 case R.id.menuUpdate:
+                    Intent detailContext = new Intent(context, MyGroupUpdateCategoryActivity.class);
+                    detailContext.putExtra("oldCate", categoryList.get(position));
+                    context.startActivity(detailContext);
                     break;
-
             }
             return false;
         });
