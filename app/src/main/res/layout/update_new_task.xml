@@ -193,6 +193,8 @@
                         android:layout_marginStart="250dp"
                         android:gravity="center"
                         android:text="Cập nhật"
+                        android:layout_marginTop="20dp"
+                        android:textColor="@color/colorAccent"
                         android:background="@drawable/btn_background"></Button>
                 </LinearLayout>
         </LinearLayout>

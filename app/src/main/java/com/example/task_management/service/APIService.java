@@ -10,6 +10,7 @@ import com.example.task_management.model.CreateTask;
 import com.example.task_management.model.Group;
 import com.example.task_management.model.JoinRequest;
 import com.example.task_management.model.Label;
+import com.example.task_management.model.Notification;
 import com.example.task_management.model.ResponseCate;
 import com.example.task_management.model.ResponseLabel;
 import com.example.task_management.model.UnAssignee;
@@ -120,4 +121,8 @@ public interface APIService {
     Call<Category> updateCate(@Header("Authorization") String accessToken, @Path("id") int id,@Body UpdateCate updateCate);
     @PATCH("/label/{id}")
     Call<Label> updateLabel(@Header("Authorization") String accessToken, @Path("id") int id,@Body UpdateLabel updateLabel);
+    @GET("/notification")
+    Call<List<Notification>> getNoti(@Header("Authorization") String accessToken);
+    @POST("/notification/{id}/mark-as-read")
+    Call<Notification> markNotiRead(@Header("Authorization") String accessToken,@Path("id") int id);
 }

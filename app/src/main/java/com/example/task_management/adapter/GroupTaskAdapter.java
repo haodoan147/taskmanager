@@ -226,6 +226,7 @@ public class GroupTaskAdapter extends DragItemAdapter<Pair<Long, Task>, GroupTas
                             // Replace the current fragment with NewTaskFragment and pass the parameter
                             Intent detailContext = new Intent(context, DetailTaskActivity.class);
                             detailContext.putExtra("idTask", mItemList.get(position).second.getId());
+                            detailContext.putExtra("listCate", (Serializable) listCategory);
                             context.startActivity(detailContext);
                             loadingDialog.dismissDialog();
                         }
@@ -353,7 +354,7 @@ public class GroupTaskAdapter extends DragItemAdapter<Pair<Long, Task>, GroupTas
                     }
                 }
                 dialog.dismiss();
-                assignTask(mItemList.get(position).second.getId(),1, userId);
+                assignTask(mItemList.get(position).second.getId(),idGroup, userId);
             }
         });
         spinner.setAdapter(arrayAdapter);

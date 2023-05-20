@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -18,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.task_management.R;
+import com.example.task_management.activity.SignInActivity;
 import com.example.task_management.adapter.CommentApdater;
 import com.example.task_management.model.Category;
 import com.example.task_management.model.Comment;
@@ -59,9 +61,9 @@ public class DetailTaskActivity extends AppCompatActivity {
         setContentView(R.layout.detail_task);
         Intent intent = getIntent();
         idTask = intent.getIntExtra("idTask", 24);
+        listCategory = (List<Category>) intent.getSerializableExtra("listCate");
         initView();
     }
-
     private void initView() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Chi tiết task");
@@ -91,8 +93,6 @@ public class DetailTaskActivity extends AppCompatActivity {
         apiService = RetrofitClient.getInstance().create(APIService.class);
         String accessToken = (SharedPrefManager.getInstance(getApplicationContext()).getAccessToken()).getAccessToken();
         String authHeader = "Bearer " + accessToken;
-        Log.e("Error code 400",authHeader);
-        getCategory();
         apiService.getDetailTask(authHeader,idTask).enqueue(new Callback<Task>() {
             @Override
             public void onResponse(Call<Task> call, Response<Task> response) {
@@ -100,17 +100,17 @@ public class DetailTaskActivity extends AppCompatActivity {
                     task = response.body();
                     tv_title.setText(task.getTitle());
                     tv_dueDate.setText(task.getDueDate().substring(0,10));
+                    tv_label.setText((("Nhãn: "+ (task.getLabels()).get(0).getName())));
+                    tv_des.setText(task.getDescription());
+                    tv_duration.setText("Hạn: " +task.getDuration() + "ngày");
+                    tv_priority.setText(String.valueOf(TaskPriority.values()[task.getPriority()]));
+                    tv_status.setText(task.getStatus());
                     for (Category cate: listCategory) {
                         if(cate.getId() == task.getCategoryId()) {
                             tv_category.setText(cate.getName());
                             break;
                         }
                     }
-                    tv_label.setText((("Nhãn: "+ (task.getLabels()).get(0).getName())));
-                    tv_des.setText(task.getDescription());
-                    tv_duration.setText("Hạn: " +task.getDuration() + "ngày");
-                    tv_priority.setText(String.valueOf(TaskPriority.values()[task.getPriority()]));
-                    tv_status.setText(task.getStatus());
                     switch (TaskPriority.values()[task.getPriority()])
                     {
                         case NONE:
@@ -158,30 +158,6 @@ public class DetailTaskActivity extends AppCompatActivity {
             }
             @Override
             public void onFailure(Call<Task> call, Throwable t) {
-            }
-        });
-    }
-    private void getCategory(){
-        SharedPreferences pref = getApplicationContext().getSharedPreferences("ATAuthen", Context.MODE_PRIVATE);
-        String accessToken = pref.getString("keyaccesstoken", "empty");
-        String authHeader = "Bearer " + accessToken;
-        APIService apiService = RetrofitClient.getInstance().create(APIService.class);
-        apiService.getAllCategory(authHeader,1,100,"asc",1).enqueue(new Callback<ResponseCate>() {
-            @Override
-            public void onResponse(Call<ResponseCate> call, Response<ResponseCate> response) {
-                if (response.isSuccessful()) {
-                    listCategory.addAll(response.body().getData());
-                }else{
-                    try {
-                        Log.v("Error code 400",response.errorBody().string());
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            }
-            @Override
-            public void onFailure(Call<ResponseCate> call, Throwable t) {
-                Log.d("TAG", "onFailure: " + t.getMessage());
             }
         });
     }
@@ -270,9 +246,16 @@ public class DetailTaskActivity extends AppCompatActivity {
         apiService.createComment(authHeader,idTask,comment).enqueue(new Callback<Comment>() {
             @Override
             public void onResponse(Call<Comment> call, Response<Comment> response) {
+                if (response.isSuccessful()) {
+                    Comment newComment = response.body();
+                    listComment.add(newComment);
+                    commentApdater.notifyItemInserted(listComment.size()-1);
+                    Toast.makeText(DetailTaskActivity.this, "Đã gửi bình luận", Toast.LENGTH_SHORT).show();
+                }
             }
             @Override
             public void onFailure(Call<Comment> call, Throwable t) {
+                Toast.makeText(DetailTaskActivity.this, "Thất bại", Toast.LENGTH_SHORT).show();
             }
         });
     }

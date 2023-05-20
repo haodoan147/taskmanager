@@ -1,11 +1,14 @@
 package com.example.task_management.adapter;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
+import android.os.Handler;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,9 +19,13 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.task_management.R;
+import com.example.task_management.activity.HomeActivity;
+import com.example.task_management.activity.LoadingDialog;
+import com.example.task_management.activity.member.task.TaskFragment;
 import com.example.task_management.activity.task.DetailTaskActivity;
 import com.example.task_management.model.Category;
 import com.example.task_management.model.Task;
@@ -26,6 +33,7 @@ import com.example.task_management.service.APIService;
 import com.example.task_management.utils.RetrofitClient;
 import com.example.task_management.utils.SharedPrefManager;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -180,9 +188,16 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
                             .setNegativeButton(R.string.no, (dialog, which) -> dialog.cancel()).show();
                     break;
                 case R.id.menuDetail:
-                    Intent detailContext = new Intent(context, DetailTaskActivity.class);
-                    detailContext.putExtra("idTask", taskList.get(position).getId());
-                    context.startActivity(detailContext);
+                    LoadingDialog loadingDialog = new LoadingDialog((Activity) context);
+                    loadingDialog.startLoadingDialog();
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Intent detailContext = new Intent(context, DetailTaskActivity.class);
+                            detailContext.putExtra("idTask", taskList.get(position).getId());
+                            context.startActivity(detailContext);
+                        }
+                    }, 3000);
                     break;
                 case R.id.menuAssign:
                     showBottomDialog();

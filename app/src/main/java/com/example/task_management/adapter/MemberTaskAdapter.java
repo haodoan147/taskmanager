@@ -1,5 +1,6 @@
 package com.example.task_management.adapter;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -25,6 +26,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.task_management.R;
+import com.example.task_management.activity.LoadingDialog;
 import com.example.task_management.activity.task.DetailTaskActivity;
 import com.example.task_management.model.Category;
 import com.example.task_management.model.Task;
@@ -35,6 +37,7 @@ import com.example.task_management.utils.SharedPrefManager;
 import com.woxthebox.draglistview.DragItemAdapter;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -186,13 +189,17 @@ public class MemberTaskAdapter extends DragItemAdapter<Pair<Long, Task>, MemberT
                             .setNegativeButton(R.string.no, (dialog, which) -> dialog.cancel()).show();
                     break;
                 case R.id.menuDetail:
+                    LoadingDialog loadingDialog = new LoadingDialog((Activity) context);
+                    loadingDialog.startLoadingDialog();
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
                             // Replace the current fragment with NewTaskFragment and pass the parameter
                             Intent detailContext = new Intent(context, DetailTaskActivity.class);
                             detailContext.putExtra("idTask", mItemList.get(position).second.getId());
+                            detailContext.putExtra("listCate", (Serializable) listCategory);
                             context.startActivity(detailContext);
+                            loadingDialog.dismissDialog();
                         }
                     }, 3000);
                     break;

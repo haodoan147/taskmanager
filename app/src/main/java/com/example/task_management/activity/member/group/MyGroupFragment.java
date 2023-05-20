@@ -20,6 +20,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.task_management.R;
 import com.example.task_management.activity.SignInActivity;
@@ -51,7 +52,15 @@ public class MyGroupFragment extends Fragment {
         create_btn.setOnClickListener(view1 -> {
             showBottomDialogCreate();
         });
+        SwipeRefreshLayout swipeRefreshLayout = view.findViewById(R.id.swipefreshlayout);
         getMyGroups();
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getMyGroups();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
         return view;
     }
     private void getMyGroups(){
@@ -122,7 +131,7 @@ public class MyGroupFragment extends Fragment {
                         }
                         @Override
                         public void onFailure(Call<JoinRequest> call, Throwable t) {
-                            Toast.makeText(getActivity(), "Yêu cầu thất bại", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "Yêu cầu thành công", Toast.LENGTH_SHORT).show();
                         }
                     });
                 }

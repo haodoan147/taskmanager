@@ -24,10 +24,12 @@ import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.example.task_management.R;
 import com.example.task_management.activity.group.group.MyGroupActivity;
+import com.example.task_management.activity.member.NotiFragment;
 import com.example.task_management.activity.member.group.MyGroupFragment;
 import com.example.task_management.activity.member.task.TaskFragment;
 import com.example.task_management.activity.task.CalendarActivity;
 import com.example.task_management.activity.member.task.SearchTaskFragment;
+import com.example.task_management.activity.task.DetailTaskActivity;
 import com.example.task_management.adapter.MemberGroupAdapter;
 import com.example.task_management.model.Category;
 import com.example.task_management.model.Group;
@@ -124,6 +126,17 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                         }
                     }, 3000);
                     break;
+                case R.id.btm_notice:
+                    toolbar.setTitle("Thông báo");
+                    loadingDialog.startLoadingDialog();
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            replaceFragment(new NotiFragment());
+                            loadingDialog.dismissDialog();
+                        }
+                    }, 3000);
+                    break;
             }
             return true;
         });
@@ -157,6 +170,22 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_group:
                 intent = new Intent(getApplicationContext(), MyGroupActivity.class);
                 startActivity(intent);
+                break;
+            case R.id.nav_statistic:
+                taskList.clear();
+                getMyGroups();
+                LoadingDialog loadingDialog = new LoadingDialog(HomeActivity.this);
+                loadingDialog.startLoadingDialog();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Intent detailContext = new Intent(getApplicationContext(), StaticticActivity.class);
+                        detailContext.putExtra("newTaskList", (Serializable) taskList);
+                        detailContext.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        getApplicationContext().startActivity(detailContext);
+                        loadingDialog.dismissDialog();
+                    }
+                }, 3000);
                 break;
         }
         drawerLayout.closeDrawer(GravityCompat.START);

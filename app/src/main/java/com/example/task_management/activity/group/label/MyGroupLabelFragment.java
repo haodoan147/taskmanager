@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.task_management.R;
 import com.example.task_management.adapter.CategoryAdapter;
@@ -40,8 +41,17 @@ public class MyGroupLabelFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.label, container, false);
         recyclerView = view.findViewById(R.id.rcv_label);
+        SwipeRefreshLayout swipeRefreshLayout = view.findViewById(R.id.swipefreshlayout);
         Bundle arguments = getArguments();
         groupId  = arguments.getInt("idGroup",1);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                labelList.clear();
+                getLabel();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
         getLabel();
         return view;
     }

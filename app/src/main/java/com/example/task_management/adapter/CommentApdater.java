@@ -52,4 +52,8 @@ public class CommentApdater extends RecyclerView.Adapter<CommentApdater.MyViewHo
     public int getItemCount() {
         return commentList == null ? 0 : commentList.size();
     }
+    public void addItem(int position, Comment item) {
+        commentList.add(position, item);
+        notifyItemInserted(position);
+    }
 }

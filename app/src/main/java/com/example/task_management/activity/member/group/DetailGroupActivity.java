@@ -51,7 +51,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class DetailGroupActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class    DetailGroupActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     DrawerLayout drawerLayout;
     BottomNavigationView bottomNavigationView;
     APIService apiService;
